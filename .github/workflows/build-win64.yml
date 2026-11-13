@@ -1,0 +1,38 @@
+name: Build Win64
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        target-type: [template_debug, template_release]
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive        # ← 漏了这条必挂
+
+      - name: Setup godot-cpp
+        uses: ./godot-cpp/.github/actions/setup-godot-cpp
+        with:
+          platform: windows
+          arch: x86_64
+          em-version: 3.1.62
+
+      - name: Fetch Merman SDK
+        run: python scripts/fetch_merman_sdk.py
+
+      - name: Fetch PDFium SDK
+        run: python scripts/fetch_pdfium_sdk.py
+
+      - name: Build
+        run: scons godot-docrender target=${{ matrix.target-type }} platform=windows arch=x86_64
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: docrender-win64-${{ matrix.target-type }}
+          path: addons/docrender/bin/*
+          if-no-files-found: error
