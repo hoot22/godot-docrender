@@ -13,6 +13,8 @@ python -m pip install scons
 
 The submodules provide godot-cpp, MicroTeX and its fonts, TinyXML-2, and litehtml v0.10 with bundled Gumbo. SCons compiles litehtml and Gumbo into the extension on each target. Run a build before opening the solution in Visual Studio so IntelliSense can find the generated godot-cpp bindings and staged litehtml headers. [Visual Studio solution](Godot-DocRender.sln)
 
+DocRender's litehtml changes live in `scripts/litehtml/patches/`, grouped by document integration, CSS, render tree, layout, and Flexbox. Each patch mirrors one path relative to the pinned litehtml source root. SCons uses `git apply` on a temporary copy for each patched file and writes the result to `src/gen/html/`. Edit the patch when changing litehtml behavior. SCons regenerates its output when the patch or upstream input changes.
+
 ## Install optional SDKs
 
 On Windows x64, install Merman for Mermaid rendering with MSVC and PDFium for PDF import, reading, and writing. The installers fetch the pinned archives and verify their checksums.
@@ -40,3 +42,9 @@ scons godot-docrender platform=windows target=template_release arch=x86_64
 SCons writes the libraries to `addons/docrender/bin/` and copies `pdfium.dll` there when the Windows x64 SDK is installed. Copy the full `addons/docrender` directory into a Godot project and reopen it to load the new binary. Use the CI build matrix to find `platform` and `arch` values for other targets. [Build workflow](.github/workflows/make_build.yml)
 
 When changing editor text or class documentation, update and check the translation catalogs. [Localization tools](tools/README.md)
+
+After building Windows x64 `template_debug`, run the CSS cascade regression checks with Godot 4.7.2. The runner tests both Compatibility and Forward+ in a temporary project. Use `--renderer gl_compatibility` or `--renderer forward_plus` to select one.
+
+```powershell
+python tests/html/run_css_cascade.py "C:/path/to/Godot_v4.7.2-stable_win64_console.exe"
+```

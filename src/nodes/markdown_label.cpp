@@ -1,6 +1,7 @@
 #include "markdown_label.h"
 
 #include "formats/html/html_markup.h"
+#include "formats/html/layout/html_geometry.h"
 
 #include <godot_cpp/classes/display_server.hpp>
 #include <godot_cpp/classes/engine.hpp>
@@ -1949,7 +1950,7 @@ void MarkdownLabelCanvas::rebuild_layout() {
 	};
 	const Ref<Font> html_code_font = html_theme_font("code_text_font", font.code);
 	const Ref<Font> html_code_block_font = html_theme_font("code_block_font", font.code_block);
-	const HTMLLayout::Fonts html_fonts{ font.text,
+	const docrender::HTMLFontConfig html_fonts{ font.text,
 		html_theme_font("bold_font", font.bold), html_theme_font("italic_font", font.italic),
 		html_theme_font("bold_italic_font", font.bold_italic), html_code_font,
 		html_code_block_font.is_valid() ? html_code_block_font : html_code_font };
@@ -3500,7 +3501,7 @@ int64_t MarkdownLabelCanvas::hit_test_document(const Vector2& p_position) const 
 	}
 	if (p_position.y <= item.rect.get_end().y) {
 		if (item.html_layout.is_valid()) {
-			return item.global_start + item.html_layout->hit_test_text(p_position - item.text_rect.position);
+			return item.global_start + item.html_layout->hit_test_text(docrender::to_local_point(p_position, item.text_rect.position));
 		}
 		if (item.type == MARKDOWN_BLOCK_TABLE) {
 			for (const MarkdownTableCell& cell : item.cells) {
@@ -3527,7 +3528,7 @@ int64_t MarkdownLabelCanvas::hit_test_document(const Vector2& p_position) const 
 			for (const MarkdownContainerLine& line : item.container_lines) {
 				if (p_position.y <= line.rect.get_end().y) {
 					if (line.html_layout.is_valid()) {
-						return line.global_start + line.html_layout->hit_test_text(p_position - line.text_rect.position);
+						return line.global_start + line.html_layout->hit_test_text(docrender::to_local_point(p_position, line.text_rect.position));
 					}
 					if (line.paragraph.is_null()) {
 						return p_position.x < line.rect.get_center().x ? line.global_start : line.global_end;
@@ -3571,12 +3572,12 @@ Ref<HTMLLayout> MarkdownLabelCanvas::html_at_position(const Vector2& p_position,
 			continue;
 		}
 		if (item.html_layout.is_valid() && item.text_rect.has_point(p_position)) {
-			r_local_position = p_position - item.text_rect.position;
+			r_local_position = docrender::to_local_point(p_position, item.text_rect.position);
 			return item.html_layout;
 		}
 		for (const MarkdownContainerLine& line : item.container_lines) {
 			if (line.html_layout.is_valid() && line.text_rect.has_point(p_position)) {
-				r_local_position = p_position - line.text_rect.position;
+				r_local_position = docrender::to_local_point(p_position, line.text_rect.position);
 				return line.html_layout;
 			}
 		}

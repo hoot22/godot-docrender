@@ -17,6 +17,13 @@ namespace litehtml {
 	using docrender::LiteHTMLContainer;
 
 	namespace {
+		void update_button_pseudo_classes(element& p_element) {
+			const bool button = docrender_editor::is_command_button(p_element);
+			const bool disabled = button && p_element.get_attr("disabled");
+			p_element.set_pseudo_class(_id("disabled"), disabled);
+			p_element.set_pseudo_class(_id("enabled"), button && !disabled);
+		}
+
 		bool selector_uses_hover(const css_selector::ptr& p_selector) {
 			if (p_selector->m_left && selector_uses_hover(p_selector->m_left)) {
 				return true;
@@ -48,9 +55,9 @@ namespace litehtml {
 			return {};
 		}
 		switch (output->document->v.document.doc_type_quirks_mode) {
-			case GUMBO_DOCTYPE_NO_QUIRKS: doc->m_mode = no_quirks_mode; break;
-			case GUMBO_DOCTYPE_QUIRKS: doc->m_mode = quirks_mode; break;
-			case GUMBO_DOCTYPE_LIMITED_QUIRKS: doc->m_mode = limited_quirks_mode; break;
+		case GUMBO_DOCTYPE_NO_QUIRKS: doc->m_mode = no_quirks_mode; break;
+		case GUMBO_DOCTYPE_QUIRKS: doc->m_mode = quirks_mode; break;
+		case GUMBO_DOCTYPE_LIMITED_QUIRKS: doc->m_mode = limited_quirks_mode; break;
 		}
 		// The mode determines how node creation normalizes class and ID selectors.
 		elements_list roots;
@@ -138,9 +145,12 @@ namespace litehtml {
 				p_child->parent(nullptr);
 			}
 			return generated;
-		});
+			});
 		if (auto* tag = dynamic_cast<html_tag*>(&p_element)) {
 			tag->m_style.clear();
+			if (tag->tag() == _button_) {
+				update_button_pseudo_classes(*tag);
+			}
 			if (tag->tag() == _a_) {
 				reset_link(*tag, false);
 			}
@@ -155,8 +165,19 @@ namespace litehtml {
 		return p_document.update_media_lists(p_document.m_media);
 	}
 
+	void docrender_editor::compute_styles(document& p_document) {
+		const auto clear_counters = [](const auto& visit, element& p_element) -> void {
+			p_element.m_counter_values.clear();
+			for (const auto& child : p_element.children()) {
+				visit(visit, *child);
+			}
+		};
+		clear_counters(clear_counters, *p_document.m_root);
+		p_document.m_root->compute_styles();
+	}
+
 	bool docrender_editor::has_hover_styles(const document& p_document) {
-		for (const css* sheet : { &p_document.m_master_css, &p_document.m_styles, &p_document.m_user_css }) {
+		for (const css* sheet : { &p_document.m_master_css, &p_document.m_styles }) {
 			const auto& selectors = sheet->selectors();
 			if (std::any_of(selectors.begin(), selectors.end(), selector_uses_hover)) {
 				return true;
@@ -167,6 +188,11 @@ namespace litehtml {
 
 	void docrender_editor::set_hover(element& p_element, bool p_hovered) {
 		p_element.set_pseudo_class(_hover_, p_hovered);
+	}
+
+	bool docrender_editor::is_command_button(const element& p_element) {
+		const char* type = p_element.tag() == _button_ ? p_element.get_attr("type") : nullptr;
+		return type && lowcase(type) == "button";
 	}
 
 	const std::vector<box_shadow>* docrender_editor::get_box_shadows(const html_tag& p_element) {
@@ -199,28 +225,22 @@ namespace litehtml {
 		doc.m_media_lists.clear();
 		doc.m_master_css = {};
 		doc.m_styles = {};
-		doc.m_user_css = {};
 
 		doc.container()->get_media_features(doc.m_media);
 		doc.m_master_css.parse_css_stylesheet(p_default_styles, "", p_document);
 		doc.m_master_css.sort_selectors();
-		if (!p_user_styles.empty()) {
-			p_container.set_css_source_kind(css_source_kind::stylesheet);
-			doc.m_user_css.parse_css_stylesheet(p_user_styles, "", p_document);
-			doc.m_user_css.sort_selectors();
-		}
 		doc.update_media_lists(doc.m_media);
 		root->apply_stylesheet(doc.m_master_css);
 		root->parse_attributes();
-		const auto snapshot_font_families = [&](const auto& p_visit, element& p_element) -> void {
+		const auto snapshot_defaults = [&](const auto& p_visit, element& p_element) -> void {
 			if (auto* tag = dynamic_cast<html_tag*>(&p_element)) {
-				tag->m_style.snapshot_default_font_family();
+				tag->m_style.snapshot_defaults();
 			}
 			for (const auto& child : p_element.children()) {
 				p_visit(p_visit, *child);
 			}
-		};
-		snapshot_font_families(snapshot_font_families, *root);
+			};
+		snapshot_defaults(snapshot_defaults, *root);
 		p_container.set_css_source_kind(css_source_kind::style_element);
 		for (const auto& sheet : doc.m_css) {
 			media_query_list_list::ptr media;
@@ -230,10 +250,13 @@ namespace litehtml {
 			}
 			doc.m_styles.parse_css_stylesheet(sheet.text, sheet.baseurl, p_document, media);
 		}
+		if (!p_user_styles.empty()) {
+			p_container.set_css_source_kind(css_source_kind::stylesheet);
+			doc.m_styles.parse_css_stylesheet(p_user_styles, "", p_document);
+		}
 		doc.m_styles.sort_selectors();
 		doc.update_media_lists(doc.m_media);
 		root->apply_stylesheet(doc.m_styles);
-		root->apply_stylesheet(doc.m_user_css);
 		p_container.set_css_source_kind(css_source_kind::none);
 		root->compute_styles();
 
@@ -257,6 +280,9 @@ namespace litehtml {
 		}
 		if (tag->tag() == _a_ && std::string_view(p_name) == "href") {
 			reset_link(*tag, p_value != nullptr);
+		}
+		if (tag->tag() == _button_ && (std::string_view(p_name) == "disabled" || std::string_view(p_name) == "type")) {
+			update_button_pseudo_classes(*tag);
 		}
 		return true;
 	}

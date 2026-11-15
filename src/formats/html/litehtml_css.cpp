@@ -5,6 +5,113 @@
 #include <litehtml/style.h>
 
 namespace litehtml {
+	namespace {
+		using alignment = alignment_keyword;
+
+		constexpr std::pair<alignment, const char*> alignment_words[] = {
+			{ alignment::normal, "normal" }, { alignment::automatic, "auto" }, { alignment::stretch, "stretch" },
+			{ alignment::start, "start" }, { alignment::end, "end" }, { alignment::center, "center" },
+			{ alignment::self_start, "self-start" }, { alignment::self_end, "self-end" },
+			{ alignment::flex_start, "flex-start" }, { alignment::flex_end, "flex-end" },
+			{ alignment::left, "left" }, { alignment::right, "right" },
+			{ alignment::space_between, "space-between" }, { alignment::space_around, "space-around" },
+			{ alignment::space_evenly, "space-evenly" }, { alignment::first_baseline, "baseline" },
+			{ alignment::last_baseline, "baseline" },
+		};
+
+		const char* alignment_word(css_alignment p_alignment) {
+			for (const auto& [keyword, word] : alignment_words)
+				if (keyword == p_alignment.keyword) return word;
+			return "normal";
+		}
+	}
+
+	css_alignment initial_alignment(string_id p_property) {
+		return { is_one_of(p_property, _justify_self_, _align_self_) ? alignment::automatic : alignment::normal };
+	}
+
+	static bool parse_alignment_value(string_id p_property, css_token_vector::const_iterator p_begin,
+		css_token_vector::const_iterator p_end, css_alignment& r_alignment) {
+		const auto count = p_end - p_begin;
+		if (count == 0 || count > 2) return false;
+		const bool content = is_one_of(p_property, _justify_content_, _align_content_);
+		const bool justify = is_one_of(p_property, _justify_items_, _justify_self_, _justify_content_);
+		const auto word = (p_end - 1)->ident();
+		auto prefix = count == 2 ? p_begin->ident() : string();
+		const auto keyword_word = prefix == "baseline" && is_one_of(word, "first", "last") ? prefix : word;
+		if (keyword_word != word) prefix = word;
+		const auto found = std::find_if(std::begin(alignment_words), std::end(alignment_words),
+			[&](const auto& entry) { return keyword_word == entry.second; });
+		if (found == std::end(alignment_words)) return false;
+		auto keyword = found->first;
+		auto overflow = alignment_overflow::automatic;
+		if (keyword == alignment::automatic && !is_one_of(p_property, _justify_self_, _align_self_)) return false;
+		if (is_one_of(keyword, alignment::self_start, alignment::self_end) && content) return false;
+		if (is_one_of(keyword, alignment::left, alignment::right) && !justify) return false;
+		if (is_one_of(keyword, alignment::space_between, alignment::space_around, alignment::space_evenly) && !content) return false;
+		if (keyword == alignment::first_baseline && p_property == _justify_content_) return false;
+
+		if (count == 2) {
+			if (keyword == alignment::first_baseline && is_one_of(prefix, "first", "last")) {
+				keyword = prefix == "last" ? alignment::last_baseline : alignment::first_baseline;
+			} else if (is_one_of(prefix, "safe", "unsafe") &&
+				((keyword >= alignment::start && keyword <= alignment::right) ||
+					(keyword == alignment::normal && is_one_of(p_property, _justify_self_, _align_self_)))) {
+				overflow = prefix == "safe" ? alignment_overflow::safe : alignment_overflow::unsafe;
+			} else {
+				return false;
+			}
+		}
+		r_alignment = { keyword, overflow };
+		return true;
+	}
+
+	bool parse_alignment(string_id p_property, const css_token_vector& p_tokens, css_alignment& r_alignment) {
+		return parse_alignment_value(p_property, p_tokens.begin(), p_tokens.end(), r_alignment);
+	}
+
+	bool parse_place_alignment(string_id p_align_property, string_id p_justify_property,
+		const css_token_vector& p_tokens, css_alignment& r_align, css_alignment& r_justify) {
+		if (p_tokens.empty() || p_tokens.size() > 4) return false;
+		// Baseline and overflow positions can each consume two tokens.
+		const auto begin = p_tokens.begin();
+		const auto end = p_tokens.end();
+		for (auto split = begin + std::min<std::size_t>(2, p_tokens.size()); split != begin; --split) {
+			css_alignment align;
+			css_alignment justify;
+			if (!parse_alignment_value(p_align_property, begin, split, align)) continue;
+			if (split == end) {
+				const bool content_baseline = p_justify_property == _justify_content_ &&
+					is_one_of(align.keyword, alignment::first_baseline, alignment::last_baseline);
+				if (content_baseline) justify.keyword = alignment::start;
+				else if (!parse_alignment_value(p_justify_property, begin, split, justify)) continue;
+			} else if (!parse_alignment_value(p_justify_property, split, end, justify)) {
+				continue;
+			}
+			r_align = align;
+			r_justify = justify;
+			return true;
+		}
+		return false;
+	}
+
+	flex_align_items to_flex_item_alignment(css_alignment p_alignment) {
+		int value = value_index(alignment_word(p_alignment), flex_align_items_strings);
+		if (p_alignment.keyword == alignment::last_baseline) value |= flex_align_items_last;
+		if (p_alignment.overflow == alignment_overflow::safe) value |= flex_align_items_safe;
+		if (p_alignment.overflow == alignment_overflow::unsafe) value |= flex_align_items_unsafe;
+		return static_cast<flex_align_items>(value);
+	}
+
+	flex_align_content to_flex_align_content(css_alignment p_alignment) {
+		const int value = value_index(alignment_word(p_alignment), flex_align_content_strings);
+		return value < 0 ? flex_align_content_stretch : static_cast<flex_align_content>(value);
+	}
+
+	flex_justify_content to_flex_justify_content(css_alignment p_alignment) {
+		return static_cast<flex_justify_content>(value_index(alignment_word(p_alignment), flex_justify_content_strings));
+	}
+
 	bool parse_font_families(const css_token_vector& p_tokens, css_font_families& r_families) {
 		const auto is_generic = [](const string& p_name) {
 			return is_one_of(p_name, "serif", "sans-serif", "monospace", "cursive", "fantasy", "system-ui", "math",
@@ -52,27 +159,6 @@ namespace litehtml {
 		}
 		r_families = std::move(families);
 		return true;
-	}
-
-	void css_declaration_result::accept(string_id p_name, const property_value& p_value) {
-		accepted = true;
-		switch (p_name) {
-			case _border_top_style_:
-			case _border_right_style_:
-			case _border_bottom_style_:
-			case _border_left_style_:
-				if (p_value.is<int>() && p_value.get<int>() >= border_style_groove) {
-					drawing_values.emplace_back(p_name, p_value.get<int>());
-				}
-				break;
-			case _text_emphasis_style_:
-				if (p_value.is<string>() && lowcase(p_value.get<string>()) != "none") {
-					drawing_values.emplace_back(p_name, 0);
-				}
-				break;
-			default:
-				break;
-		}
 	}
 
 	bool parse_decoration_line(const css_token_vector& p_tokens, int& r_line) {
