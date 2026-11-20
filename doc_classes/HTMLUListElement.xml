@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLUListElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A handle to an HTML unordered list.
+	</brief_description>
+	<description>
+		Represents a [code]&lt;ul&gt;[/code] element. Use the inherited [method HTMLElement.get_children] method to access its list items.
+	</description>
+</class>

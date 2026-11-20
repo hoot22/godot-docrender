@@ -1,19 +1,21 @@
-# Contributing to Godot DocRender
+# Contributing to Godot Dockit
 
 ## Set up the repository
 
 Install Git, Python, and a C++ toolchain for your target. For the Windows builds below, install MSVC and the Windows SDK through Visual Studio or Visual Studio Build Tools.
 
 ```powershell
-git clone https://github.com/LuYingYiLong/godot-docrender.git
-cd godot-docrender
+git clone https://github.com/LuYingYiLong/godot-dockit.git
+cd godot-dockit
 git submodule update --init --recursive
 python -m pip install scons
 ```
 
-The submodules provide godot-cpp, MicroTeX and its fonts, TinyXML-2, and litehtml v0.10 with bundled Gumbo. SCons compiles litehtml and Gumbo into the extension on each target. Run a build before opening the solution in Visual Studio so IntelliSense can find the generated godot-cpp bindings and staged litehtml headers. [Visual Studio solution](Godot-DocRender.sln)
+The submodules provide godot-cpp, MicroTeX and its fonts, TinyXML-2, and litehtml v0.10 with bundled Gumbo. SCons compiles litehtml and Gumbo into the extension on each target. Run a build before opening the solution in Visual Studio so IntelliSense can find the generated godot-cpp bindings and staged litehtml headers. [Visual Studio solution](Godot-Dockit.sln)
 
-DocRender's litehtml changes live in `scripts/litehtml/patches/`, grouped by document integration, CSS, render tree, layout, and Flexbox. Each patch mirrors one path relative to the pinned litehtml source root. SCons uses `git apply` on a temporary copy for each patched file and writes the result to `src/gen/html/`. Edit the patch when changing litehtml behavior. SCons regenerates its output when the patch or upstream input changes.
+Dockit maintains its litehtml replacements as C++ sources and headers in `src/formats/html/litehtml/`. Each group mirrors paths relative to the pinned litehtml submodule. Edit these files directly. SCons compiles the replacement sources in place, compiles the remaining sources from the submodule, and stages the combined headers in `src/gen/html/include/`. When updating the litehtml submodule, reconcile each replacement with its matching upstream file. The replacements retain the [litehtml BSD 3-Clause license](addons/dockit/LiteHTML-LICENSES/litehtml.txt).
+
+Edit CSS tokenization, grammar, stylesheet rules, matching, the cascade, value types, default stylesheet, and computed styles in `src/formats/html/css/`. The litehtml adapter supplies a read-only DOM view, cascaded declarations, parent styles, and document-specific font and image queries. Layout reads the resulting `ComputedStyle`, resolves box-dependent values, and positions Grid items. The renderer turns resolved background layers into draw commands. CSS compatibility headers under `src/formats/html/litehtml/` forward to the canonical definitions. Material migrated from litehtml retains its BSD 3-Clause license.
 
 ## Install optional SDKs
 
@@ -35,15 +37,30 @@ python scripts/fetch_pdfium_sdk.py --archive "C:/Downloads/pdfium-win-x64.tgz"
 Run SCons from the repository root. Build `template_debug` for the editor and debug exports, and `template_release` for release exports.
 
 ```powershell
-scons godot-docrender platform=windows target=template_debug arch=x86_64
-scons godot-docrender platform=windows target=template_release arch=x86_64
+scons godot-dockit platform=windows target=template_debug arch=x86_64 -j 3
+scons godot-dockit platform=windows target=template_release arch=x86_64 -j 3
 ```
 
-SCons writes the libraries to `addons/docrender/bin/` and copies `pdfium.dll` there when the Windows x64 SDK is installed. Copy the full `addons/docrender` directory into a Godot project and reopen it to load the new binary. Use the CI build matrix to find `platform` and `arch` values for other targets. [Build workflow](.github/workflows/make_build.yml)
+SCons defaults to the core count minus one, and each C++ translation unit peaks around 450 MB while compiling the HTML sources. On a 16 GB machine the default parallelism runs out of compiler heap (`fatal error C1060`); cap it with `-j 3` (`-j 4` when the machine is otherwise idle).
+
+SCons writes the libraries to `addons/dockit/bin/` and copies `pdfium.dll` there when the Windows x64 SDK is installed. Copy the full `addons/dockit` directory into a Godot project and reopen it to load the new binary. [Build workflow](.github/workflows/make_build.yml)
+
+GitHub Actions compiles the Windows x64 debug extension on pull requests, pushes to `main`, and merge queue runs. Run the HTML regression suite locally using the command below. Use **Build Godot Dockit** in the Actions tab to run the full platform matrix and download the merged `godot-dockit` addon artifact. [Continuous Integration](.github/workflows/ci.yml)
+
+To publish a GitHub Release, tag the commit you want to ship and push the tag.
+
+```sh
+git tag vX.Y.Z
+git push origin vX.Y.Z
+```
+
+The same workflow builds the debug and release libraries for every platform in the GDExtension descriptor. The iOS builds target iOS 13.0 or later, as required by MicroTeX's filesystem support. The workflow verifies the complete addon, then publishes `godot-dockit-vX.Y.Z.zip` with release notes generated by GitHub. If a target or package check fails, rerun the failed jobs from the tag's workflow run. Extract the ZIP into the project's `addons/dockit/` directory. [Release workflow](.github/workflows/make_build.yml)
+
+To edit the tag, title, and notes before building, run **Build Godot Dockit** from the Actions tab and fill in the inputs: the release tag (must start with `v`, for example `v1.0.1`), an optional title, and optional notes. The run validates the tag first, then creates that tag on the commit it was dispatched on, builds every platform, verifies the addon, and publishes `godot-dockit-v1.0.1.zip`. Notes accept `\n` for line breaks and are prepended to the generated notes. Enable **draft** to review and edit the release on GitHub before publishing it, or clear **publish** to build without creating a release and download the artifact instead.
 
 When changing editor text or class documentation, update and check the translation catalogs. [Localization tools](tools/README.md)
 
-After building Windows x64 `template_debug`, run the CSS cascade regression checks with Godot 4.7.2. The runner tests both Compatibility and Forward+ in a temporary project. Use `--renderer gl_compatibility` or `--renderer forward_plus` to select one.
+After building Windows x64 `template_debug`, run the HTML regression suite with Godot 4.7.2. The runner checks the GDScript DOM ports of Web Platform Tests headlessly, then runs the CSS and rendering regressions in both Compatibility and Forward+ in a temporary project. Use `--dom-only` to run just the headless tests, or `--renderer gl_compatibility` or `--renderer forward_plus` to select a single renderer. [HTML API and Web standards](addons/dockit/docs/html_api_reference.md) · [WPT ports](tests/html/wpt/dom.gd)
 
 ```powershell
 python tests/html/run_css_cascade.py "C:/path/to/Godot_v4.7.2-stable_win64_console.exe"

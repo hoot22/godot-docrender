@@ -1,6 +1,6 @@
-# Godot DocRender Simplified Chinese Localization
+# Godot Dockit Simplified Chinese Localization
 
-In Godot, open **Editor Settings → Interface → Editor → Localization → Editor Language**, select **Simplified Chinese**, and restart the editor. DocRender loads its translations when the editor starts. Include `addons/docrender/translations/` when installing the addon.
+In Godot, open **Editor Settings → Interface → Editor → Localization → Editor Language**, select **Simplified Chinese**, and restart the editor. Dockit loads its translations when the editor starts. Include `addons/dockit/translations/` when installing the addon.
 
 | File | Contents |
 | --- | --- |

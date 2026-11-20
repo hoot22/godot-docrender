@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLShadowRoot" inherits="HTMLDocumentFragment" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <brief_description>A separate DOM tree attached to a host element.</brief_description>
+  <description>Created with [method HTMLElement.attach_shadow] or a declarative template. Its children are excluded from document queries. Slot assignment changes rendering without moving the host's child nodes.</description>
+  <members>
+    <member name="host" type="HTMLElement" setter="" getter="get_host">The host of this shadow tree.</member>
+    <member name="mode" type="String" setter="" getter="get_mode">Either open or closed. Closed roots are hidden by the host's shadow_root getter.</member>
+    <member name="slot_assignment" type="String" setter="" getter="get_slot_assignment">Either named or manual.</member>
+    <member name="delegates_focus" type="bool" setter="" getter="get_delegates_focus">The requested focus delegation flag.</member>
+  </members>
+</class>

@@ -10,7 +10,7 @@ namespace godot {
 		static void _bind_methods() {}
 
 	public:
-		static constexpr int32_t FORMAT_VERSION = 3;
+		static constexpr int32_t FORMAT_VERSION = 12;
 
 		String _get_importer_name() const override;
 		String _get_visible_name() const override;

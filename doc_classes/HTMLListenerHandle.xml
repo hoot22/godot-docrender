@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLListenerHandle" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A cancellable registration returned by [method HTMLEventTarget.listen].
+	</brief_description>
+	<description>
+		The handle retains the event target and callback until [method cancel] is called or the target becomes invalid.
+	</description>
+	<methods>
+		<method name="cancel">
+			<return type="void" />
+			<description>
+				Removes the listener. Calling this more than once has no additional effect.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="canceled" type="bool" setter="" getter="is_canceled">
+			Whether [method cancel] has been called on this handle.
+		</member>
+	</members>
+</class>

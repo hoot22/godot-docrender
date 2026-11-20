@@ -46,6 +46,9 @@
 		<member name="display_mode" type="bool" setter="set_display_mode" getter="is_display_mode" default="true">
 			Uses display math style when enabled and the compact inline math style when disabled.
 		</member>
+		<member name="document" type="LatexDocument" setter="set_document" getter="get_document">
+			The LaTeX resource to display, such as an imported [code].tex[/code] file containing a math expression. The formula updates when the resource changes or is reimported. Set this to [code]null[/code] to use [member text].
+		</member>
 		<member name="double_sided" type="bool" setter="set_draw_flag" getter="get_draw_flag" default="true">
 			Draws both sides of the formula quad.
 		</member>
@@ -80,7 +83,7 @@
 			Allows 3D lights to affect the formula.
 		</member>
 		<member name="text" type="String" setter="set_text" getter="get_text" default="&quot;&quot;">
-			The LaTeX expression to display. Use the formula source directly.
+			The LaTeX expression to display when [member document] is unset. Use the formula source directly.
 		</member>
 		<member name="texture_filter" type="int" setter="set_texture_filter" getter="get_texture_filter" enum="BaseMaterial3D.TextureFilter" default="1">
 			Sampling filter for the formula texture.

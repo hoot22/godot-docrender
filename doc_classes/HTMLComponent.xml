@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLComponent" inherits="HTMLBehavior" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <brief_description>A GDScript component instance associated with one HTML element.</brief_description>
+  <description>Register a GDScript subclass through HTMLLabel.component_scripts or a script element with type="text/gdscript" and a component attribute. Document declarations override the label registry. Component construction takes no required arguments. Enable HTMLLabel.behaviors_enabled to run components. Timers, requests, and frame callbacks use the inherited behavior runtime.</description>
+  <methods>
+    <method name="_mount" qualifiers="virtual"><return type="void"/><description>Called once after host and document have been assigned. Initialize the shadow tree and event listeners here.</description></method>
+    <method name="_connected" qualifiers="virtual"><return type="void"/><description>Called when the host is connected, including reconnection.</description></method>
+    <method name="_disconnected" qualifiers="virtual"><return type="void"/><description>Called when the host is removed from the document.</description></method>
+    <method name="_unmount" qualifiers="virtual"><return type="void"/><description>Called before releasing this component on reload or document teardown. Release event listeners here.</description></method>
+  </methods>
+  <members>
+    <member name="host" type="HTMLElement" setter="" getter="get_host">The element associated with this component.</member>
+    <member name="shadow_root" type="HTMLShadowRoot" setter="" getter="get_shadow_root">The host's shadow root, including a closed root.</member>
+  </members>
+</class>

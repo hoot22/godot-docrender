@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLTouchEvent" inherits="HTMLEvent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A touch start, move, end, or cancellation event.
+	</brief_description>
+	<members>
+		<member name="touches" type="HTMLTouchPoint[]" setter="set_touches" getter="get_touches">
+			All active touch contacts.
+		</member>
+		<member name="target_touches" type="HTMLTouchPoint[]" setter="set_target_touches" getter="get_target_touches">
+			Active contacts whose initial target matches this event's changed contact.
+		</member>
+		<member name="changed_touches" type="HTMLTouchPoint[]" setter="set_changed_touches" getter="get_changed_touches">
+			The contact changed by this event.
+		</member>
+		<member name="shift_pressed" type="bool" setter="set_shift_pressed" getter="is_shift_pressed">
+			Whether Shift was held.
+		</member>
+		<member name="ctrl_pressed" type="bool" setter="set_ctrl_pressed" getter="is_ctrl_pressed">
+			Whether Ctrl was held.
+		</member>
+		<member name="alt_pressed" type="bool" setter="set_alt_pressed" getter="is_alt_pressed">
+			Whether Alt was held.
+		</member>
+		<member name="meta_pressed" type="bool" setter="set_meta_pressed" getter="is_meta_pressed">
+			Whether Meta was held.
+		</member>
+	</members>
+</class>

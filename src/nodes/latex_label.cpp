@@ -1,5 +1,7 @@
 #include "nodes/latex_label.h"
 
+#include "editor/dockit_source_editor.h"
+
 #include <godot_cpp/classes/rendering_server.hpp>
 
 using namespace godot;
@@ -12,6 +14,8 @@ LatexLabel::LatexLabel() {
 void LatexLabel::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_text", "text"), &LatexLabel::set_text);
 	ClassDB::bind_method(D_METHOD("get_text"), &LatexLabel::get_text);
+	ClassDB::bind_method(D_METHOD("set_document", "document"), &LatexLabel::set_document);
+	ClassDB::bind_method(D_METHOD("get_document"), &LatexLabel::get_document);
 	ClassDB::bind_method(D_METHOD("set_label_settings", "settings"), &LatexLabel::set_label_settings);
 	ClassDB::bind_method(D_METHOD("get_label_settings"), &LatexLabel::get_label_settings);
 	ClassDB::bind_method(D_METHOD("set_horizontal_alignment", "alignment"), &LatexLabel::set_horizontal_alignment);
@@ -25,6 +29,7 @@ void LatexLabel::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_render_error"), &LatexLabel::get_render_error);
 
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "text", PROPERTY_HINT_MULTILINE_TEXT), "set_text", "get_text");
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "document", PROPERTY_HINT_RESOURCE_TYPE, "LatexDocument"), "set_document", "get_document");
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "label_settings", PROPERTY_HINT_RESOURCE_TYPE, "LabelSettings"), "set_label_settings", "get_label_settings");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "horizontal_alignment", PROPERTY_HINT_ENUM, "Left,Center,Right,Fill"), "set_horizontal_alignment", "get_horizontal_alignment");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "vertical_alignment", PROPERTY_HINT_ENUM, "Top,Center,Bottom,Fill"), "set_vertical_alignment", "get_vertical_alignment");
@@ -59,11 +64,33 @@ void LatexLabel::set_text(const String& p_text) {
 		return;
 	}
 	text = p_text;
-	rebuild();
+	if (document.is_null()) {
+		rebuild();
+	}
 }
 
 String LatexLabel::get_text() const {
 	return text;
+}
+
+void LatexLabel::set_document(const Ref<LatexDocument>& p_document) {
+	if (document == p_document) {
+		return;
+	}
+	const Callable changed = callable_mp(this, &LatexLabel::rebuild);
+	if (document.is_valid()) {
+		document->disconnect("changed", changed);
+	}
+	document = p_document;
+	if (document.is_valid()) {
+		DockitSourceEditorPlugin::observe_source_document(document);
+		document->connect("changed", changed, CONNECT_DEFERRED);
+	}
+	rebuild();
+}
+
+Ref<LatexDocument> LatexLabel::get_document() const {
+	return document;
 }
 
 void LatexLabel::set_label_settings(const Ref<LabelSettings>& p_settings) {
@@ -198,7 +225,7 @@ void LatexLabel::draw_formula() {
 }
 
 void LatexLabel::rebuild() {
-	const String formula = atr(text);
+	const String formula = document.is_valid() ? document->get_text() : atr(text);
 	if (is_inside_tree() && !formula.strip_edges().is_empty()) {
 		const int font_size = label_settings.is_valid() ? label_settings->get_font_size() :
 			(has_theme_font_size("font_size") ? get_theme_font_size("font_size") : get_theme_font_size("font_size", "Label"));

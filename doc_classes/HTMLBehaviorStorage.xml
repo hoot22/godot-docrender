@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLBehaviorStorage" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		String key-value storage for an HTML behavior.
+	</brief_description>
+	<description>
+		[HTMLBehavior.local_storage] persists values in [code]user://[/code] under the host's storage namespace. [HTMLBehavior.session_storage] stores values in memory for the lifetime of its [HTMLLabel]. Use [member HTMLLabel.storage_namespace] to assign a stable custom namespace when the document has no source path.
+	</description>
+	<methods>
+		<method name="clear">
+			<return type="void" />
+			<description>
+				Removes all values from this storage.
+			</description>
+		</method>
+		<method name="get_item">
+			<return type="String" />
+			<param index="0" name="key" type="String" />
+			<description>
+				Returns the value for [param key], or an empty string when it is missing. Use [method has_item] to distinguish a missing key from an empty value.
+			</description>
+		</method>
+		<method name="has_item">
+			<return type="bool" />
+			<param index="0" name="key" type="String" />
+			<description>
+				Returns [code]true[/code] if [param key] exists.
+			</description>
+		</method>
+		<method name="remove_item">
+			<return type="void" />
+			<param index="0" name="key" type="String" />
+			<description>
+				Removes [param key] if present.
+			</description>
+		</method>
+		<method name="set_item">
+			<return type="void" />
+			<param index="0" name="key" type="String" />
+			<param index="1" name="value" type="String" />
+			<description>
+				Stores [param value] under [param key]. An empty key is ignored.
+			</description>
+		</method>
+	</methods>
+</class>

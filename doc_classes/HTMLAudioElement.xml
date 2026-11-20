@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLAudioElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An audio element with optional media controls.
+	</brief_description>
+	<description>
+		An [HTMLLabel] owns the audio player for a connected element. Use [member src] or child [code]&lt;source&gt;[/code] elements to select an imported project audio resource.
+	</description>
+	<methods>
+		<method name="pause">
+			<return type="void" />
+			<description>
+				Pauses playback at the current position.
+			</description>
+		</method>
+		<method name="play">
+			<return type="int" enum="Error" />
+			<description>
+				Starts or resumes playback. Returns an error if the element has no playback host or no source can be loaded by the selected backend.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="autoplay" type="bool" setter="set_autoplay" getter="is_autoplay_enabled" default="false">
+			Starts playback automatically at runtime. Editor previews start on user input.
+		</member>
+		<member name="controls" type="bool" setter="set_controls" getter="has_controls" default="false">
+			Shows the playback controls for the audio element.
+		</member>
+		<member name="current_src" type="String" setter="" getter="get_current_src" default="&quot;&quot;">
+			Returns the project resource path of the selected audio source.
+		</member>
+		<member name="current_time" type="float" setter="set_current_time" getter="get_current_time" default="0.0">
+			The playback position, in seconds. Assigning a value seeks within the loaded audio stream.
+		</member>
+		<member name="duration" type="float" setter="" getter="get_duration" default="0.0">
+			The duration of the loaded audio, in seconds.
+		</member>
+		<member name="loop" type="bool" setter="set_loop" getter="is_looping" default="false">
+			Restarts playback when the audio stream ends.
+		</member>
+		<member name="muted" type="bool" setter="set_muted" getter="is_muted" default="false">
+			Whether the audio output is muted. The HTML attribute provides the initial value.
+		</member>
+		<member name="paused" type="bool" setter="" getter="is_paused" default="true">
+			Whether playback is paused or stopped.
+		</member>
+		<member name="src" type="String" setter="set_src" getter="get_src" default="&quot;&quot;">
+			The audio source URL, relative to the HTML document or using [code]res://[/code], [code]user://[/code], or [code]uid://[/code]. When the attribute is omitted, sources are tried in child order.
+		</member>
+		<member name="volume" type="float" setter="set_volume" getter="get_volume" default="1.0">
+			The linear playback volume from [code]0.0[/code] to [code]1.0[/code].
+		</member>
+	</members>
+</class>

@@ -1,6 +1,6 @@
 #include "latex_document_loader.h"
 
-#include "formats/docrender_source.h"
+#include "formats/dockit_source.h"
 #include "latex_document.h"
 
 #include <godot_cpp/classes/config_file.hpp>
@@ -11,7 +11,7 @@
 using namespace godot;
 
 namespace {
-	// Godot's binary resource loader also recognizes .tex. Prefer DocRender's
+	// Godot's binary resource loader also recognizes .tex. Prefer Dockit's
 	// imported artifact only when the sidecar identifies our importer.
 	Ref<ConfigFile> get_tex_import(const String& p_path) {
 		if (p_path.get_extension().nocasecmp_to("tex") != 0) {
@@ -28,7 +28,7 @@ namespace {
 			return {};
 		}
 		const String importer = config->get_value("remap", "importer", "");
-		if (importer != "docrender.latex_document" && importer != "docrender.source") {
+		if (importer != "dockit.latex_document" && importer != "dockit.source") {
 			return {};
 		}
 		return config;
@@ -53,16 +53,16 @@ namespace {
 	}
 } // namespace
 
-bool DocRenderTexLoader::_recognize_path(const String& p_path, const StringName& p_type) const {
+bool DockitTexLoader::_recognize_path(const String& p_path, const StringName& p_type) const {
 	return (p_type.is_empty() || p_type == Resource::get_class_static() || p_type == LatexDocument::get_class_static()) &&
 		is_tex_source(p_path);
 }
 
-String DocRenderTexLoader::_get_resource_type(const String& p_path) const {
+String DockitTexLoader::_get_resource_type(const String& p_path) const {
 	return is_tex_source(p_path) ? String(LatexDocument::get_class_static()) : String();
 }
 
-int64_t DocRenderTexLoader::_get_resource_uid(const String& p_path) const {
+int64_t DockitTexLoader::_get_resource_uid(const String& p_path) const {
 	const Ref<ConfigFile> config = get_tex_import(p_path);
 	if (config.is_null()) {
 		return ResourceUID::INVALID_ID;
@@ -70,7 +70,7 @@ int64_t DocRenderTexLoader::_get_resource_uid(const String& p_path) const {
 	return ResourceUID::get_singleton()->text_to_id(config->get_value("remap", "uid", ""));
 }
 
-Variant DocRenderTexLoader::_load(const String& p_path, const String&, bool, int32_t) const {
+Variant DockitTexLoader::_load(const String& p_path, const String&, bool, int32_t) const {
 	const Ref<ConfigFile> config = get_tex_import(p_path);
 	if (config.is_valid() && StringName(config->get_value("remap", "type", "")) == LatexDocument::get_class_static()) {
 		const String artifact = config->get_value("remap", "path", "");
@@ -83,7 +83,7 @@ Variant DocRenderTexLoader::_load(const String& p_path, const String&, bool, int
 	}
 
 	String text;
-	const Error error = docrender::read_document_text(p_path, text);
+	const Error error = dockit::read_document_text(p_path, text);
 	if (error != OK) {
 		return error;
 	}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLWheelEvent" inherits="HTMLMouseEvent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A cancelable wheel event with pixel deltas.
+	</brief_description>
+	<description>
+		Dispatched before the host [HTMLLabel] applies wheel scrolling. Positive [member delta] values move down and right. Each Godot wheel step maps to 36 pixels. Calling [method HTMLEvent.prevent_default] prevents the label's default wheel scrolling. The event uses [constant DELTA_MODE_PIXEL].
+	</description>
+	<constants>
+		<constant name="DELTA_MODE_PIXEL" value="0" enum="DeltaMode">
+			The delta values are measured in pixels.
+		</constant>
+	</constants>
+	<members>
+		<member name="delta" type="Vector2" setter="set_delta" getter="get_delta">
+			The wheel delta in pixels. Positive Y scrolls down and positive X scrolls right.
+		</member>
+		<member name="delta_mode" type="int" setter="set_delta_mode" getter="get_delta_mode" enum="HTMLWheelEvent.DeltaMode">
+			The units used by [member delta]. This event always uses [constant DELTA_MODE_PIXEL].
+		</member>
+	</members>
+</class>

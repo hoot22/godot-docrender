@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-namespace docrender {
+namespace dockit {
 	struct MarkdownHTMLImage {
 		godot::String src;
 		godot::String alt;

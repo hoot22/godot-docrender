@@ -1,0 +1,1 @@
+body { margin: 0; background: black; } #external { width: 60px; height: 60px;background: cyan; --clip: url(../../clip-assets/import.svg#use-ring); clip-path: var(--clip); }

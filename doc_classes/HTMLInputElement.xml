@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLInputElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A handle to an HTML input element.
+	</brief_description>
+	<description>
+		Returned by queries and [method HTMLLayout.create_element] for [code]&lt;input&gt;[/code]. [HTMLLabel] supports text, search, tel, url, email, password, number, range, date, month, week, time, datetime-local, color, file, checkbox, radio, button, submit, reset, image, and hidden.
+		Text and picker values are tracked separately from the markup default. Checkbox and radio values default to [code]on[/code]. A selected file contributes a read-only [HTMLInputFile] to form data. Script assignments emit no user editing signals.
+	</description>
+	<methods>
+		<method name="get_form" qualifiers="const">
+			<return type="HTMLFormElement" />
+			<description>
+				Returns the associated form or [code]null[/code].
+			</description>
+		</method>
+		<method name="get_files" qualifiers="const">
+			<return type="HTMLInputFile[]" />
+			<description>
+				Returns a snapshot of the selected files. Returns an empty array for other input types.
+			</description>
+		</method>
+		<method name="get_validity" qualifiers="const">
+			<return type="Dictionary" />
+			<description>
+				Returns the boolean flags [code]will_validate[/code], [code]valid[/code], [code]value_missing[/code], [code]type_mismatch[/code], [code]bad_input[/code], [code]pattern_mismatch[/code], [code]range_underflow[/code], [code]range_overflow[/code], [code]step_mismatch[/code], [code]too_short[/code], and [code]too_long[/code]. The [code]pattern[/code] attribute uses Godot's [RegEx] syntax and matches the full value. ECMAScript Unicode Sets syntax may differ.
+			</description>
+		</method>
+		<method name="get_value_as_date" qualifiers="const">
+			<return type="Dictionary" />
+			<description>
+				Returns [code]year[/code], [code]month[/code], [code]day[/code], [code]hour[/code], [code]minute[/code], [code]second[/code], and [code]millisecond[/code]. A month starts on its first day, a week starts on Monday, and a time uses the date 1970-01-01. Returns an empty dictionary when the value is empty or this operation does not apply, including for datetime-local.
+			</description>
+		</method>
+		<method name="set_value_as_date">
+			<return type="int" enum="Error" />
+			<param index="0" name="parts" type="Dictionary" />
+			<description>
+				Sets the input from date or time parts. An empty dictionary clears the value. Returns [constant ERR_UNAVAILABLE] for input types without a date getter and [constant ERR_INVALID_PARAMETER] for invalid parts.
+			</description>
+		</method>
+		<method name="show_picker">
+			<return type="int" enum="Error" />
+			<description>
+				Opens the input picker or suggestions in the owning [HTMLLabel]. The element must be visible, connected, mutable, and within the active dialog if one is modal.
+			</description>
+		</method>
+		<method name="step_up">
+			<return type="int" enum="Error" />
+			<param index="0" name="count" type="int" default="1" />
+			<description>
+				Increases a numeric or temporal value using its configured step and limits. Returns [constant ERR_UNAVAILABLE] when stepping does not apply or [code]step="any"[/code].
+			</description>
+		</method>
+		<method name="step_down">
+			<return type="int" enum="Error" />
+			<param index="0" name="count" type="int" default="1" />
+			<description>
+				Decreases a numeric or temporal value using its configured step and limits.
+			</description>
+		</method>
+		<method name="get_selection_end" qualifiers="const">
+			<return type="int" />
+			<description>
+				Returns the end of the single-line text selection. Other input types and invalid handles return [code]-1[/code].
+			</description>
+		</method>
+		<method name="get_selection_start" qualifiers="const">
+			<return type="int" />
+			<description>
+				Returns the start of the single-line text selection. Other input types and invalid handles return [code]-1[/code].
+			</description>
+		</method>
+		<method name="set_selection_range">
+			<return type="void" />
+			<param index="0" name="start" type="int" />
+			<param index="1" name="end" type="int" />
+			<description>
+				Sets the single-line selection using Godot string character indices. Indices snap to grapheme boundaries. Equal indices set the caret.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="value" type="String" setter="set_value" getter="get_value">
+			The current input value. For a file input, this is an empty string or the first selected file name with the standard fake-path prefix. Only an empty assignment can change a file input's value.
+		</member>
+		<member name="checked" type="bool" setter="set_checked" getter="is_checked">
+			The current checked state. Before a script or user sets it, the state follows the [code]checked[/code] attribute.
+		</member>
+		<member name="type" type="String" setter="set_type" getter="get_type">
+			The normalized HTML input type.
+		</member>
+		<member name="indeterminate" type="bool" setter="set_indeterminate" getter="is_indeterminate">
+			The mixed state of a checkbox. It changes the appearance and is cleared by user activation. Form data uses [member checked].
+		</member>
+		<member name="value_as_number" type="float" setter="set_value_as_number" getter="get_value_as_number">
+			The numeric value, or NaN when unavailable. Months count from January 1970, times use milliseconds since midnight, and other temporal values use milliseconds from the civil epoch without applying a timezone offset.
+		</member>
+	</members>
+</class>

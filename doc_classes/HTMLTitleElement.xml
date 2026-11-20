@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLTitleElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		The title element of an HTML document.
+	</brief_description>
+	<description>
+		Represents [code]&lt;title&gt;[/code]. [method HTMLLayout.get_title] returns the document title with normalized ASCII whitespace.
+	</description>
+	<members>
+		<member name="text" type="String" setter="set_text_content" getter="get_text_content">
+			The original text of the title.
+		</member>
+	</members>
+</class>

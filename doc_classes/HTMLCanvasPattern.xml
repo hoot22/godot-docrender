@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLCanvasPattern" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>A repeated image fill style used by an HTML canvas 2D context.</brief_description>
+	<description>Created by [method HTMLCanvasRenderingContext2D.create_pattern] from an [Image], [Texture2D], or [HTMLCanvasElement]. The pattern retains its source image when created.</description>
+</class>

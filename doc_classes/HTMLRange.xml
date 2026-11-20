@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLRange" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A live range of nodes in an HTML layout.
+	</brief_description>
+	<description>
+		Create a range with [method HTMLLayout.create_range] or [method HTMLLabel.create_range]. Endpoints use Godot character offsets for text and comments and logical child indices for other nodes. DOM edits update endpoints. Clearing or reparsing the layout invalidates the range.
+	</description>
+	<methods>
+		<method name="is_valid" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns whether the range still belongs to a live layout and its endpoints belong to that layout.
+			</description>
+		</method>
+		<method name="is_collapsed" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns whether the range's endpoints are equal.
+			</description>
+		</method>
+		<method name="get_start_container" qualifiers="const">
+			<return type="HTMLNode" />
+			<description>
+				Returns the node containing the start boundary.
+			</description>
+		</method>
+		<method name="get_end_container" qualifiers="const">
+			<return type="HTMLNode" />
+			<description>
+				Returns the node containing the end boundary.
+			</description>
+		</method>
+		<method name="get_start_offset" qualifiers="const">
+			<return type="int" />
+			<description>
+				Returns the start offset in its container.
+			</description>
+		</method>
+		<method name="get_end_offset" qualifiers="const">
+			<return type="int" />
+			<description>
+				Returns the end offset in its container.
+			</description>
+		</method>
+		<method name="set_start">
+			<return type="int" enum="Error" />
+			<param index="0" name="node" type="HTMLNode" />
+			<param index="1" name="offset" type="int" />
+			<description>
+				Sets the start boundary. If it follows the end or has a different tree root, both endpoints move to the new boundary.
+			</description>
+		</method>
+		<method name="set_end">
+			<return type="int" enum="Error" />
+			<param index="0" name="node" type="HTMLNode" />
+			<param index="1" name="offset" type="int" />
+			<description>
+				Sets the end boundary. If it precedes the start or has a different tree root, both endpoints move to the new boundary.
+			</description>
+		</method>
+		<method name="collapse">
+			<return type="int" enum="Error" />
+			<param index="0" name="to_start" type="bool" default="false" />
+			<description>
+				Collapses the range to its end by default. Pass [code]true[/code] to collapse to the start.
+			</description>
+		</method>
+		<method name="select_node">
+			<return type="int" enum="Error" />
+			<param index="0" name="node" type="HTMLNode" />
+			<description>
+				Selects the node by setting the endpoints immediately before and after it in its parent.
+			</description>
+		</method>
+		<method name="select_node_contents">
+			<return type="int" enum="Error" />
+			<param index="0" name="node" type="HTMLNode" />
+			<description>
+				Selects the entire character data or all child nodes of the given node.
+			</description>
+		</method>
+		<method name="get_text" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns the DOM text within the range, excluding comments and generated content.
+			</description>
+		</method>
+		<method name="get_client_rects" qualifiers="const">
+			<return type="Rect2[]" />
+			<description>
+				Returns the visible text-selection rectangles in document coordinates from the last layout.
+			</description>
+		</method>
+		<method name="clone_contents">
+			<return type="HTMLDocumentFragment" />
+			<description>
+				Returns a detached copy of the selected contents, preserving the shells of partially selected elements.
+			</description>
+		</method>
+		<method name="extract_contents">
+			<return type="HTMLDocumentFragment" />
+			<description>
+				Moves the selected contents to a detached fragment and collapses the range. Fully selected nodes retain their handles.
+			</description>
+		</method>
+		<method name="delete_contents">
+			<return type="int" enum="Error" />
+			<description>
+				Removes the selected contents and collapses the range.
+			</description>
+		</method>
+		<method name="insert_node">
+			<return type="int" enum="Error" />
+			<param index="0" name="node" type="HTMLNode" />
+			<description>
+				Inserts a same-layout node or fragment at the start. A text start container is split at its offset.
+			</description>
+		</method>
+		<method name="surround_contents">
+			<return type="int" enum="Error" />
+			<param index="0" name="element" type="HTMLElement" />
+			<description>
+				Moves the selected contents into the given element and selects that element. A partially selected non-text node rejects the operation.
+			</description>
+		</method>
+	</methods>
+</class>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLDocumentFragment" inherits="HTMLNode" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A detached collection of HTML elements for batch insertion.
+	</brief_description>
+	<description>
+		Create a fragment with [method HTMLLayout.create_document_fragment] or [method HTMLLabel.create_document_fragment]. Add elements from the same layout with [method append_child]. Insert them through [method HTMLElement.append_fragment] or [method HTMLElement.insert_fragment_before]. A successful insertion preserves the element handles and empties the fragment for reuse.
+		Direct children are detached from the document and return [code]null[/code] from [method HTMLElement.get_parent] while in the fragment. Clearing or reparsing the layout invalidates the fragment and the handles it still holds.
+	</description>
+	<methods>
+		<method name="append_child">
+			<return type="int" enum="Error" />
+			<param index="0" name="child" type="HTMLNode" />
+			<description>
+				Moves [param child] to the end of the fragment. If the child was connected, its removal schedules a document update. Returns [constant ERR_INVALID_PARAMETER] for an invalid fragment or child, a child from a different layout, or the document root.
+			</description>
+		</method>
+		<method name="clone_node" qualifiers="const">
+			<return type="HTMLDocumentFragment" />
+			<param index="0" name="deep" type="bool" default="false" />
+			<description>
+				Returns a new detached fragment in the same layout. A deep copy includes all content in order, including text and comments from a template. A shallow copy is empty. Returns [code]null[/code] if this fragment is invalid.
+			</description>
+		</method>
+		<method name="get_children" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<description>
+				Returns a snapshot of the direct children in order, or an empty array if the fragment is invalid.
+			</description>
+		</method>
+		<method name="get_element_by_id" qualifiers="const">
+			<return type="HTMLElement" />
+			<param index="0" name="id" type="String" />
+			<description>
+				Returns the first element in tree order with the given case-sensitive HTML ID. Supply the raw ID without [code]#[/code]. Returns [code]null[/code] if the ID is absent, the ID is empty, or the fragment is invalid. Nested template contents are searched through their own fragments.
+			</description>
+		</method>
+		<method name="query_selector" qualifiers="const">
+			<return type="HTMLElement" />
+			<param index="0" name="selector" type="String" />
+			<description>
+				Returns the first matching element in tree order, or [code]null[/code] when nothing matches or the fragment is invalid. See [method query_selector_all] for selector scope and syntax.
+			</description>
+		</method>
+		<method name="query_selector_all" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<param index="0" name="selector" type="String" />
+			<description>
+				Returns a snapshot of matching elements in tree order, with each element included once. [code]:scope &gt; .row[/code] selects direct children with the [code]row[/code] class. A query for [code]:scope[/code] alone returns an empty array because the fragment root has no element handle.
+				A nested template can match as an element. Query its [member HTMLTemplateElement.content] separately to find its contents. Invalid or unsupported selectors report a Godot error. An invalid fragment or a selector with no matches returns an empty array. See [method HTMLLayout.query_selector_all] for supported syntax.
+			</description>
+		</method>
+		<method name="get_first_element_child" qualifiers="const">
+			<return type="HTMLElement" />
+			<description>
+				Returns the first direct element child, or [code]null[/code].
+			</description>
+		</method>
+		<method name="get_last_element_child" qualifiers="const">
+			<return type="HTMLElement" />
+			<description>
+				Returns the last direct element child, or [code]null[/code].
+			</description>
+		</method>
+		<method name="get_child_element_count" qualifiers="const">
+			<return type="int" />
+			<description>
+				Returns the number of direct element children.
+			</description>
+		</method>
+		<method name="replace_children">
+			<return type="int" enum="Error" />
+			<param index="0" name="items" type="Array" />
+			<description>
+				Replaces the child nodes with the given nodes, plain strings, and fragments. Removed nodes retain their handles.
+			</description>
+		</method>
+		<method name="insert_before">
+			<return type="int" enum="Error" />
+			<param index="0" name="child" type="HTMLNode" />
+			<param index="1" name="reference" type="HTMLNode" default="null" />
+			<description>
+				Moves a node or fragment before the reference child, or appends it if the reference is [code]null[/code].
+			</description>
+		</method>
+		<method name="remove_child">
+			<return type="int" enum="Error" />
+			<param index="0" name="child" type="HTMLNode" />
+			<description>
+				Detaches a direct child and retains its handle.
+			</description>
+		</method>
+		<method name="replace_child">
+			<return type="int" enum="Error" />
+			<param index="0" name="new_child" type="HTMLNode" />
+			<param index="1" name="old_child" type="HTMLNode" />
+			<description>
+				Replaces a direct child and retains the outgoing handle.
+			</description>
+		</method>
+	</methods>
+</class>

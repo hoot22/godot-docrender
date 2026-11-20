@@ -2,7 +2,7 @@
 
 #include "formats/pdf/reader/pdf_reader_internal.h"
 
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 #include <godot_cpp/classes/project_settings.hpp>
 #include <godot_cpp/variant/char_string.hpp>
 
@@ -30,7 +30,7 @@ namespace godot {
 	}
 
 	bool PDFWriter::is_available() {
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 		String message;
 		const auto api = pdfium::acquire(message);
 		return api && api->has(pdfium::Group::writer_document) && api->has(pdfium::Group::writer_save);
@@ -40,7 +40,7 @@ namespace godot {
 	}
 
 	PackedStringArray PDFWriter::get_capabilities() {
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 		String message;
 		if (const auto api = pdfium::acquire(message)) {
 			return api->capabilities(true);
@@ -61,7 +61,7 @@ namespace godot {
 
 	bool PDFWriter::is_open() const {
 		std::lock_guard guard(pdfium::mutex());
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 		return state->document != nullptr;
 #else
 		return false;
@@ -70,14 +70,14 @@ namespace godot {
 
 	void PDFWriter::close() {
 		std::lock_guard guard(pdfium::mutex());
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 		state->reset();
 #endif
 		state->clear_error();
 	}
 
 	Error PDFWriter::open_file(const String& p_path, const String& p_password) {
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 		PackedByteArray bytes;
 		String message;
 		const Error error = pdfium::read_file(p_path, bytes, message);
@@ -98,7 +98,7 @@ namespace godot {
 
 	Error PDFWriter::open_bytes(PackedByteArray p_bytes, const String& p_password, const String& p_source) {
 		std::lock_guard guard(pdfium::mutex());
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 		String message;
 		const auto api = pdfium::acquire(message);
 		if (!api) {
@@ -116,7 +116,7 @@ namespace godot {
 #endif
 	}
 
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 	using namespace pdfium;
 
 	namespace {
@@ -182,7 +182,7 @@ namespace godot {
 				destination = ProjectSettings::get_singleton()->globalize_path(p_path).replace("/", "\\");
 				const String parent = destination.get_base_dir();
 				for (int attempt = 0; attempt < 16; ++attempt) {
-					const String name = vformat(".docrender-pdf-%d-%d.tmp", int64_t(GetCurrentProcessId()), ++serial);
+					const String name = vformat(".dockit-pdf-%d-%d.tmp", int64_t(GetCurrentProcessId()), ++serial);
 					const String candidate = parent.path_join(name).replace("/", "\\");
 					file = CreateFileW(candidate.wide_string().get_data(), GENERIC_WRITE, 0, nullptr,
 						CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr);

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLBaseElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A document base URL or default link target.
+	</brief_description>
+	<description>
+		Represents [code]&lt;base&gt;[/code]. The first connected base with an [code]href[/code] attribute determines the document's local resource base. Read the effective URL with [method HTMLLayout.get_base_uri].
+	</description>
+	<methods>
+		<method name="get_resolved_href" qualifiers="const">
+			<return type="String" />
+			<description>
+				Resolves the base element's own address against the original document source.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="href" type="String" setter="set_href" getter="get_href">
+			The original base address. A trailing slash denotes a directory.
+		</member>
+		<member name="target" type="String" setter="set_target" getter="get_target">
+			The declared default target for navigation.
+		</member>
+	</members>
+</class>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLLIElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A handle to an HTML list item.
+	</brief_description>
+	<description>
+		Represents a [code]&lt;li&gt;[/code] element in a list.
+	</description>
+	<members>
+		<member name="type" type="String" setter="set_type" getter="get_type">
+			The reflected legacy marker type for this item. CSS can override it.
+		</member>
+		<member name="value" type="int" setter="set_value" getter="get_value">
+			The explicit item number in an ordered list. Reading a missing or invalid [code]value[/code] attribute returns [code]0[/code]. Use [method HTMLElement.remove_attribute] to resume automatic numbering.
+		</member>
+	</members>
+</class>

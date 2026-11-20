@@ -1,0 +1,15 @@
+[remap]
+
+importer="dockit.html_document"
+importer_version=12
+type="HTMLDocument"
+uid="uid://tkq6ayjk8cqd"
+path="res://.godot/imported/progress.html-68f1634f049cb43afbb805ce7b5ec8f3.res"
+
+[deps]
+
+source_file="res://addons/dockit/example/html_examples/html/progress.html"
+dest_files=["res://.godot/imported/progress.html-68f1634f049cb43afbb805ce7b5ec8f3.res"]
+
+[params]
+

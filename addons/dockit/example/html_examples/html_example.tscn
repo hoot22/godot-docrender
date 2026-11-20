@@ -1,0 +1,97 @@
+[gd_scene format=3 uid="uid://bndblmu46frjc"]
+
+[ext_resource type="HTMLDocument" uid="uid://bdgtl2f2sr47w" path="res://addons/dockit/example/html_examples/html/script.html" id="1_ufrbv"]
+
+[node name="HtmlExample" type="Control" unique_id=211205059]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BG" type="ColorRect" parent="." unique_id=1350896095]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=96865259]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HSplitContainer" type="HSplitContainer" parent="PanelContainer" unique_id=389755195]
+layout_mode = 2
+split_offsets = PackedInt32Array(256)
+split_offset = 256
+
+[node name="Tree" type="Tree" parent="PanelContainer/HSplitContainer" unique_id=1875335820]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/HSplitContainer" unique_id=152396636]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HSplitContainer/PanelContainer" unique_id=579849693]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/HSplitContainer/PanelContainer/VBoxContainer" unique_id=1481249293]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeaderLarge"
+text = "Title"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/HSplitContainer/PanelContainer/VBoxContainer" unique_id=939030071]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TabContainer" type="TabContainer" parent="PanelContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=148893884]
+custom_minimum_size = Vector2(0, 360)
+layout_mode = 2
+size_flags_horizontal = 3
+current_tab = 0
+tab_0/title = "HTML"
+tab_1/title = "CSS"
+
+[node name="HtmlSourcePanelContainer" type="PanelContainer" parent="PanelContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer" unique_id=1840443268]
+layout_mode = 2
+metadata/_tab_index = 0
+metadata/_tab_name = "HTML"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/HtmlSourcePanelContainer" unique_id=1598898659]
+layout_mode = 2
+
+[node name="HtmlCodeEdit" type="CodeEdit" parent="PanelContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/HtmlSourcePanelContainer/HBoxContainer" unique_id=1426632859]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CssSourcePanelContainer2" type="PanelContainer" parent="PanelContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer" unique_id=807606269]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+metadata/_tab_name = "CSS"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/CssSourcePanelContainer2" unique_id=986808063]
+layout_mode = 2
+
+[node name="CssCodeEdit" type="CodeEdit" parent="PanelContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/CssSourcePanelContainer2/HBoxContainer" unique_id=1110931948]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PreviewHTMLLabel" type="HTMLLabel" parent="PanelContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=79034104]
+storage_namespace = "/root/@EditorNode@19518/@Panel@14/@VBoxContainer@15/DockVSplitMain/DockHSplitMain/@VBoxContainer@37/DockVSplitCenter/@VSplitContainer@101/@VBoxContainer@102/@EditorMainScreen@160/MainScreen/@CanvasItemEditor@10138/@VSplitContainer@9897/@HSplitContainer@9899/@HSplitContainer@9901/@Control@9902/@SubViewportContainer@9903/@SubViewport@9904/HtmlExample/PanelContainer/HSplitContainer/PanelContainer/VBoxContainer/TabContainer/HtmlSourcePanelContainer/HSplitContainer/HBoxContainer/HTMLLabel"
+document = ExtResource("1_ufrbv")
+behaviors_enabled = true
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 1

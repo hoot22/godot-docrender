@@ -1,0 +1,15 @@
+[remap]
+
+importer="dockit.html_document"
+importer_version=12
+type="HTMLDocument"
+uid="uid://cdcb2s7b8xur1"
+path="res://.godot/imported/bdo.html-28d110cf6b484e2854641bc7593468c9.res"
+
+[deps]
+
+source_file="res://addons/dockit/example/html_examples/html/bdo.html"
+dest_files=["res://.godot/imported/bdo.html-28d110cf6b484e2854641bc7593468c9.res"]
+
+[params]
+

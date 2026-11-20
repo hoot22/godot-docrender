@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLEventTarget" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A DOM event target: a node, the document node, or the document window.
+	</brief_description>
+	<description>
+		[HTMLNode] and [HTMLWindow] both accept listeners, dispatch events, and report which event types have listeners. The propagation path runs from the window through the document node and the element chain to the target, so a listener registered on the window observes events from every connected node.
+		Dynamic [code]on*[/code] properties accept Callable handlers. On elements, an [code]on*[/code] HTML attribute may also name a GDScript behavior method; assigning the property overrides that attribute handler.
+	</description>
+	<methods>
+		<method name="add_event_listener">
+			<return type="int" enum="Error" />
+			<param index="0" name="type" type="StringName" />
+			<param index="1" name="callable" type="Callable" />
+			<param index="2" name="options" type="Dictionary" default="{}" />
+			<description>
+				Registers [param callable] for events of [param type] on this target. The callback receives the [HTMLEvent] as its only argument.
+				[param options] accepts [code]capture[/code] to run during the capture phase, [code]once[/code] to remove the listener after its first call, and [code]passive[/code] to make [method HTMLEvent.prevent_default] a no-op that only warns once.
+				When [code]passive[/code] is omitted for [code]wheel[/code], [code]touchstart[/code], or [code]touchmove[/code] on the document or window, it defaults to [code]true[/code]. Other targets and types default to [code]false[/code].
+				Registering the same callback, type, and [code]capture[/code] flag twice is a no-op. Registering on the document node handles events for all of its descendants, which is the supported way to delegate.
+				Listeners survive detaching the node and follow it back into the tree. They are discarded when the node is removed with [method HTMLElement.remove], when the document is replaced, and when the owning layout is cleared.
+			</description>
+		</method>
+		<method name="listen">
+			<return type="HTMLListenerHandle" />
+			<param index="0" name="type" type="StringName" />
+			<param index="1" name="callable" type="Callable" />
+			<param index="2" name="options" type="Dictionary" default="{}" />
+			<description>
+				Registers [param callable] and returns a handle whose [method HTMLListenerHandle.cancel] method removes it. Returns [code]null[/code] when registration fails. Options match [method add_event_listener].
+			</description>
+		</method>
+		<method name="remove_event_listener">
+			<return type="int" enum="Error" />
+			<param index="0" name="type" type="StringName" />
+			<param index="1" name="callable" type="Callable" />
+			<param index="2" name="options" type="Dictionary" default="{}" />
+			<description>
+				Removes a listener registered with [method add_event_listener]. The [code]capture[/code] entry of [param options] must match the registration.
+			</description>
+		</method>
+		<method name="dispatch_event">
+			<return type="bool" />
+			<param index="0" name="event" type="HTMLEvent" />
+			<description>
+				Dispatches [param event] from this target using the capture, target, and bubble phases. Returns [code]false[/code] when a listener cancelled the default action. Events created by scripts report [code]is_trusted[/code] as [code]false[/code]; they still propagate and can be cancelled.
+			</description>
+		</method>
+		<method name="has_event_listener">
+			<return type="bool" />
+			<param index="0" name="type" type="StringName" />
+			<description>
+				Returns whether this target has at least one listener registered for [param type].
+			</description>
+		</method>
+		<method name="is_valid" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns whether the target still belongs to the current document. Window handles become invalid when their document is replaced.
+			</description>
+		</method>
+	</methods>
+</class>

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "formats/html/layout/html_geometry.h"
+#include "formats/html/text/html_text_selection.h"
 #include "formats/markdown/markdown_parser.h"
 #include "formats/mermaid/mermaid_render.h"
 
@@ -131,21 +133,38 @@ private:
 	bool dragging_selection = false;
 	bool selection_dragged = false;
 	bool selection_drag_attempt = false;
+	bool pointer_update_queued = false;
 	bool internal_processing_enabled = false;
 	PopupMenu* menu = nullptr;
 	int64_t selection_anchor = 0;
 	int64_t selection_caret = 0;
+	dockit::HTMLSelectionPoint selection_origin;
 	int64_t search_match_start = -1;
 	int64_t search_match_end = -1;
 	Vector2 press_position;
+	bool pressed_markdown = false;
+	bool pressed_blank = false;
 	int32_t rendered_block_count = 0;
 	float content_height = 1.0f;
 	float layout_width = 0.0f;
 	int32_t layout_height = 0;
 	int32_t layout_html_height = 0;
+	struct HTMLScrollbarGesture {
+		Ref<HTMLLayout> layout;
+		dockit::HTMLScrollbarDrag drag;
+		Vector2 origin;
+	};
+	std::optional<HTMLScrollbarGesture> html_scrollbar_drag;
+	godot::Ref<HTMLLayout> hovered_html_scrollbar_layout;
+	void update_html_scrollbar_hover(const godot::Ref<HTMLLayout>& p_layout, const godot::Vector2& p_point = {});
 	Ref<HTMLLayout> pressed_html_layout;
 	uintptr_t pressed_html_link = 0;
 	Dictionary anchor_offsets;
+	struct HTMLAnchorSource {
+		Ref<HTMLLayout> layout;
+		float top;
+	};
+	HashMap<String, HTMLAnchorSource> html_anchor_sources;
 	HashMap<String, float> footnote_reference_offsets;
 	HashMap<String, float> footnote_definition_offsets;
 
@@ -183,7 +202,14 @@ private:
 	Rect2 get_visible_content_rect() const;
 	Rect2 get_html_visible_rect() const;
 	bool is_rect_visible(const Rect2& p_rect, const Rect2& p_visible_rect) const;
-	Ref<HTMLLayout> html_at_position(const Vector2& p_position, Vector2& r_local_position) const;
+	Ref<HTMLLayout> html_at_position(const Vector2& p_position, Vector2& r_local_position, int64_t* r_offset = nullptr) const;
+	dockit::HTMLSelectionPoint selection_point_at(const Vector2& p_position) const;
+	void extend_document_selection(const Vector2& p_position);
+	void scroll_html_input(const Vector2& p_position, const Ref<InputEvent>& p_event);
+	void on_margin_gui_input(const Ref<InputEvent>& p_event);
+	void update_pointer(const Vector2& p_position);
+	void queue_pointer_update();
+	void refresh_pointer();
 	int64_t hit_test_document(const Vector2& p_position) const;
 	String link_uri_at_position(const Vector2& p_position) const;
 	String link_uri_at_character(int64_t p_character) const;
@@ -224,9 +250,9 @@ public:
 	int32_t get_layout_flush_interval_msec() const;
 	bool flush_pending_layout();
 	void request_local_image(const String& p_uri);
-	void request_remote_image(const String& p_uri);
-	void on_image_request_completed(int32_t p_result, int32_t p_response_code, const PackedStringArray& p_headers, const PackedByteArray& p_body, const String& p_uri, uint64_t p_request_id);
 	void refresh_image_content();
+	static void remote_image_completed(const String& p_url, const Ref<Texture2D>& p_texture, uint64_t p_canvas);
+	static void refresh_after_html_resource(uint64_t p_canvas);
 	void update_internal_processing();
 	bool process_pending_local_images();
 	bool update_gif_animations(double p_delta);
@@ -241,6 +267,7 @@ public:
 	bool has_anchor(const String& p_anchor) const;
 	PackedStringArray get_anchors() const;
 	float get_anchor_offset(const String& p_anchor) const;
+	std::optional<float> scroll_to_html_anchor(const String& p_anchor, float p_align);
 	float get_search_result_y() const;
 	float get_bottom_position() const;
 	PopupMenu* get_menu();

@@ -1,0 +1,1 @@
+body { margin: 0; } #imported_border { width: 20px; height: 20px; border: 4px solid black;border-image: url(../border-import.png) 4 fill; }

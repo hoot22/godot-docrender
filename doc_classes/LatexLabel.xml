@@ -11,7 +11,7 @@
 		<method name="get_render_error" qualifiers="const">
 			<return type="String" />
 			<description>
-				Returns the error from the last attempt to lay out [member text]. Returns an empty string if the expression rendered successfully or is empty. The label lays out its expression after entering the scene tree.
+				Returns the error from the last attempt to lay out the expression. Returns an empty string if the expression rendered successfully or is empty. The label lays out its expression after entering the scene tree.
 			</description>
 		</method>
 	</methods>
@@ -22,6 +22,9 @@
 		<member name="display_mode" type="bool" setter="set_display_mode" getter="is_display_mode" default="true">
 			Uses display math style when enabled and the more compact inline math style when disabled.
 		</member>
+		<member name="document" type="LatexDocument" setter="set_document" getter="get_document">
+			The LaTeX resource to display, such as an imported [code].tex[/code] file containing a math expression. The formula updates when the resource changes or is reimported. Set this to [code]null[/code] to use [member text].
+		</member>
 		<member name="horizontal_alignment" type="int" setter="set_horizontal_alignment" getter="get_horizontal_alignment" enum="HorizontalAlignment" default="0">
 			Aligns the formula horizontally. Left and right mirror in right-to-left layouts. Fill places the formula at the left without stretching it.
 		</member>
@@ -29,7 +32,7 @@
 			Uses the resource's font size and font color in preference to the theme. Changes to a shared resource update the formula. The glyphs use the embedded math fonts.
 		</member>
 		<member name="text" type="String" setter="set_text" getter="get_text" default="&quot;&quot;">
-			The LaTeX expression to display. Supply the formula directly, for example [code]\sum_{n=1}^{10} n^2[/code].
+			The LaTeX expression to display when [member document] is unset. Supply the formula directly, for example [code]\sum_{n=1}^{10} n^2[/code].
 		</member>
 		<member name="vertical_alignment" type="int" setter="set_vertical_alignment" getter="get_vertical_alignment" enum="VerticalAlignment" default="0">
 			Aligns the formula vertically inside the normal stylebox margins. Fill places the formula at the top.

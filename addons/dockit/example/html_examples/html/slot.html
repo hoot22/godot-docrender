@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>GDScript components and slots</title>
+  <style>
+    body { font-family: sans-serif; margin: 16px; }
+    x-slot-card { display: block; margin: 12px 0; }
+  </style>
+  <script type="text/gdscript" component="x-slot-card" src="../behavior_scripts/slot.gd"></script>
+</head>
+<body>
+  <x-slot-card>
+    <template shadowrootmode="open">
+      <style>
+        article { border: 1px solid #8899aa; border-radius: 8px; padding: 16px; }
+        h2 { margin: 0 0 12px; color: #217ac0; }
+        button { margin-top: 12px; }
+      </style>
+      <article>
+        <h2><slot name="title">Default title</slot></h2>
+        <div><slot>Default content</slot></div>
+        <button type="button">Change title</button>
+      </article>
+    </template>
+    <span slot="title">A reusable card</span>
+    <p>This content stays in the original DOM while the slot determines where it is rendered.</p>
+  </x-slot-card>
+</body>
+</html>

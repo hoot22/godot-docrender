@@ -1,0 +1,6 @@
+@font-face { font-family: "Probe Face"; src: url(../../fonts/times.ttf); }
+@media (max-width: 400px) { @supports font-format( Truetype ) and at-rule(@font-face) {
+@font-face { font-family: "Probe Face";
+src: local("Unavailable face"), url(missing.ttf), url(../../fonts/times.ttf) format(svg),
+url(../../fonts/times.ttf) tech(variations),
+url("../../fonts/cour.ttf") format("truetype"); } } }

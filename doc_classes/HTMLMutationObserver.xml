@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLMutationObserver" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		Observes DOM changes in one or more HTML layouts.
+	</brief_description>
+	<description>
+		Call [method observe] for each target. Use [signal mutations_delivered] for deferred batches or [method take_records] for synchronous polling. Callback edits enter a later delivery. Clearing a layout drops its registered observations and undelivered records.
+	</description>
+	<methods>
+		<method name="observe">
+			<return type="int" enum="Error" />
+			<param index="0" name="target" type="HTMLNode" />
+			<param index="1" name="options" type="Dictionary" />
+			<description>
+				Observes the target using the boolean options child_list, attributes, character_data, subtree, attribute_old_value, and character_data_old_value. The attribute_filter option accepts an array of attribute names. At least one mutation category must be enabled.
+			</description>
+		</method>
+		<method name="disconnect">
+			<return type="void" />
+			<description>
+				Removes all registrations and discards pending records.
+			</description>
+		</method>
+		<method name="take_records">
+			<return type="Dictionary[]" />
+			<description>
+				Returns the queued record dictionaries in order and drains the queue.
+			</description>
+		</method>
+	</methods>
+	<signals>
+		<signal name="mutations_delivered">
+			<param index="0" name="records" type="Dictionary[]" />
+			<description>
+				Emitted with a snapshot of the layout's pending records. Each record has the keys type, target, added_nodes, removed_nodes, previous_sibling, next_sibling, attribute_name, and old_value.
+			</description>
+		</signal>
+	</signals>
+</class>

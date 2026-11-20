@@ -1,5 +1,7 @@
 #include "nodes/latex_label_3d.h"
 
+#include "editor/dockit_source_editor.h"
+
 #include <godot_cpp/classes/node2d.hpp>
 #include <godot_cpp/classes/sub_viewport.hpp>
 #include <godot_cpp/classes/viewport_texture.hpp>
@@ -47,6 +49,8 @@ void LatexLabel3D::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("set_text", "text"), &LatexLabel3D::set_text);
 	ClassDB::bind_method(D_METHOD("get_text"), &LatexLabel3D::get_text);
+	ClassDB::bind_method(D_METHOD("set_document", "document"), &LatexLabel3D::set_document);
+	ClassDB::bind_method(D_METHOD("get_document"), &LatexLabel3D::get_document);
 	ClassDB::bind_method(D_METHOD("set_display_mode", "enabled"), &LatexLabel3D::set_display_mode);
 	ClassDB::bind_method(D_METHOD("is_display_mode"), &LatexLabel3D::is_display_mode);
 	ClassDB::bind_method(D_METHOD("set_font_size", "size"), &LatexLabel3D::set_font_size);
@@ -80,6 +84,7 @@ void LatexLabel3D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_render_error"), &LatexLabel3D::get_render_error);
 
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "text", PROPERTY_HINT_MULTILINE_TEXT), "set_text", "get_text");
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "document", PROPERTY_HINT_RESOURCE_TYPE, "LatexDocument"), "set_document", "get_document");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "display_mode"), "set_display_mode", "is_display_mode");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "font_size", PROPERTY_HINT_RANGE, "1,256,1,or_greater,suffix:px"), "set_font_size", "get_font_size");
 	ADD_PROPERTY(PropertyInfo(Variant::COLOR, "modulate"), "set_modulate", "get_modulate");
@@ -119,11 +124,33 @@ void LatexLabel3D::set_text(const String& p_text) {
 		return;
 	}
 	text = p_text;
-	queue_rebuild();
+	if (document.is_null()) {
+		queue_rebuild();
+	}
 }
 
 String LatexLabel3D::get_text() const {
 	return text;
+}
+
+void LatexLabel3D::set_document(const Ref<LatexDocument>& p_document) {
+	if (document == p_document) {
+		return;
+	}
+	const Callable changed = callable_mp(this, &LatexLabel3D::queue_rebuild);
+	if (document.is_valid()) {
+		document->disconnect("changed", changed);
+	}
+	document = p_document;
+	if (document.is_valid()) {
+		DockitSourceEditorPlugin::observe_source_document(document);
+		document->connect("changed", changed, CONNECT_DEFERRED);
+	}
+	queue_rebuild();
+}
+
+Ref<LatexDocument> LatexLabel3D::get_document() const {
+	return document;
 }
 
 void LatexLabel3D::set_display_mode(bool p_enabled) {
@@ -348,7 +375,8 @@ void LatexLabel3D::rebuild() {
 	if (render.is_null()) {
 		render.instantiate();
 	}
-	render->parse(atr(text), font_size, display_mode ? TeXRender::STYLE_DISPLAY : TeXRender::STYLE_TEXT);
+	const String formula = document.is_valid() ? document->get_text() : atr(text);
+	render->parse(formula, font_size, display_mode ? TeXRender::STYLE_DISPLAY : TeXRender::STYLE_TEXT);
 	update_configuration_warnings();
 	if (!render->is_valid()) {
 		set_mesh(Ref<Mesh>());

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLDetailsElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML disclosure widget.
+	</brief_description>
+	<description>
+		Represents [code]&lt;details&gt;[/code]. Activate the first [code]&lt;summary&gt;[/code] child to toggle it. Setting [member open] through this element API dispatches cancelable [code]beforetoggle[/code]; accepted changes produce a coalesced [code]toggle[/code] event and the [signal toggled] signal.
+	</description>
+	<members>
+		<member name="open" type="bool" setter="set_open" getter="is_open">
+			Whether the disclosure is open.
+		</member>
+		<member name="name" type="String" setter="set_name" getter="get_name">
+			The name of the mutually exclusive disclosure group.
+		</member>
+	</members>
+	<signals>
+		<signal name="toggled">
+			<param index="0" name="open" type="bool" />
+			<description>
+				Emitted after the open state changes. Successive changes in the same frame are combined.
+			</description>
+		</signal>
+	</signals>
+</class>

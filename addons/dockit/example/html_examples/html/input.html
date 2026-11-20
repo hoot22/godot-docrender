@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<style>
+	input {
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.styled {
+		border: 0;
+		line-height: 2.5;
+		padding: 0 20px;
+		font-size: 1rem;
+		text-align: center;
+		color: white;
+		text-shadow: 1px 1px 1px black;
+		border-radius: 10px;
+		background-color: tomato;
+		background-image: linear-gradient(to top left,
+				rgb(0 0 0 / 20%),
+				rgb(0 0 0 / 20%) 30%,
+				transparent);
+		box-shadow:
+			inset 2px 2px 3px rgb(255 255 255 / 60%),
+			inset -2px -2px 3px rgb(0 0 0 / 60%);
+	}
+
+	.styled:hover {
+		background-color: red;
+	}
+
+	.styled:active {
+		box-shadow:
+			inset -2px -2px 3px rgb(255 255 255 / 60%),
+			inset 2px 2px 3px rgb(0 0 0 / 60%);
+	}
+
+	h3 {
+		margin: 0.25rem 0 0.25rem 0
+	}
+
+	input[type="image"] {
+		margin-top: 1rem;
+	}
+
+	input[type="image"] {
+		width: 80px;
+	}
+
+	.controls {
+		padding-top: 1rem;
+		display: grid;
+		grid-template-rows: repeat(2, auto);
+		grid-template-columns: 1fr 2fr;
+		gap: 0.7rem;
+	}
+
+	input[type="reset"] {
+		width: 5rem;
+		justify-self: end;
+	}
+
+	input[type="reset"] {
+		grid-column: 2;
+		grid-row: 2;
+	}
+</style>
+
+<html>
+<div>
+	<div>
+		<h3>Text Input</h3>
+		<label for="name">Name (4 to 8 characters):</label>
+		<input type="text" id="name" name="name" required minlength="4" maxlength="8" size="10" />
+	</div>
+
+	<div>
+		<h3>Checkbox Input</h3>
+		<fieldset>
+			<legend>Choose your monster's features:</legend>
+
+            <div>
+                <input type="checkbox" id="scales" name="scales" checked />
+                <label for="scales">Scales</label>
+            </div>
+
+            <div>
+                <input type="checkbox" id="horns" name="horns" />
+                <label for="horns">Horns</label>
+            </div>
+        </fieldset>
+    </div>
+
+    <div>
+        <h3>Color Input</h3>
+        <div>
+            <input type="color" id="foreground" name="foreground" value="#e66465" />
+            <label for="foreground">Foreground color</label>
+        </div>
+        <div>
+            <input type="color" id="background" name="background" value="oklab(50% 0.1 0.1 / 0.5)"
+                colorspace="display-p3" alpha />
+            <label for="background">Background color</label>
+        </div>
+    </div>
+
+    <div>
+        <h3>Date Input</h3>
+        <label for="start">Start date:</label>
+        <input type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" max="2018-12-31" />
+    </div>
+
+    <div>
+        <h3>Datetime-local Input</h3>
+        <label for="meeting-time">Choose a time for your appointment:</label>
+        <input type="datetime-local" id="meeting-time" name="meeting-time" value="2018-06-12T19:30"
+            min="2018-06-07T00:00" max="2018-06-14T00:00" />
+    </div>
+
+    <div>
+        <h3>Email Input</h3>
+        <label for="email">Enter your example.com email:</label>
+        <input type="email" id="email" pattern=".+@example\.com" size="30" required />
+    </div>
+
+    <div>
+        <h3>File Input</h3>
+        <label for="avatar">Choose a profile picture:</label>
+        <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" />
+    </div>
+
+    <div>
+        <h3>Image Input</h3>
+        <p>Sign in to your account:</p>
+
+        <div>
+            <label for="userId">User ID</label>
+            <input type="text" id="userId" name="userId" />
+        </div>
+
+        <input type="image" id="image" alt="Login" src="uid://cc5sstdcy1mn6" />
+    </div>
+
+    <div>
+        <h3>Month Input</h3>
+        <label for="start">Start month:</label>
+        <input type="month" id="start" name="start" min="2018-03" value="2018-05" />
+    </div>
+
+    <div>
+        <h3>Number Input</h3>
+        <label for="tentacles">Number of tentacles (10-100):</label>
+        <input type="number" id="tentacles" name="tentacles" min="10" max="100" />
+    </div>
+
+    <div>
+        <h3>Password Input</h3>
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" />
+        </div>
+
+        <div>
+            <label for="pass">Password (8 characters minimum):</label>
+            <input type="password" id="pass" name="password" minlength="8" required />
+        </div>
+
+        <input type="submit" value="Sign in" />
+    </div>
+
+    <div>
+        <h3>Radio Input</h3>
+        <fieldset>
+            <legend>Select a maintenance drone:</legend>
+
+            <div>
+                <input type="radio" id="huey" name="drone" value="huey" checked />
+                <label for="huey">Huey</label>
+            </div>
+
+            <div>
+                <input type="radio" id="dewey" name="drone" value="dewey" />
+                <label for="dewey">Dewey</label>
+            </div>
+
+            <div>
+                <input type="radio" id="louie" name="drone" value="louie" />
+                <label for="louie">Louie</label>
+            </div>
+        </fieldset>
+    </div>
+
+    <div>
+        <h3>Range Input</h3>
+        <p>Audio settings:</p>
+
+        <div>
+            <input type="range" id="volume" name="volume" min="0" max="11" />
+            <label for="volume">Volume</label>
+        </div>
+
+        <div>
+            <input type="range" id="cowbell" name="cowbell" min="0" max="100" value="90" step="10" />
+            <label for="cowbell">Cowbell</label>
+        </div>
+    </div>
+
+    <div>
+        <h3>Reset Input</h3>
+        <form>
+            <div class="controls">
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments"></textarea>
+
+                <input type="reset" value="Reset" />
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <h3>Search Input</h3>
+        <label for="site-search">Search the site:</label>
+        <input type="search" id="site-search" name="q" />
+        <button>Search</button>
+    </div>
+
+    <div>
+        <h3>Submit Input</h3>
+        <input type="submit" value="Send Request" />
+    </div>
+
+    <div>
+        <h3>Tel Input</h3>
+        <label for="phone">
+            Enter your phone number:<br />
+            <small>Format: 123-456-7890</small>
+        </label>
+        <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required />
+    </div>
+
+    <div>
+        <h3>Time <Input></Input></h3>
+        <label for="appointment">Choose a time for your meeting:</label>
+        <input type="time" id="appointment" name="appointment" min="09:00" max="18:00" required />
+        <small>Office hours are 9am to 6pm</small>
+    </div>
+
+    <div>
+        <h3>URL Input</h3>
+        <label for="url">Enter an https:// URL:</label>
+        <input type="url" name="url" id="url" placeholder="https://example.com" pattern="https://.*" size="30"
+            required />
+    </div>
+
+    <div>
+        <h3>Week Input</h3>
+        <label for="camp-week">Choose a week in May or June:</label>
+        <input type="week" name="week" id="camp-week" min="2018-W18" max="2018-W26" required />
+    </div>
+
+    <input class="styled" type="button" value="Add to favorites" />
+</div>
+
+</html>

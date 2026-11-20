@@ -5,18 +5,113 @@
 	</brief_description>
 	<description>
 		Displays [member document] or inline [member text] using [HTMLLayout]. Give the control a size with anchors, offsets, or a parent [Container]. The document wraps to the available width, and scrollbars appear as needed to reach overflowing content.
+		When the active Godot accessibility backend supports it, [code]HTMLLabel[/code] publishes an element tree for headings, landmarks, links, form controls, lists, tables, dialogs, and live regions. Accessible names use [code]aria-label[/code], [code]aria-labelledby[/code], associated [code]&lt;label&gt;[/code] text, image [code]alt[/code], and native text where available. Disabled, required, read-only, checked, selected, invalid, and expanded states are exposed where Godot has a matching state. Focus, click, and scroll actions are routed back to the HTML document. Godot does not provide dedicated heading or landmark roles, so those use static-text or container roles with role descriptions. Elements hidden by [code]hidden[/code], [code]inert[/code], [code]aria-hidden="true"[/code], or computed [code]display:none[/code] are omitted.
+		The default canvas follows CSS [code]color-scheme[/code]. Set an HTML background with CSS, or enable [member transparent_canvas] to composite it over the scene.
 		Source changes are applied on a deferred update and reset the scroll position. Resizing recalculates the layout and clamps the current scroll offset. Clicking a [code]#id[/code] link scrolls to the matching HTML element. Connect [signal link_pressed] to handle other links.
-		Drag to select rendered text. The focused control supports the standard select-all and copy shortcuts. The theme color [code]selection_color[/code] sets the selection highlight.
+		Drag to select rendered text. The focused control supports the standard select-all and copy shortcuts. CSS [code]::selection[/code] styles the selection highlight.
+		Selection drags and elements with [code]draggable="true"[/code] expose [code]text/plain[/code], serialized [code]text/html[/code], and custom MIME data through [HTMLDataTransfer]. Drop HTML into an editable region in another [HTMLLabel], or drop the plain text into Godot controls such as [LineEdit].
+		For rich-text editing, mark a region [code]contenteditable="true"[/code] or [code]contenteditable="plaintext-only"[/code]. The document node also exposes [member HTMLDocumentNode.design_mode] and [member HTMLDocumentNode.active_element]. The focused editable region supports basic text insertion, deletion, line breaks, and [method execute_edit_command] formatting commands. It does not yet provide browser-equivalent IME handling or HTML clipboard paste.
 		CSS [code]:hover[/code] matches the element under the mouse and its ancestors. Scrolling updates the hovered element even when the mouse is stationary. During text selection by dragging, hover styles stay fixed until the drag ends.
+		Elements also report DOM events. Register a listener with [method HTMLEventTarget.add_event_listener] or [method HTMLEventTarget.listen] on an element, document, or window. Events run before the built-in action they describe, so a listener can call [method HTMLEvent.prevent_default] to cancel following a link, activating a button or label, toggling a checkbox, opening a disclosure or dropdown, editing text, traversing focus with Tab, and submitting or resetting a form. Pointer moves are coalesced per frame; wheel dispatch stays synchronous. Events without listeners change nothing, and the signals below keep reporting the actions that were performed.
+		Assign a Callable to an event handler property such as [code]element.onclick[/code], or use an HTML [code]on*[/code] attribute that names a GDScript behavior method as [code]_on_click()[/code] or [code]_on_click(event)[/code]. Callable properties override the corresponding attribute handler. This does not execute JavaScript.
+		When a listener cancels an event, the signal that reports the same action is not emitted. For example, cancelling [code]click[/code] on a link suppresses [signal link_pressed].
 		CSS [code]cursor[/code] supports [code]default[/code], [code]pointer[/code], [code]text[/code], [code]crosshair[/code], [code]move[/code], [code]wait[/code], [code]progress[/code], [code]help[/code], [code]not-allowed[/code], [code]ew-resize[/code], and [code]ns-resize[/code]. With [code]auto[/code] or unsupported values, the control uses a pointing hand over links, an I-beam when text selection is enabled, and an arrow otherwise. Dragging to select text uses the I-beam.
-		[code]&lt;button type="button"&gt;[/code] has a default style that author CSS can override. Use [code]:active[/code], [code]:focus[/code], [code]:focus-visible[/code], [code]:enabled[/code], and [code]:disabled[/code] to style its states. Tab and Shift+Tab navigate enabled, visible buttons and scroll the focused button into view. A negative [code]tabindex[/code] skips the button in tab order. Enter and Space activate the focused button even when text selection is disabled.
+		[code]&lt;button type="button"&gt;[/code] has a default style that author CSS can override. Use [code]:active[/code], [code]:focus[/code], [code]:focus-visible[/code], [code]:enabled[/code], and [code]:disabled[/code] to style its states. Enter and Space activate the focused button even when text selection is disabled.
 		Connect [signal button_pressed] to handle commands in GDScript. Read the button's [code]id[/code] or [code]data-*[/code] attributes to identify the command.
+		Tab and Shift+Tab traverse visible, enabled inputs, buttons, links with an [code]href[/code], and elements with a valid [code]tabindex[/code]. Positive values are visited in ascending order before the default stops. A negative value allows direct focus. At either end, focus passes to another Godot control when one is available.
+		HTML inputs are represented by [HTMLInputElement]. A focused text input handles text editing, its own selection, and system IME composition. A focused checkbox can be toggled with Space. Date, time, color, and file inputs provide pickers.
+		Focused text fields support the [code]ui_undo[/code] and [code]ui_redo[/code] input actions. Undo and redo also restore the selection. Each IME commit is grouped into one edit. Assigning a new value from script or resetting the form clears the field's edit history.
 	</description>
 	<methods>
+		<method name="reload_components"><return type="void"/><description>Unmounts component instances and schedules registration and mounting again.</description></method>
+		<method name="get_component_diagnostics" qualifiers="const"><return type="Dictionary[]"/><description>Returns component registration failures with tag, src, and reason fields.</description></method>
+
+		<method name="get_base_uri" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns the effective base URL of the displayed document. See [method HTMLLayout.get_base_uri].
+			</description>
+		</method>
+		<method name="back">
+			<return type="bool" />
+			<description>
+				Loads the previous entry in this label's navigation history. Returns [code]false[/code] when there is no previous entry.
+			</description>
+		</method>
+		<method name="forward">
+			<return type="bool" />
+			<description>
+				Loads the next entry in this label's navigation history. Returns [code]false[/code] when there is no next entry.
+			</description>
+		</method>
+		<method name="get_behavior_diagnostics" qualifiers="const">
+			<return type="Dictionary[]" />
+			<description>
+				Returns a snapshot of behavior mounting failures. Each Dictionary contains [code]src[/code], [code]path[/code], and [code]reason[/code]. Failures are also reported with [code]push_warning[/code].
+			</description>
+		</method>
+		<method name="get_location" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns the current navigation URL, or the effective document base URL when no navigation has occurred.
+			</description>
+		</method>
+		<method name="get_storage_namespace" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns the configured storage namespace, or the document source and host identity used by persistent behavior storage.
+			</description>
+		</method>
+		<method name="go">
+			<return type="bool" />
+			<param index="0" name="delta" type="int" />
+			<description>
+				Moves by [param delta] entries in this label's navigation history. Returns [code]false[/code] when the target is outside the history or is the current entry.
+			</description>
+		</method>
+		<method name="activate_element">
+			<return type="bool" />
+			<param index="0" name="element" type="HTMLElement" />
+			<description>
+				Activates a visible link or a form control in this label. A fragment link requests an anchor scroll before emitting [signal link_pressed]. A command button emits [signal button_pressed]. Form buttons, labels, toggles, and dropdowns perform their corresponding actions. Returns [code]true[/code] if activation was dispatched.
+			</description>
+		</method>
+		<method name="advance_animation">
+			<return type="void" />
+			<param index="0" name="delta" type="float" />
+			<description>
+				Applies pending layout changes and advances CSS animations and transitions by [param delta] seconds while this label is in the scene tree. The delta must be finite and non-negative. Pass [code]0.0[/code] to apply pending changes at the current time. In Idle or Physics mode, this step adds to automatic updates.
+			</description>
+		</method>
+		<method name="focus_element">
+			<return type="bool" />
+			<param index="0" name="element" type="HTMLElement" />
+			<description>
+				Focuses a visible, enabled element from this label and scrolls it into view. Returns [code]false[/code] if the element cannot receive focus.
+			</description>
+		</method>
+		<method name="get_focused_element" qualifiers="const">
+			<return type="HTMLElement" />
+			<description>
+				Returns the focused element, or [code]null[/code] when the label has no DOM focus. Removing the focused element from the document clears focus and ends input method composition immediately. Reinserting it does not restore focus.
+			</description>
+		</method>
 		<method name="clear_selection">
 			<return type="void" />
 			<description>
 				Clears the text selection.
+			</description>
+		</method>
+		<method name="get_document_node" qualifiers="const">
+			<return type="HTMLDocumentNode" />
+			<description>
+				Returns the root node of this control's live document, or [code]null[/code] when the source has not been parsed yet. Register listeners on this node to handle events for all of its descendants, then use [method HTMLElement.closest] on the event's [member HTMLEvent.target] to find the element that owns the action. The handle is invalidated when the source is reparsed.
+			</description>
+		</method>
+		<method name="create_document_fragment">
+			<return type="HTMLDocumentFragment" />
+			<description>
+				Creates an empty fragment owned by this control's layout. See [method HTMLLayout.create_document_fragment].
 			</description>
 		</method>
 		<method name="create_element">
@@ -72,6 +167,12 @@
 				Returns the horizontal and vertical scroll offset in pixels from the start of the document.
 			</description>
 		</method>
+		<method name="get_accessible_text" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns the document text published as this control's accessibility text value. CSS alternatives in [code]content[/code] are applied. See [method HTMLLayout.get_accessible_text].
+			</description>
+		</method>
 		<method name="get_selected_text" qualifiers="const">
 			<return type="String" />
 			<description>
@@ -92,12 +193,26 @@
 				Returns all matches in this label's parsed document. See [method HTMLLayout.query_selector_all].
 			</description>
 		</method>
+		<method name="navigate">
+			<return type="int" enum="Error" />
+			<param index="0" name="url" type="String" />
+			<param index="1" name="replace" type="bool" default="false" />
+			<description>
+				Loads a local HTML file or an HTTP(S) HTML page and adds it to this label's navigation history. Set [param replace] to replace the current history entry. Navigating to a fragment in the current document scrolls to its anchor without adding an entry. Remote page loading is asynchronous; connect to [signal navigation_failed] to handle failures.
+			</description>
+		</method>
+		<method name="reload_behaviors">
+			<return type="void" />
+			<description>
+				Detaches and remounts behaviors declared in the current document. Resource-path scripts are reloaded from the resource cache before mounting.
+			</description>
+		</method>
 		<method name="scroll_to_anchor">
 			<return type="bool" />
 			<param index="0" name="id" type="String" />
 			<param index="1" name="align" type="float" default="0.0" />
 			<description>
-				Scrolls to a laid-out element by its case-sensitive HTML ID. Pass the ID without [code]#[/code]. The vertical alignment ranges from [code]0.0[/code] at the top to [code]1.0[/code] at the bottom and is clamped to the scrollable range. Returns [code]false[/code] if the ID is absent or the layout is pending.
+				Scrolls to a laid-out element by its case-sensitive HTML ID. Pass the ID without [code]#[/code]. Alignment follows [method scroll_to_element], including CSS scroll padding and margins. Each scroll container uses its own [code]scroll-behavior[/code]. Returns [code]false[/code] if the ID is absent or the layout is pending.
 			</description>
 		</method>
 		<method name="scroll_to_element">
@@ -105,7 +220,7 @@
 			<param index="0" name="element" type="HTMLElement" />
 			<param index="1" name="align" type="float" default="0.0" />
 			<description>
-				Scrolls to an element obtained from this label. [param align] positions the element's top from [code]0.0[/code] at the viewport top to [code]1.0[/code] at the viewport bottom, within the scrollable range. Horizontal scrolling adjusts when the target's left edge is outside the viewport. Returns [code]false[/code] for an invalid, foreign, or invisible element, or when layout is pending.
+				Scrolls to an element obtained from this label, starting with its innermost scroll container. [param align] places the top of the target's CSS scroll margin area from [code]0.0[/code] at the top of the scroll-padding region to [code]1.0[/code] at its bottom, within the scrollable range. Horizontal scrolling adjusts when the area's left edge is outside that region. Returns [code]false[/code] for an invalid or foreign element, an element without a visible layout box, or a pending layout.
 			</description>
 		</method>
 		<method name="select_all">
@@ -121,10 +236,220 @@
 				Sets the horizontal and vertical scroll offset in pixels, clamped to the scrollable range. If a layout is pending, the offset is applied after that layout.
 			</description>
 		</method>
+		<method name="submit_form">
+			<return type="int" enum="Error" />
+			<param index="0" name="form" type="HTMLFormElement" />
+			<param index="1" name="submitter" type="HTMLElement" default="null" />
+			<description>
+				Submits a connected form in this label and emits [signal form_submitted] on success. An optional submitter must be an enabled submit button associated with the form. Returns [constant ERR_INVALID_DATA] on failed validation or [constant ERR_INVALID_PARAMETER] for an invalid argument. The submitter's [code]formmethod[/code] overrides the form's [code]method[/code]. With the [code]dialog[/code] method, a successful submission closes the form's nearest ancestor [HTMLDialogElement]. A supplied submitter [code]value[/code], including an empty string, replaces [member HTMLDialogElement.return_value]. Omit the attribute or the submitter to preserve the existing value.
+			</description>
+		</method>
+		<method name="get_elements_at" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<param index="0" name="position" type="Vector2" />
+			<description>
+				Returns the elements under a label-local point in front-to-back hit order. Scrollbars and points outside the visible document are skipped.
+			</description>
+		</method>
+		<method name="get_plain_text" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns the indexed document text used for selection and search.
+			</description>
+		</method>
+		<method name="get_selection_range" qualifiers="const">
+			<return type="Vector2i" />
+			<description>
+				Returns the ordered selection endpoints as offsets into [method get_plain_text].
+			</description>
+		</method>
+		<method name="set_selection_range">
+			<return type="void" />
+			<param index="0" name="from" type="int" />
+			<param index="1" name="to" type="int" />
+			<description>
+				Sets the document selection using character offsets. Endpoints are clamped to the document text length.
+			</description>
+		</method>
+		<method name="get_selection_rects" qualifiers="const">
+			<return type="Rect2[]" />
+			<description>
+				Returns the visible selection rectangles in document coordinates.
+			</description>
+		</method>
+		<method name="copy_selection" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Copies selectable text to the system clipboard. Returns whether there was text to copy.
+			</description>
+		</method>
+		<method name="find_text" qualifiers="const">
+			<return type="Vector2i" />
+			<param index="0" name="text" type="String" />
+			<param index="1" name="from" type="int" default="0" />
+			<param index="2" name="case_sensitive" type="bool" default="false" />
+			<description>
+				Searches document text from the given offset and returns the matching range, or [code]Vector2i(-1, -1)[/code] when absent.
+			</description>
+		</method>
+		<method name="scroll_element_into_view">
+			<return type="bool" />
+			<param index="0" name="element" type="HTMLElement" />
+			<param index="1" name="options" type="Dictionary" default="{}" />
+			<description>
+				Scrolls inner containers and the viewport to reveal an element. Options are [code]block[/code], [code]inline[/code], and [code]behavior[/code]. The alignment values are [code]start[/code], [code]center[/code], [code]end[/code], and [code]nearest[/code]. Behavior accepts [code]auto[/code], [code]instant[/code], or [code]smooth[/code]. The defaults are [code]start[/code], [code]nearest[/code], and [code]auto[/code].
+			</description>
+		</method>
+		<method name="scroll_to_text_range">
+			<return type="bool" />
+			<param index="0" name="from" type="int" />
+			<param index="1" name="to" type="int" />
+			<description>
+				Scrolls the viewport to the first available selection rectangle for character offsets [param from] and [param to]. Returns [code]false[/code] if the range has no visible rectangle in the laid-out document.
+			</description>
+		</method>
+		<method name="create_range">
+			<return type="HTMLRange" />
+			<description>
+				Creates a live range with both endpoints at the start of the DOM document.
+			</description>
+		</method>
+		<method name="execute_edit_command">
+			<return type="bool" />
+			<param index="0" name="command" type="String" />
+			<param index="1" name="value" type="String" default="&quot;&quot;" />
+			<description>
+				Applies a supported formatting command to a noncollapsed selection inside the focused editable region. Commands include [code]bold[/code], [code]italic[/code], [code]underline[/code], [code]strikethrough[/code], [code]subscript[/code], [code]superscript[/code], [code]formatBlock[/code], [code]insertOrderedList[/code], [code]insertUnorderedList[/code], [code]createLink[/code], [code]foreColor[/code], and [code]backColor[/code]. Dispatches cancelable [code]beforeinput[/code] and [code]input[/code] events. Returns [code]false[/code] for unsupported commands or an invalid selection.
+			</description>
+		</method>
+		<method name="get_selection" qualifiers="const">
+			<return type="HTMLSelection" />
+			<description>
+				Returns the live document selection, or [code]null[/code] if the document is unavailable.
+			</description>
+		</method>
+		<method name="get_computed_style">
+			<return type="Dictionary" />
+			<param index="0" name="element" type="HTMLElement" />
+			<param index="1" name="pseudo" type="String" default="&quot;&quot;" />
+			<description>
+				Returns a snapshot of serialized computed CSS properties. Lengths that depend on a layout box can retain percentages. See [method HTMLElement.get_bounding_rect] for geometry.
+			</description>
+		</method>
+		<method name="get_computed_style_property">
+			<return type="String" />
+			<param index="0" name="element" type="HTMLElement" />
+			<param index="1" name="name" type="String" />
+			<param index="2" name="pseudo" type="String" default="&quot;&quot;" />
+			<description>
+				Returns a serialized computed value for a connected element, including sampled animation values. Pass [code]::before[/code], [code]::after[/code], [code]::marker[/code], [code]::placeholder[/code], [code]::selection[/code], or [code]::backdrop[/code] to inspect a supported pseudo-element. Returns an empty string if the value is unavailable.
+			</description>
+		</method>
+		<method name="get_stylesheets">
+			<return type="Dictionary[]" />
+			<description>
+				Returns the author stylesheets in source order. Each dictionary includes [code]id[/code], [code]owner[/code], [code]source[/code], [code]path[/code], [code]media[/code], and [code]disabled[/code]. The additional stylesheet is last. IDs apply to the current layout generation.
+			</description>
+		</method>
+		<method name="get_css_rules">
+			<return type="PackedStringArray" />
+			<param index="0" name="stylesheet" type="int" />
+			<description>
+				Returns a serialized snapshot of the top-level rules in the stylesheet identified by [param stylesheet]. Grouped and imported rules retain their place in the list.
+			</description>
+		</method>
+		<method name="insert_rule">
+			<return type="int" enum="Error" />
+			<param index="0" name="stylesheet" type="int" />
+			<param index="1" name="rule" type="String" />
+			<param index="2" name="index" type="int" default="0" />
+			<description>
+				Inserts one CSS rule at the given zero-based index. The edit applies to this layout. Invalid rules or indices leave the stylesheet as it was.
+			</description>
+		</method>
+		<method name="delete_rule">
+			<return type="int" enum="Error" />
+			<param index="0" name="stylesheet" type="int" />
+			<param index="1" name="index" type="int" />
+			<description>
+				Deletes the top-level rule at the given zero-based index in this layout.
+			</description>
+		</method>
+		<method name="supports_css" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="property_or_condition" type="String" />
+			<param index="1" name="value" type="String" default="&quot;&quot;" />
+			<description>
+				Tests a CSS property and value, or a [code]@supports[/code] condition when [param value] is empty.
+			</description>
+		</method>
+		<method name="supports_selector" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="selector" type="String" />
+			<description>
+				Tests whether the selector is accepted by the CSS selector parser.
+			</description>
+		</method>
+		<method name="matches_media" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="query" type="String" />
+			<description>
+				Tests the media query against the current CSS viewport and preferences.
+			</description>
+		</method>
+		<method name="get_animations">
+			<return type="HTMLAnimation[]" />
+			<param index="0" name="element" type="HTMLElement" default="null" />
+			<description>
+				Returns CSS animations, CSS transitions, and scripted animations. Pass an element to restrict the snapshot to that target.
+			</description>
+		</method>
+		<method name="animate">
+			<return type="HTMLAnimation" />
+			<param index="0" name="element" type="HTMLElement" />
+			<param index="1" name="keyframes" type="Dictionary[]" />
+			<param index="2" name="options" type="Dictionary" default="{}" />
+			<description>
+				Creates a scripted animation on the current layout clock. Keyframe dictionaries contain CSS property values and optional [code]offset[/code] and [code]easing[/code]. Options include [code]duration[/code], [code]delay[/code], [code]iterations[/code], [code]easing[/code], [code]direction[/code], and [code]fill[/code]. Times are in seconds. Returns [code]null[/code] for invalid input or an empty effect.
+			</description>
+		</method>
+		<method name="get_fullscreen_video" qualifiers="const">
+			<return type="HTMLVideoElement" />
+			<description>
+				Returns the current fullscreen video owned by this label, if any.
+			</description>
+		</method>
+		<method name="get_event_listener_count" qualifiers="const">
+			<return type="int" />
+			<param index="0" name="type" type="StringName" />
+			<description>
+				Returns the number of explicit listeners registered for [param type] on this label's document, elements, and window. Event handler properties and HTML attributes are not included.
+			</description>
+		</method>
 	</methods>
 	<members>
+		<member name="component_scripts" type="Dictionary[StringName, GDScript]" setter="set_component_scripts" getter="get_component_scripts">Maps custom HTML tag names to HTMLComponent scripts. Valid document declarations take precedence. Enable behaviors_enabled to run components.</member>
+
+		<member name="animation_process_mode" type="int" setter="set_animation_process_mode" getter="get_animation_process_mode" enum="HTMLLabel.AnimationProcessMode" default="0">
+			Chooses when CSS animations and transitions advance. Idle uses the idle frame delta, Physics uses the physics frame delta, and Manual uses calls to [method advance_animation]. Switching modes preserves the current progress and any remaining delay.
+		</member>
 		<member name="base_dir" type="String" setter="set_base_dir" getter="get_base_dir" default="&quot;res://&quot;">
-			Project resource directory used to resolve relative image paths for [member text]. See [method HTMLLayout.parse] for the supported paths and image formats.
+			The base directory in [code]res://[/code] or [code]user://[/code] for relative asset paths in [member text]. See [method HTMLLayout.parse] for the supported paths and image formats.
+		</member>
+		<member name="behavior_scripts" type="Dictionary" setter="set_behavior_scripts" getter="get_behavior_scripts" default="{}">
+			A [code]Dictionary[StringName, GDScript][/code] of optional [HTMLBehavior] aliases. A script element first selects an exact [code]src[/code] alias; otherwise [code]src[/code] is resolved as a local script path. Reading this property returns a copy. Assign a new dictionary to update the registry and remount behaviors.
+		</member>
+		<member name="behaviors_enabled" type="bool" setter="set_behaviors_enabled" getter="are_behaviors_enabled" default="false">
+			Enables local and registered [HTMLBehavior] scripts at runtime. Network script URLs are rejected. Replacing the document, disabling behaviors, or leaving the scene tree detaches current instances and cancels their asynchronous work.
+		</member>
+		<member name="caret_blink" type="bool" setter="set_caret_blink_enabled" getter="is_caret_blink_enabled" default="true">
+			If [code]true[/code], the caret in a focused text field blinks. If [code]false[/code], it stays visible while the field is focused.
+		</member>
+		<member name="caret_blink_interval" type="float" setter="set_caret_blink_interval" getter="get_caret_blink_interval" default="0.65">
+			The time in seconds between changes in caret visibility when [member caret_blink] is enabled.
+		</member>
+		<member name="context_menu_enabled" type="bool" setter="set_context_menu_enabled" getter="is_context_menu_enabled" default="true">
+			Shows an editing menu for text inputs and textareas on right-click or with the [code]ui_menu[/code] input action. Opening the menu commits any pending IME text as one undoable edit. Readonly fields offer Copy and Select All. Keyboard editing shortcuts remain available when the menu is disabled.
 		</member>
 		<member name="css_diagnostics_enabled" type="bool" setter="set_css_diagnostics_enabled" getter="is_css_diagnostics_enabled" default="false">
 			Outlines visible elements with CSS declaration diagnostics. Hover over an outlined element to read its diagnostics in an HTML tooltip. Disabling this clears the outlines and results.
@@ -132,27 +457,84 @@
 		<member name="document" type="HTMLDocument" setter="set_document" getter="get_document">
 			The HTML resource to display. Its source and styles take priority over the local properties. Set this to [code]null[/code] to use [member text], [member base_dir], and [member stylesheet].
 		</member>
+		<member name="event_debug" type="bool" setter="set_event_debug" getter="is_event_debug_enabled" default="false">
+			Prints a summary of each DOM event dispatched by this label, including its target, propagation path size, registered listener count, and default-canceled state.
+		</member>
+		<member name="location" type="String" setter="" getter="get_location">
+			The current navigation URL. Read-only.
+		</member>
+		<member name="storage_namespace" type="String" setter="set_storage_namespace" getter="get_storage_namespace" default="">
+			Persistent behavior storage namespace. When empty, the label derives one from its document source or node identity.
+		</member>
 		<member name="selection_enabled" type="bool" setter="set_selection_enabled" getter="is_selection_enabled" default="true">
 			Enables text selection. Disabling it clears the current selection.
 		</member>
 		<member name="stylesheet" type="String" setter="set_stylesheet" getter="get_stylesheet" default="&quot;&quot;">
-			Additional CSS for [member text]. Its rules follow the document's stylesheets in the author cascade. See [method HTMLLayout.parse].
+			Additional CSS for [member text]. The rules share the document stylesheets' author origin and follow them in source order. See [method HTMLLayout.parse].
 		</member>
 		<member name="text" type="String" setter="set_text" getter="get_text" default="&quot;&quot;">
 			The HTML document or fragment to display.
+		</member>
+		<member name="transparent_canvas" type="bool" setter="set_transparent_canvas" getter="is_transparent_canvas" default="false">
+			If [code]true[/code], the default canvas is transparent. Authored CSS backgrounds still paint over the scene.
+		</member>
+		<member name="bus" type="StringName" setter="set_bus" getter="get_bus" default="&amp;&quot;Master&quot;">
+			The audio bus used by audio elements. An unavailable bus name uses the current backend's Master bus.
+		</member>
+		<member name="use_fmod_bus" type="bool" setter="set_use_fmod_bus" getter="is_using_fmod_bus" default="false">
+			Uses the FMOD audio player and bus list when the optional FMOD plugin is available.
+		</member>
+		<member name="video_backend" type="int" setter="set_video_backend" getter="get_video_backend" enum="HTMLLabel.VideoBackend" default="0">
+			The video decoder. Auto tries the available FFmpeg and VLC add-ons in that order for each source.
+		</member>
+		<member name="video_bus" type="StringName" setter="set_video_bus" getter="get_video_bus" default="&amp;&quot;Master&quot;">
+			The Godot audio bus for video playback.
 		</member>
 	</members>
 	<signals>
 		<signal name="button_pressed">
 			<param index="0" name="element" type="HTMLElement" />
 			<description>
-				Emitted when an enabled [code]&lt;button type="button"&gt;[/code] is activated by a mouse click, Enter, or Space. Pressing and releasing over different descendants of the same button can activate it. The signal passes the button element.
+				Emitted when an enabled [code]&lt;button type="button"&gt;[/code] is activated by a mouse click, Enter, Space, or [method activate_element]. Pressing and releasing over different descendants of the same button can activate it. The signal passes an [HTMLButtonElement] handle.
 			</description>
 		</signal>
 		<signal name="element_clicked">
 			<param index="0" name="element" type="HTMLElement" />
 			<description>
 				Emitted when a left mouse press and release hit the same visible HTML element without dragging or scrolling. Use [method HTMLElement.closest] to find an ancestor with an action attribute. For a link, the built-in anchor scroll and [signal link_pressed] run first. The element signal is emitted if the target still belongs to the current document.
+			</description>
+		</signal>
+		<signal name="form_reset">
+			<param index="0" name="form" type="HTMLFormElement" />
+			<description>
+				Emitted after a reset button restores the form's default values.
+			</description>
+		</signal>
+		<signal name="form_submitted">
+			<param index="0" name="form" type="HTMLFormElement" />
+			<param index="1" name="entries" type="Dictionary[]" />
+			<param index="2" name="submitter" type="HTMLElement" />
+			<description>
+				Emitted for a valid submission with ordered entries and the submitter. The submitter is an [HTMLButtonElement], an [HTMLInputElement], or [code]null[/code]. If the submission closes a dialog, this signal is emitted before [signal HTMLDialogElement.closed].
+			</description>
+		</signal>
+		<signal name="form_validation_failed">
+			<param index="0" name="form" type="HTMLFormElement" />
+			<param index="1" name="control" type="HTMLElement" />
+			<description>
+				Emitted with the first control that fails form validation.
+			</description>
+		</signal>
+		<signal name="input_changed">
+			<param index="0" name="element" type="HTMLInputElement" />
+			<description>
+				Emitted when the user changes an input value or checked state. Read the new state from the element.
+			</description>
+		</signal>
+		<signal name="input_committed">
+			<param index="0" name="element" type="HTMLInputElement" />
+			<description>
+				Emitted when the user confirms an edit. Text fields commit with Enter or on focus loss. Toggle controls and confirmed picker selections commit immediately after [signal input_changed].
 			</description>
 		</signal>
 		<signal name="layout_changed">
@@ -163,8 +545,74 @@
 		<signal name="link_pressed">
 			<param index="0" name="uri" type="String" />
 			<description>
-				Emitted when the left mouse button is pressed and released over the same visible link without dragging or scrolling. [param uri] is the link's original [code]href[/code].
+				Emitted when the left mouse button is pressed and released over the same visible link without dragging or scrolling, when Enter activates a focused link, or when [method activate_element] activates a link. [param uri] is the link's original nonempty [code]href[/code].
+			</description>
+		</signal>
+		<signal name="location_changed">
+			<param index="0" name="location" type="String" />
+			<description>
+				Emitted after a navigation or history traversal changes the current URL.
+			</description>
+		</signal>
+		<signal name="navigation_failed">
+			<param index="0" name="url" type="String" />
+			<param index="1" name="error" type="String" />
+			<description>
+				Emitted when a local or remote page cannot be loaded.
+			</description>
+		</signal>
+		<signal name="select_changed">
+			<param index="0" name="element" type="HTMLSelectElement" />
+			<description>
+				Emitted when a user selects a different option in a dropdown.
+			</description>
+		</signal>
+		<signal name="textarea_changed">
+			<param index="0" name="element" type="HTMLTextAreaElement" />
+			<description>
+				Emitted when the user changes the value of a multiline text field.
+			</description>
+		</signal>
+		<signal name="textarea_committed">
+			<param index="0" name="element" type="HTMLTextAreaElement" />
+			<description>
+				Emitted when a multiline text field loses focus after a user edit.
+			</description>
+		</signal>
+		<signal name="video_failed">
+			<param index="0" name="element" type="HTMLVideoElement" />
+			<param index="1" name="error" type="int" enum="Error" />
+			<param index="2" name="message" type="String" />
+			<description>
+				Emitted when a video cannot open any of its sources.
+			</description>
+		</signal>
+		<signal name="video_fullscreen_changed">
+			<param index="0" name="element" type="HTMLVideoElement" />
+			<param index="1" name="active" type="bool" />
+			<description>
+				Emitted when the video enters or exits fullscreen.
 			</description>
 		</signal>
 	</signals>
+	<constants>
+		<constant name="ANIMATION_PROCESS_IDLE" value="0" enum="AnimationProcessMode">
+			Advances CSS animations and transitions during idle processing.
+		</constant>
+		<constant name="ANIMATION_PROCESS_PHYSICS" value="1" enum="AnimationProcessMode">
+			Advances CSS animations and transitions during physics processing.
+		</constant>
+		<constant name="ANIMATION_PROCESS_MANUAL" value="2" enum="AnimationProcessMode">
+			Advances CSS animations and transitions through calls to [method advance_animation].
+		</constant>
+		<constant name="VIDEO_BACKEND_AUTO" value="0" enum="VideoBackend">
+			Selects an available video decoder automatically.
+		</constant>
+		<constant name="VIDEO_BACKEND_FFMPEG" value="1" enum="VideoBackend">
+			Uses the optional EIRTeam.FFmpeg add-on.
+		</constant>
+		<constant name="VIDEO_BACKEND_VLC" value="2" enum="VideoBackend">
+			Uses the optional godot-vlc add-on.
+		</constant>
+	</constants>
 </class>

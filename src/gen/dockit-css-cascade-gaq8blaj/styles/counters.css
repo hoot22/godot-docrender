@@ -1,0 +1,2 @@
+@counter-style imported-counter { system: cyclic; symbols: IMPORT; }
+@counter-style layered { system: cyclic; symbols: imported; }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLBRElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML line break.
+	</brief_description>
+	<description>
+		Represents the [code]&lt;br&gt;[/code] element.
+	</description>
+	<members>
+		<member name="clear" type="String" setter="set_clear" getter="get_clear">
+			Reflects the legacy clear attribute.
+		</member>
+	</members>
+</class>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLParagraphElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A handle to an HTML paragraph element.
+	</brief_description>
+	<description>
+		Returned by queries and [method HTMLLayout.create_element] for [code]&lt;p&gt;[/code]. Use [method HTMLElement.get_text_content] to read the paragraph's text.
+	</description>
+</class>

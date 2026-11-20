@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLAnimation" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		Playback control for a CSS or scripted HTML animation.
+	</brief_description>
+	<description>
+		Use [method HTMLLayout.get_animations] or [method HTMLElement.animate] to obtain a handle. Animation time uses the owning layout clock. [HTMLLabel] drives that clock using its [member HTMLLabel.animation_process_mode].
+	</description>
+	<methods>
+		<method name="is_valid" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns whether the playback handle still belongs to its active layout and target.
+			</description>
+		</method>
+		<method name="get_target" qualifiers="const">
+			<return type="HTMLElement" />
+			<description>
+				Returns the target element of the animation.
+			</description>
+		</method>
+		<method name="get_kind" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns [code]animation[/code], [code]transition[/code], or [code]script[/code].
+			</description>
+		</method>
+		<method name="get_name" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns the CSS animation name or the CSS transition property.
+			</description>
+		</method>
+		<method name="get_pseudo_element" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns the target pseudo-element name, or an empty string for an element target.
+			</description>
+		</method>
+		<method name="get_play_state" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns [code]idle[/code], [code]running[/code], [code]paused[/code], or [code]finished[/code].
+			</description>
+		</method>
+		<method name="get_duration" qualifiers="const">
+			<return type="float" />
+			<description>
+				Returns the total active duration in seconds, including iterations.
+			</description>
+		</method>
+		<method name="get_current_time" qualifiers="const">
+			<return type="float" />
+			<description>
+				Returns the playback position in seconds relative to the start of the animation clock.
+			</description>
+		</method>
+		<method name="set_current_time">
+			<return type="bool" />
+			<param index="0" name="time" type="float" />
+			<description>
+				Seeks to the given time in seconds and samples the effect.
+			</description>
+		</method>
+		<method name="play">
+			<return type="bool" />
+			<description>
+				Plays or resumes the current animation.
+			</description>
+		</method>
+		<method name="pause">
+			<return type="bool" />
+			<description>
+				Pauses at the current playback position.
+			</description>
+		</method>
+		<method name="cancel">
+			<return type="bool" />
+			<description>
+				Clears the effect and resets playback to idle.
+			</description>
+		</method>
+		<method name="finish">
+			<return type="bool" />
+			<description>
+				Seeks to the end in the current playback direction. An infinite forward animation cannot be finished.
+			</description>
+		</method>
+		<method name="reverse">
+			<return type="bool" />
+			<description>
+				Reverses the playback direction on the same layout clock.
+			</description>
+		</method>
+	</methods>
+</class>

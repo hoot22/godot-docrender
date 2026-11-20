@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLCustomEvent" inherits="HTMLEvent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An event that carries a script-defined payload.
+	</brief_description>
+	<description>
+		Use [HTMLCustomEvent] for application-level events. Assign [member detail] before dispatching; listeners read it to receive structured data. Only [Dictionary] payloads are supported, and the payload is not copied, so listeners share the dispatched value. Assignment is ignored while the event is being dispatched.
+	</description>
+	<members>
+		<member name="detail" type="Dictionary" setter="set_detail" getter="get_detail">
+			The custom payload delivered to listeners.
+		</member>
+	</members>
+</class>

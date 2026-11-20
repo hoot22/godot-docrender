@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLTouchPoint" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		One active or changed contact in a touch event.
+	</brief_description>
+	<members>
+		<member name="identifier" type="int" setter="set_identifier" getter="get_identifier">
+			The stable pointer identifier assigned to this contact.
+		</member>
+		<member name="target" type="HTMLElement" setter="set_target" getter="get_target">
+			The element initially targeted by the contact.
+		</member>
+		<member name="position" type="Vector2" setter="set_position" getter="get_position">
+			The contact position in the label's local coordinates.
+		</member>
+	</members>
+</class>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLSubmitEvent" inherits="HTMLEvent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A form event for [code]submit[/code] and [code]reset[/code].
+	</brief_description>
+	<description>
+		[code]submit[/code] runs after constraint validation passes and before the entries are collected. Cancelling it aborts the submission, so [signal HTMLLabel.form_submitted] is not emitted. [code]reset[/code] runs only for a reset button; calling [method HTMLFormElement.reset] from a script does not dispatch it.
+	</description>
+	<members>
+		<member name="submitter" type="HTMLElement" setter="set_submitter" getter="get_submitter">
+			The button that initiated the submission, or [code]null[/code] for a programmatic submit or a reset.
+		</member>
+	</members>
+</class>

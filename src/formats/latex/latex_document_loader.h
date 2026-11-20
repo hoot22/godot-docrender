@@ -2,8 +2,8 @@
 
 #include <godot_cpp/classes/resource_format_loader.hpp>
 
-class DocRenderTexLoader : public godot::ResourceFormatLoader {
-	GDCLASS(DocRenderTexLoader, godot::ResourceFormatLoader)
+class DockitTexLoader : public godot::ResourceFormatLoader {
+	GDCLASS(DockitTexLoader, godot::ResourceFormatLoader)
 
 public:
 	bool _recognize_path(

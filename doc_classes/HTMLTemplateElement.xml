@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLTemplateElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML template that holds reusable content in a detached fragment.
+	</brief_description>
+	<description>
+		Query a [code]&lt;template&gt;[/code] element or create one with [method HTMLLayout.create_element]. Its content stays outside document queries and layout until inserted. To reuse a template, call [method HTMLDocumentFragment.clone_node] with [code]true[/code] on [member content] and pass the result to [method HTMLElement.append_fragment]. Each insertion empties the supplied fragment.
+		Use [method HTMLElement.get_inner_html] and [method HTMLElement.set_inner_html] to read or replace the fragment's markup. Use [member content] for tree edits. The template itself accepts no direct children. A shallow copy of the template has empty content. A deep copy includes its content and any nested templates.
+		[method HTMLLayout.adopt_node] transfers the content fragment and its existing handles with the template. Like the template, the fragment follows the lifetime of its owning layout.
+	</description>
+	<members>
+		<member name="content" type="HTMLDocumentFragment" setter="" getter="get_content">
+			The template's persistent content fragment. Returns [code]null[/code] if the template handle is invalid.
+		</member>
+	</members>
+</class>

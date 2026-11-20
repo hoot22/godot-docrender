@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLCompositionEvent" inherits="HTMLEvent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An IME composition lifecycle event.
+	</brief_description>
+	<description>
+		Composition events report the current preedit text on a focused editable text control.
+	</description>
+	<members>
+		<member name="data" type="String" setter="set_data" getter="get_data">
+			The composition text associated with this event.
+		</member>
+	</members>
+</class>

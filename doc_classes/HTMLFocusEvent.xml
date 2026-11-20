@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLFocusEvent" inherits="HTMLEvent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A focus event for [code]focus[/code], [code]blur[/code], [code]focusin[/code], and [code]focusout[/code].
+	</brief_description>
+	<description>
+		[code]focus[/code] and [code]blur[/code] do not bubble. [code]focusin[/code] and [code]focusout[/code] report the same transitions and bubble, which makes them suitable for delegation. When focus moves between elements, the outgoing events run before the incoming ones.
+	</description>
+	<members>
+		<member name="related_target" type="HTMLEventTarget" setter="set_related_target" getter="get_related_target">
+			The node that gains focus for [code]blur[/code] and [code]focusout[/code], or the node that loses it for [code]focus[/code] and [code]focusin[/code]. It is [code]null[/code] when focus enters or leaves the document.
+		</member>
+	</members>
+</class>

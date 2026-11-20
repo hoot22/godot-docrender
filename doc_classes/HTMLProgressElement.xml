@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLProgressElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML progress indicator.
+	</brief_description>
+	<description>
+		Represents [code]&lt;progress&gt;[/code]. Remove the value attribute for indeterminate progress.
+	</description>
+	<methods>
+		<method name="get_labels" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<description>
+				Returns associated [HTMLLabelElement] handles in tree order.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="value" type="float" setter="set_value" getter="get_value">
+			The current value clamped to the effective range.
+		</member>
+		<member name="max" type="float" setter="set_max" getter="get_max">
+			The positive maximum. Missing and invalid values use 1.
+		</member>
+		<member name="position" type="float" setter="" getter="get_position">
+			The fraction completed, or -1 for indeterminate progress.
+		</member>
+	</members>
+</class>

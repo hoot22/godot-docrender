@@ -1,6 +1,6 @@
 #include "pdf_writer_internal.h"
 
-#ifndef DOCRENDER_PDFIUM_ENABLED
+#ifndef DOCKIT_PDFIUM_ENABLED
 
 namespace godot {
 #define WRITER_UNAVAILABLE_ERROR(name, args) \

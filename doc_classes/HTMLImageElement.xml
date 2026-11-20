@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLImageElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A handle to an HTML image element.
+	</brief_description>
+	<description>
+		Returned by queries and [method HTMLLayout.create_element] for [code]&lt;img&gt;[/code]. Use [method get_intrinsic_size] for the image's intrinsic dimensions and [method HTMLElement.get_bounding_rect] for its visual rectangle.
+		Responsive images support [member srcset], [member sizes], and preceding [code]&lt;source&gt;[/code] elements in a [code]&lt;picture&gt;[/code]. Selections use the layout viewport and the renderer's [code]1x[/code] output density.
+	</description>
+	<methods>
+		<method name="get_intrinsic_size" qualifiers="const">
+			<return type="Vector2" />
+			<description>
+				Returns the intrinsic size in CSS pixels used by the current layout, including the effects of image orientation, resolution, and source fragments. Returns [constant Vector2.ZERO] if layout is pending, the handle is invalid or detached, or the image is unavailable.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="alt" type="String" setter="set_alt" getter="get_alt">
+			The source [code]alt[/code] attribute. If the selected texture is unavailable, nonempty alternative text is drawn inside the image box. Text can wrap and determine automatic dimensions.
+		</member>
+		<member name="current_src" type="String" setter="" getter="get_current_src">
+			The selected resource path or HTTP(S) URL, including any fragment, from the last successful layout. Empty before the first selection, when no source is selected, or for invalid or detached handles. The selected source can still be loading or unavailable.
+		</member>
+		<member name="height_hint" type="int" setter="set_height_hint" getter="get_height_hint">
+			The nonnegative integer pixel hint from the HTML [code]height[/code] attribute, or [code]0[/code] if it is absent or invalid as an integer. CSS can override the hint.
+		</member>
+		<member name="src" type="String" setter="set_src" getter="get_src">
+			The original [code]src[/code] attribute. Relative paths use the document's resource directory. Absolute HTTP(S) image URLs load asynchronously.
+		</member>
+		<member name="sizes" type="String" setter="set_sizes" getter="get_sizes">
+			The source [code]sizes[/code] attribute used to evaluate width descriptors. Uses the first matching source size and defaults to [code]100vw[/code]. An [code]auto[/code] entry is skipped.
+		</member>
+		<member name="srcset" type="String" setter="set_srcset" getter="get_srcset">
+			The source [code]srcset[/code] attribute. Candidates accept width or pixel-density descriptors. URLs follow the rules for [member src].
+		</member>
+		<member name="width_hint" type="int" setter="set_width_hint" getter="get_width_hint">
+			The nonnegative integer pixel hint from the HTML [code]width[/code] attribute, or [code]0[/code] if it is absent or invalid as an integer. CSS can override the hint.
+		</member>
+	</members>
+</class>

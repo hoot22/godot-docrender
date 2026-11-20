@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <ProjectGuid>{B1CED6EE-09CE-4425-2B7D-C101FDB344A3}</ProjectGuid>
+    <Keyword>MakeFileProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <NMakeBuildCommandLine>scons godot-dockit platform=windows target=template_debug arch=x86_64 -j 3</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>scons -c godot-dockit platform=windows target=template_debug arch=x86_64 &amp;&amp; scons godot-dockit platform=windows target=template_debug arch=x86_64 -j 3</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>scons -c godot-dockit platform=windows target=template_debug arch=x86_64</NMakeCleanCommandLine>
+    <NMakeOutput>$(ProjectDir)addons\dockit\bin\dockit.windows.template_debug.x86_64.dll</NMakeOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <NMakeBuildCommandLine>scons godot-dockit platform=windows target=template_release arch=x86_64 -j 3</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>scons -c godot-dockit platform=windows target=template_release arch=x86_64 &amp;&amp; scons godot-dockit platform=windows target=template_release arch=x86_64 -j 3</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>scons -c godot-dockit platform=windows target=template_release arch=x86_64</NMakeCleanCommandLine>
+    <NMakeOutput>$(ProjectDir)addons\dockit\bin\dockit.windows.template_release.x86_64.dll</NMakeOutput>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <!-- IntelliSense-only Visual Studio project. VS is used to browse and edit the sources; the
+       extension itself is built with SCons from a terminal, so no build, clean or IntelliSense-page
+       properties are set here. The editor takes the include roots from the VC++ include directories
+       and the compiler switches from the ClCompile item definition below. -->
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <DockitConfigDefines>WIN32;_DEBUG</DockitConfigDefines>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DockitConfigDefines>_DEBUG</DockitConfigDefines>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <DockitConfigDefines>WIN32;NDEBUG</DockitConfigDefines>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DockitConfigDefines>NDEBUG</DockitConfigDefines>
+  </PropertyGroup>
+  <!-- SCons puts src/ first on the include path, so every include inside the project is written
+       relative to it ("formats/html/...", "editor/...", "nodes/..."); the other roots provide the
+       upstream, staged and generated headers the sources include by bare name ("types.h",
+       "internal.h", "gumbo.h", "latex.h", "tinyxml2.h"). -->
+  <PropertyGroup>
+    <DockitIncludeRoots>$(ProjectDir)src;$(ProjectDir)src\gen\html\include;$(ProjectDir)src\gen\html\include\litehtml;$(ProjectDir)src\thirdparty\litehtml\src;$(ProjectDir)src\thirdparty\litehtml\src\gumbo\include;$(ProjectDir)src\thirdparty\litehtml\src\gumbo\include\gumbo;$(ProjectDir)src\thirdparty\litehtml\src\gumbo\visualc\include;$(ProjectDir)src\thirdparty\microtex\src;$(ProjectDir)src\thirdparty\tinyxml2</DockitIncludeRoots>
+    <!-- Keep upstream Godot-cpp headers external so VS reports diagnostics from Dockit sources, not the dependency. -->
+    <DockitExternalIncludeRoots>$(ProjectDir)godot-cpp\gdextension;$(ProjectDir)godot-cpp\include;$(ProjectDir)godot-cpp\gen\include</DockitExternalIncludeRoots>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Platform)'=='x64' And Exists('$(ProjectDir)src\thirdparty\merman-sdk\include\merman.h') And Exists('$(ProjectDir)src\thirdparty\merman-sdk\lib\merman_ffi.lib')">
+    <DockitIncludeRoots>$(ProjectDir)src\thirdparty\merman-sdk\include;$(DockitIncludeRoots)</DockitIncludeRoots>
+    <DockitSdkDefines>MARKDOWN_LABEL_MERMAN_ENABLED;$(DockitSdkDefines)</DockitSdkDefines>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Platform)'=='x64' And Exists('$(ProjectDir)src\thirdparty\pdfium-sdk\include\fpdfview.h') And Exists('$(ProjectDir)src\thirdparty\pdfium-sdk\bin\pdfium.dll')">
+    <DockitIncludeRoots>$(ProjectDir)src\thirdparty\pdfium-sdk\include;$(DockitIncludeRoots)</DockitIncludeRoots>
+    <DockitSdkDefines>DOCKIT_PDFIUM_ENABLED;$(DockitSdkDefines)</DockitSdkDefines>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IncludePath>$(DockitIncludeRoots);$(IncludePath)</IncludePath>
+    <ExternalIncludePath>$(DockitExternalIncludeRoots);$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
+  <!-- These ClCompile settings are what Visual Studio's IntelliSense parses with. /permissive- is
+       deliberately NOT passed: it is a cl.exe switch and the IntelliSense front end does not emulate
+       it reliably. The alternative tokens (not, and, or) the HTML sources use come from the forced
+       iso646.h include instead, which behaves identically in cl and in IntelliSense.
+       The project type is StaticLibrary only so VS follows the normal C++ pipeline instead of the
+       Makefile one; the solution does not build it (no Build.0 entries) and SCons builds the
+       extension from a terminal. -->
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/std:c++17 /utf-8 /permissive- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(DockitIncludeRoots);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
+      <TreatExternalTemplatesAsInternal>false</TreatExternalTemplatesAsInternal>
+      <PreprocessorDefinitions>NOMINMAX;TYPED_METHOD_BIND;WINDOWS_ENABLED;GDEXTENSION;$(DockitSdkDefines);$(DockitConfigDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\editor\dockit_editor_translations.cpp" />
+    <ClCompile Include="src\editor\dockit_source_editor.cpp" />
+    <ClCompile Include="src\editor\html_preview_editor_plugin.cpp" />
+    <ClCompile Include="src\editor\html_video_export_plugin.cpp" />
+    <ClCompile Include="src\editor\importers\html_document_importer.cpp" />
+    <ClCompile Include="src\editor\importers\latex_document_importer.cpp" />
+    <ClCompile Include="src\editor\importers\mermaid_document_importer.cpp" />
+    <ClCompile Include="src\editor\importers\pdf_texture_importer.cpp" />
+    <ClCompile Include="src\editor\markdown_preview_editor_plugin.cpp" />
+    <ClCompile Include="src\editor\mermaid_preview_editor_plugin.cpp" />
+    <ClCompile Include="src\editor\script_editor_preview_plugin.cpp" />
+    <ClCompile Include="src\formats\dockit_source.cpp" />
+    <ClCompile Include="src\formats\html\backend\litehtml_container.cpp" />
+    <ClCompile Include="src\formats\html\backend\litehtml_document_adapter.cpp" />
+    <ClCompile Include="src\formats\html\css\css_animated_property.cpp" />
+    <ClCompile Include="src\formats\html\css\css_animation.cpp" />
+    <ClCompile Include="src\formats\html\css\css_animation_state.cpp" />
+    <ClCompile Include="src\formats\html\css\css_border_image.cpp" />
+    <ClCompile Include="src\formats\html\css\css_borders.cpp" />
+    <ClCompile Include="src\formats\html\css\css_cascade.cpp" />
+    <ClCompile Include="src\formats\html\css\css_cascade_order.cpp" />
+    <ClCompile Include="src\formats\html\css\css_clip_path.cpp" />
+    <ClCompile Include="src\formats\html\css\css_color.cpp" />
+    <ClCompile Include="src\formats\html\css\css_computed_style.cpp" />
+    <ClCompile Include="src\formats\html\css\css_counter_style.cpp" />
+    <ClCompile Include="src\formats\html\css\css_declarations.cpp" />
+    <ClCompile Include="src\formats\html\css\css_font_face.cpp" />
+    <ClCompile Include="src\formats\html\css\css_font_feature_values.cpp" />
+    <ClCompile Include="src\formats\html\css\css_gradient.cpp" />
+    <ClCompile Include="src\formats\html\css\css_grid_values.cpp" />
+    <ClCompile Include="src\formats\html\css\css_image_value.cpp" />
+    <ClCompile Include="src\formats\html\css\css_length.cpp" />
+    <ClCompile Include="src\formats\html\css\css_litehtml_dom.cpp" />
+    <ClCompile Include="src\formats\html\css\css_litehtml_properties.cpp" />
+    <ClCompile Include="src\formats\html\css\css_litehtml_selectors.cpp" />
+    <ClCompile Include="src\formats\html\css\css_litehtml_style.cpp" />
+    <ClCompile Include="src\formats\html\css\css_litehtml_stylesheet.cpp" />
+    <ClCompile Include="src\formats\html\css\css_litehtml_syntax.cpp" />
+    <ClCompile Include="src\formats\html\css\css_math.cpp" />
+    <ClCompile Include="src\formats\html\css\css_media_query.cpp" />
+    <ClCompile Include="src\formats\html\css\css_motion_path.cpp" />
+    <ClCompile Include="src\formats\html\css\css_parser.cpp" />
+    <ClCompile Include="src\formats\html\css\css_position_values.cpp" />
+    <ClCompile Include="src\formats\html\css\css_selector_matcher.cpp" />
+    <ClCompile Include="src\formats\html\css\css_selectors.cpp" />
+    <ClCompile Include="src\formats\html\css\css_shadows.cpp" />
+    <ClCompile Include="src\formats\html\css\css_shape_path.cpp" />
+    <ClCompile Include="src\formats\html\css\css_string_id.cpp" />
+    <ClCompile Include="src\formats\html\css\css_stylesheet_rules.cpp" />
+    <ClCompile Include="src\formats\html\css\css_supports.cpp" />
+    <ClCompile Include="src\formats\html\css\css_svg_path.cpp" />
+    <ClCompile Include="src\formats\html\css\css_tokenizer.cpp" />
+    <ClCompile Include="src\formats\html\css\css_transform.cpp" />
+    <ClCompile Include="src\formats\html\css\css_transition.cpp" />
+    <ClCompile Include="src\formats\html\css\css_transition_state.cpp" />
+    <ClCompile Include="src\formats\html\css\css_units.cpp" />
+    <ClCompile Include="src\formats\html\css\css_values.cpp" />
+    <ClCompile Include="src\formats\html\css\css_values_background.cpp" />
+    <ClCompile Include="src\formats\html\css\css_values_box.cpp" />
+    <ClCompile Include="src\formats\html\css\css_values_layout.cpp" />
+    <ClCompile Include="src\formats\html\css\css_values_text.cpp" />
+    <ClCompile Include="src\formats\html\css\css_variables.cpp" />
+    <ClCompile Include="src\formats\html\css\css_web_color.cpp" />
+    <ClCompile Include="src\formats\html\css\html_animation.cpp" />
+    <ClCompile Include="src\formats\html\css\html_cssom.cpp" />
+    <ClCompile Include="src\formats\html\css\html_style_sheet.cpp" />
+    <ClCompile Include="src\formats\html\dom\html_document_fragment.cpp" />
+    <ClCompile Include="src\formats\html\dom\html_dom.cpp" />
+    <ClCompile Include="src\formats\html\dom\html_dom_events.cpp" />
+    <ClCompile Include="src\formats\html\dom\html_dom_mutations.cpp" />
+    <ClCompile Include="src\formats\html\dom\html_mutation_observer.cpp" />
+    <ClCompile Include="src\formats\html\dom\html_node.cpp" />
+    <ClCompile Include="src\formats\html\dom\html_range.cpp" />
+    <ClCompile Include="src\formats\html\dom\html_selection.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_anchor_element.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_audio_element.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_button_element.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_canvas_element.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_details_element.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_dialog_element.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_element.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_element_style.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_element_types.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_form_elements.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_form_state.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_gauge_elements.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_gauge_node.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_heading_element.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_image_element.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_input_element.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_input_node.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_input_time.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_list_elements.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_metadata_elements.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_ruby_node.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_select_node.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_table_elements.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_template_element.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_template_node.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_text_editor.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_textarea_element.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_textarea_node.cpp" />
+    <ClCompile Include="src\formats\html\elements\html_video_element.cpp" />
+    <ClCompile Include="src\formats\html\events\html_event.cpp" />
+    <ClCompile Include="src\formats\html\events\html_event_target.cpp" />
+    <ClCompile Include="src\formats\html\events\html_window.cpp" />
+    <ClCompile Include="src\formats\html\html_behavior.cpp" />
+    <ClCompile Include="src\formats\html\html_document.cpp" />
+    <ClCompile Include="src\formats\html\html_layout.cpp" />
+    <ClCompile Include="src\formats\html\layout\grid\litehtml_grid_placement.cpp" />
+    <ClCompile Include="src\formats\html\layout\grid\litehtml_grid_tracks.cpp" />
+    <ClCompile Include="src\formats\html\layout\grid\litehtml_render_grid.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_geometry.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_hyphenation.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_hyphenation_dictionary.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_inline_text_fragment.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_lexical_breaks.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_line_alignment.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_line_break.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_plane_transform.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_polygon_clip.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_punctuation_spacing.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_svg_clip.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_svg_geometry.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_svg_text.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_text_autospace.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_text_wrap.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_transform_interpolation.cpp" />
+    <ClCompile Include="src\formats\html\layout\html_white_space.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\css\src\el_anchor.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\css\src\el_before_after.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\css\src\el_image.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\css\src\html_tag.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\document\src\document.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\document\src\document_container.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\document\src\el_table.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\document\src\element.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\flex\src\flex_item.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\flex\src\flex_line.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\flex\src\render_flex.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\layout\src\formatting_context.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\layout\src\iterators.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\layout\src\line_box.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\layout\src\render_block.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\layout\src\render_block_context.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\layout\src\render_image.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\layout\src\render_inline_context.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\layout\src\render_table.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\layout\src\table.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\render_tree\src\el_space.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\render_tree\src\el_text.cpp" />
+    <ClCompile Include="src\formats\html\litehtml\render_tree\src\render_item.cpp" />
+    <ClCompile Include="src\formats\html\markup\html_markup.cpp" />
+    <ClCompile Include="src\formats\html\paint\html_background_paint.cpp" />
+    <ClCompile Include="src\formats\html\paint\html_border_image.cpp" />
+    <ClCompile Include="src\formats\html\paint\html_canvas_renderer.cpp" />
+    <ClCompile Include="src\formats\html\paint\html_depth_sort.cpp" />
+    <ClCompile Include="src\formats\html\paint\html_image_blend.cpp" />
+    <ClCompile Include="src\formats\html\paint\html_paint_recorder.cpp" />
+    <ClCompile Include="src\formats\html\paint\html_svg_mask.cpp" />
+    <ClCompile Include="src\formats\html\paint\html_text_mask.cpp" />
+    <ClCompile Include="src\formats\html\paint\html_text_overflow.cpp" />
+    <ClCompile Include="src\formats\html\resources\html_asset_collector.cpp" />
+    <ClCompile Include="src\formats\html\resources\html_image_metadata.cpp" />
+    <ClCompile Include="src\formats\html\resources\html_image_sources.cpp" />
+    <ClCompile Include="src\formats\html\resources\html_remote_stylesheets.cpp" />
+    <ClCompile Include="src\formats\html\resources\html_resource_paths.cpp" />
+    <ClCompile Include="src\formats\html\resources\html_resources.cpp" />
+    <ClCompile Include="src\formats\html\text\html_glyph_outline.cpp" />
+    <ClCompile Include="src\formats\html\text\html_image_alt_text.cpp" />
+    <ClCompile Include="src\formats\html\text\html_system_fonts.cpp" />
+    <ClCompile Include="src\formats\html\text\html_text_layout.cpp" />
+    <ClCompile Include="src\formats\html\text\html_text_spacing.cpp" />
+    <ClCompile Include="src\formats\html\text\html_text_transform.cpp" />
+    <ClCompile Include="src\formats\html\text\litehtml_fonts.cpp" />
+    <ClCompile Include="src\formats\http_requests.cpp" />
+    <ClCompile Include="src\formats\http_url.cpp" />
+    <ClCompile Include="src\formats\latex\latex_document.cpp" />
+    <ClCompile Include="src\formats\latex\latex_document_loader.cpp" />
+    <ClCompile Include="src\formats\latex\tex_render.cpp" />
+    <ClCompile Include="src\formats\markdown\markdown_document.cpp" />
+    <ClCompile Include="src\formats\markdown\markdown_html.cpp" />
+    <ClCompile Include="src\formats\markdown\markdown_parser.cpp" />
+    <ClCompile Include="src\formats\mermaid\mermaid_document.cpp" />
+    <ClCompile Include="src\formats\mermaid\mermaid_render.cpp" />
+    <ClCompile Include="src\formats\pdf\pdf_texture.cpp" />
+    <ClCompile Include="src\formats\pdf\pdfium\pdfium_backend.cpp" />
+    <ClCompile Include="src\formats\pdf\reader\pdf_reader.cpp" />
+    <ClCompile Include="src\formats\pdf\reader\pdf_reader_content.cpp" />
+    <ClCompile Include="src\formats\pdf\reader\pdf_reader_queries.cpp" />
+    <ClCompile Include="src\formats\pdf\writer\pdf_writer.cpp" />
+    <ClCompile Include="src\formats\pdf\writer\pdf_writer_annotations.cpp" />
+    <ClCompile Include="src\formats\pdf\writer\pdf_writer_attachments.cpp" />
+    <ClCompile Include="src\formats\pdf\writer\pdf_writer_bindings.cpp" />
+    <ClCompile Include="src\formats\pdf\writer\pdf_writer_media.cpp" />
+    <ClCompile Include="src\formats\pdf\writer\pdf_writer_objects.cpp" />
+    <ClCompile Include="src\formats\pdf\writer\pdf_writer_pages.cpp" />
+    <ClCompile Include="src\formats\pdf\writer\pdf_writer_stub.cpp" />
+    <ClCompile Include="src\formats\remote_images.cpp" />
+    <ClCompile Include="src\nodes\html_label.cpp" />
+    <ClCompile Include="src\nodes\html_label_audio.cpp" />
+    <ClCompile Include="src\nodes\html_label_actions.cpp" />
+    <ClCompile Include="src\nodes\html_label_behaviors.cpp" />
+    <ClCompile Include="src\nodes\html_label_color_picker.cpp" />
+    <ClCompile Include="src\nodes\html_label_dialog.cpp" />
+    <ClCompile Include="src\nodes\html_label_events.cpp" />
+    <ClCompile Include="src\nodes\html_label_forms.cpp" />
+    <ClCompile Include="src\nodes\html_label_input.cpp" />
+    <ClCompile Include="src\nodes\html_label_pickers.cpp" />
+    <ClCompile Include="src\nodes\html_label_time_picker.cpp" />
+    <ClCompile Include="src\nodes\html_label_video.cpp" />
+    <ClCompile Include="src\nodes\latex_label.cpp" />
+    <ClCompile Include="src\nodes\latex_label_3d.cpp" />
+    <ClCompile Include="src\nodes\markdown_label.cpp" />
+    <ClCompile Include="src\nodes\mermaid_label.cpp" />
+    <ClCompile Include="src\register_types.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\editor\dockit_editor_translations.h" />
+    <ClInclude Include="src\editor\dockit_source_editor.h" />
+    <ClInclude Include="src\editor\html_preview_editor_plugin.h" />
+    <ClInclude Include="src\editor\html_video_export_plugin.h" />
+    <ClInclude Include="src\editor\importers\html_document_importer.h" />
+    <ClInclude Include="src\editor\importers\latex_document_importer.h" />
+    <ClInclude Include="src\editor\importers\mermaid_document_importer.h" />
+    <ClInclude Include="src\editor\importers\pdf_texture_importer.h" />
+    <ClInclude Include="src\editor\markdown_preview_editor_plugin.h" />
+    <ClInclude Include="src\editor\mermaid_preview_editor_plugin.h" />
+    <ClInclude Include="src\editor\script_editor_preview_plugin.h" />
+    <ClInclude Include="src\formats\dockit_source.h" />
+    <ClInclude Include="src\formats\html\backend\litehtml_container.h" />
+    <ClInclude Include="src\formats\html\backend\litehtml_document_adapter.h" />
+    <ClInclude Include="src\formats\html\css\css_animated_property.h" />
+    <ClInclude Include="src\formats\html\css\css_animation.h" />
+    <ClInclude Include="src\formats\html\css\css_animation_state.h" />
+    <ClInclude Include="src\formats\html\css\css_background.h" />
+    <ClInclude Include="src\formats\html\css\css_blend_mode.h" />
+    <ClInclude Include="src\formats\html\css\css_border_image.h" />
+    <ClInclude Include="src\formats\html\css\css_borders.h" />
+    <ClInclude Include="src\formats\html\css\css_cascade.h" />
+    <ClInclude Include="src\formats\html\css\css_cascade_order.h" />
+    <ClInclude Include="src\formats\html\css\css_clip_path.h" />
+    <ClInclude Include="src\formats\html\css\css_color.h" />
+    <ClInclude Include="src\formats\html\css\css_compute_context.h" />
+    <ClInclude Include="src\formats\html\css\css_computed_style.h" />
+    <ClInclude Include="src\formats\html\css\css_counter_style.h" />
+    <ClInclude Include="src\formats\html\css\css_declarations.h" />
+    <ClInclude Include="src\formats\html\css\css_default_stylesheet.h" />
+    <ClInclude Include="src\formats\html\css\css_font_description.h" />
+    <ClInclude Include="src\formats\html\css\css_font_face.h" />
+    <ClInclude Include="src\formats\html\css\css_font_feature_values.h" />
+    <ClInclude Include="src\formats\html\css\css_gradient.h" />
+    <ClInclude Include="src\formats\html\css\css_grid_lines.h" />
+    <ClInclude Include="src\formats\html\css\css_grid_values.h" />
+    <ClInclude Include="src\formats\html\css\css_image_value.h" />
+    <ClInclude Include="src\formats\html\css\css_length.h" />
+    <ClInclude Include="src\formats\html\css\css_litehtml_dom.h" />
+    <ClInclude Include="src\formats\html\css\css_margins.h" />
+    <ClInclude Include="src\formats\html\css\css_math.h" />
+    <ClInclude Include="src\formats\html\css\css_media_query.h" />
+    <ClInclude Include="src\formats\html\css\css_motion_path.h" />
+    <ClInclude Include="src\formats\html\css\css_offsets.h" />
+    <ClInclude Include="src\formats\html\css\css_parser.h" />
+    <ClInclude Include="src\formats\html\css\css_playback.h" />
+    <ClInclude Include="src\formats\html\css\css_position.h" />
+    <ClInclude Include="src\formats\html\css\css_position_values.h" />
+    <ClInclude Include="src\formats\html\css\css_property_value.h" />
+    <ClInclude Include="src\formats\html\css\css_selector_matcher.h" />
+    <ClInclude Include="src\formats\html\css\css_selectors.h" />
+    <ClInclude Include="src\formats\html\css\css_shadows.h" />
+    <ClInclude Include="src\formats\html\css\css_shape_path.h" />
+    <ClInclude Include="src\formats\html\css\css_string_id.h" />
+    <ClInclude Include="src\formats\html\css\css_stylesheet_rules.h" />
+    <ClInclude Include="src\formats\html\css\css_supports.h" />
+    <ClInclude Include="src\formats\html\css\css_svg_path.h" />
+    <ClInclude Include="src\formats\html\css\css_syntax_util.h" />
+    <ClInclude Include="src\formats\html\css\css_token_compat.h" />
+    <ClInclude Include="src\formats\html\css\css_tokenizer.h" />
+    <ClInclude Include="src\formats\html\css\css_transform.h" />
+    <ClInclude Include="src\formats\html\css\css_transition.h" />
+    <ClInclude Include="src\formats\html\css\css_transition_state.h" />
+    <ClInclude Include="src\formats\html\css\css_types.h" />
+    <ClInclude Include="src\formats\html\css\css_units.h" />
+    <ClInclude Include="src\formats\html\css\css_value_helpers.h" />
+    <ClInclude Include="src\formats\html\css\css_value_parser.h" />
+    <ClInclude Include="src\formats\html\css\css_values.h" />
+    <ClInclude Include="src\formats\html\css\css_variables.h" />
+    <ClInclude Include="src\formats\html\css\css_web_color.h" />
+    <ClInclude Include="src\formats\html\css\html_animation.h" />
+    <ClInclude Include="src\formats\html\css\html_cssom.h" />
+    <ClInclude Include="src\formats\html\css\html_style_sheet.h" />
+    <ClInclude Include="src\formats\html\dom\html_document_fragment.h" />
+    <ClInclude Include="src\formats\html\dom\html_dom.h" />
+    <ClInclude Include="src\formats\html\dom\html_mutation_observer.h" />
+    <ClInclude Include="src\formats\html\dom\html_node.h" />
+    <ClInclude Include="src\formats\html\dom\html_range.h" />
+    <ClInclude Include="src\formats\html\dom\html_selection.h" />
+    <ClInclude Include="src\formats\html\elements\html_anchor_element.h" />
+    <ClInclude Include="src\formats\html\elements\html_audio_element.h" />
+    <ClInclude Include="src\formats\html\elements\html_audio_node.h" />
+    <ClInclude Include="src\formats\html\elements\html_button_element.h" />
+    <ClInclude Include="src\formats\html\elements\html_canvas_element.h" />
+    <ClInclude Include="src\formats\html\elements\html_canvas_node.h" />
+    <ClInclude Include="src\formats\html\elements\html_control_render_item.h" />
+    <ClInclude Include="src\formats\html\elements\html_details_element.h" />
+    <ClInclude Include="src\formats\html\elements\html_details_node.h" />
+    <ClInclude Include="src\formats\html\elements\html_dialog_element.h" />
+    <ClInclude Include="src\formats\html\elements\html_dialog_node.h" />
+    <ClInclude Include="src\formats\html\elements\html_element.h" />
+    <ClInclude Include="src\formats\html\elements\html_element_types.h" />
+    <ClInclude Include="src\formats\html\elements\html_form_elements.h" />
+    <ClInclude Include="src\formats\html\elements\html_form_state.h" />
+    <ClInclude Include="src\formats\html\elements\html_gauge_elements.h" />
+    <ClInclude Include="src\formats\html\elements\html_gauge_node.h" />
+    <ClInclude Include="src\formats\html\elements\html_heading_element.h" />
+    <ClInclude Include="src\formats\html\elements\html_image_element.h" />
+    <ClInclude Include="src\formats\html\elements\html_input_element.h" />
+    <ClInclude Include="src\formats\html\elements\html_input_node.h" />
+    <ClInclude Include="src\formats\html\elements\html_input_time.h" />
+    <ClInclude Include="src\formats\html\elements\html_list_elements.h" />
+    <ClInclude Include="src\formats\html\elements\html_metadata_elements.h" />
+    <ClInclude Include="src\formats\html\elements\html_node_copy_state.h" />
+    <ClInclude Include="src\formats\html\elements\html_output_node.h" />
+    <ClInclude Include="src\formats\html\elements\html_ruby_node.h" />
+    <ClInclude Include="src\formats\html\elements\html_select_node.h" />
+    <ClInclude Include="src\formats\html\elements\html_stylesheet_node.h" />
+    <ClInclude Include="src\formats\html\elements\html_table_attributes.h" />
+    <ClInclude Include="src\formats\html\elements\html_table_elements.h" />
+    <ClInclude Include="src\formats\html\elements\html_template_element.h" />
+    <ClInclude Include="src\formats\html\elements\html_template_node.h" />
+    <ClInclude Include="src\formats\html\elements\html_text_control_node.h" />
+    <ClInclude Include="src\formats\html\elements\html_text_editor.h" />
+    <ClInclude Include="src\formats\html\elements\html_textarea_element.h" />
+    <ClInclude Include="src\formats\html\elements\html_textarea_node.h" />
+    <ClInclude Include="src\formats\html\elements\html_video_element.h" />
+    <ClInclude Include="src\formats\html\elements\html_video_node.h" />
+    <ClInclude Include="src\formats\html\events\html_event.h" />
+    <ClInclude Include="src\formats\html\events\html_event_target.h" />
+    <ClInclude Include="src\formats\html\events\html_window.h" />
+    <ClInclude Include="src\formats\html\html_behavior.h" />
+    <ClInclude Include="src\formats\html\html_document.h" />
+    <ClInclude Include="src\formats\html\html_layout.h" />
+    <ClInclude Include="src\formats\html\layout\grid\litehtml_grid_placement.h" />
+    <ClInclude Include="src\formats\html\layout\grid\litehtml_grid_tracks.h" />
+    <ClInclude Include="src\formats\html\layout\grid\litehtml_render_grid.h" />
+    <ClInclude Include="src\formats\html\layout\html_geometry.h" />
+    <ClInclude Include="src\formats\html\layout\html_hyphenation.h" />
+    <ClInclude Include="src\formats\html\layout\html_hyphenation_dictionary.h" />
+    <ClInclude Include="src\formats\html\layout\html_inline_text_fragment.h" />
+    <ClInclude Include="src\formats\html\layout\html_lexical_breaks.h" />
+    <ClInclude Include="src\formats\html\layout\html_line_break.h" />
+    <ClInclude Include="src\formats\html\layout\html_plane_transform.h" />
+    <ClInclude Include="src\formats\html\layout\html_polygon_clip.h" />
+    <ClInclude Include="src\formats\html\layout\html_punctuation_spacing.h" />
+    <ClInclude Include="src\formats\html\layout\html_svg_clip.h" />
+    <ClInclude Include="src\formats\html\layout\html_svg_geometry.h" />
+    <ClInclude Include="src\formats\html\layout\html_svg_text.h" />
+    <ClInclude Include="src\formats\html\layout\html_text_autospace.h" />
+    <ClInclude Include="src\formats\html\layout\html_transform_interpolation.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\background.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\borders.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\css_length.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\css_margins.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\css_offsets.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\css_parser.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\css_position.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\css_properties.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\css_selector.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\css_tokenizer.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\el_anchor.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\el_before_after.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\el_image.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\font_description.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\gradient.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\html_tag.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\master_css.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\media_query.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\string_id.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\style.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\stylesheet.h" />
+    <ClInclude Include="src\formats\html\litehtml\css\include\litehtml\web_color.h" />
+    <ClInclude Include="src\formats\html\litehtml\document\include\litehtml\document.h" />
+    <ClInclude Include="src\formats\html\litehtml\document\include\litehtml\document_container.h" />
+    <ClInclude Include="src\formats\html\litehtml\document\include\litehtml\element.h" />
+    <ClInclude Include="src\formats\html\litehtml\flex\include\litehtml\flex_line.h" />
+    <ClInclude Include="src\formats\html\litehtml\flex\include\litehtml\render_flex.h" />
+    <ClInclude Include="src\formats\html\litehtml\layout\include\litehtml\line_box.h" />
+    <ClInclude Include="src\formats\html\litehtml\layout\include\litehtml\render_block.h" />
+    <ClInclude Include="src\formats\html\litehtml\layout\include\litehtml\render_block_context.h" />
+    <ClInclude Include="src\formats\html\litehtml\layout\include\litehtml\render_inline_context.h" />
+    <ClInclude Include="src\formats\html\litehtml\layout\include\litehtml\render_table.h" />
+    <ClInclude Include="src\formats\html\litehtml\layout\include\litehtml\table.h" />
+    <ClInclude Include="src\formats\html\litehtml\layout\include\litehtml\types.h" />
+    <ClInclude Include="src\formats\html\litehtml\render_tree\include\litehtml\el_space.h" />
+    <ClInclude Include="src\formats\html\litehtml\render_tree\include\litehtml\el_text.h" />
+    <ClInclude Include="src\formats\html\litehtml\render_tree\include\litehtml\render_item.h" />
+    <ClInclude Include="src\formats\html\markup\html_markup.h" />
+    <ClInclude Include="src\formats\html\markup\html_number.h" />
+    <ClInclude Include="src\formats\html\paint\html_blend_shader.h" />
+    <ClInclude Include="src\formats\html\paint\html_border_image.h" />
+    <ClInclude Include="src\formats\html\paint\html_canvas_renderer.h" />
+    <ClInclude Include="src\formats\html\paint\html_depth_sort.h" />
+    <ClInclude Include="src\formats\html\paint\html_image_blend.h" />
+    <ClInclude Include="src\formats\html\paint\html_paint_recorder.h" />
+    <ClInclude Include="src\formats\html\paint\html_paint_run.h" />
+    <ClInclude Include="src\formats\html\paint\html_svg_mask.h" />
+    <ClInclude Include="src\formats\html\paint\html_text_mask.h" />
+    <ClInclude Include="src\formats\html\resources\html_asset_collector.h" />
+    <ClInclude Include="src\formats\html\resources\html_image_metadata.h" />
+    <ClInclude Include="src\formats\html\resources\html_image_sources.h" />
+    <ClInclude Include="src\formats\html\resources\html_remote_stylesheets.h" />
+    <ClInclude Include="src\formats\html\resources\html_resource_paths.h" />
+    <ClInclude Include="src\formats\html\resources\html_resources.h" />
+    <ClInclude Include="src\formats\html\text\html_font_config.h" />
+    <ClInclude Include="src\formats\html\text\html_glyph_outline.h" />
+    <ClInclude Include="src\formats\html\text\html_image_alt_text.h" />
+    <ClInclude Include="src\formats\html\text\html_shaped_text.h" />
+    <ClInclude Include="src\formats\html\text\html_system_fonts.h" />
+    <ClInclude Include="src\formats\html\text\html_text_layout.h" />
+    <ClInclude Include="src\formats\html\text\html_text_selection.h" />
+    <ClInclude Include="src\formats\html\text\litehtml_fonts.h" />
+    <ClInclude Include="src\formats\http_requests.h" />
+    <ClInclude Include="src\formats\http_url.h" />
+    <ClInclude Include="src\formats\latex\latex_document.h" />
+    <ClInclude Include="src\formats\latex\latex_document_loader.h" />
+    <ClInclude Include="src\formats\latex\tex_render.h" />
+    <ClInclude Include="src\formats\markdown\markdown_document.h" />
+    <ClInclude Include="src\formats\markdown\markdown_html.h" />
+    <ClInclude Include="src\formats\markdown\markdown_parser.h" />
+    <ClInclude Include="src\formats\mermaid\mermaid_document.h" />
+    <ClInclude Include="src\formats\mermaid\mermaid_render.h" />
+    <ClInclude Include="src\formats\pdf\pdf_texture.h" />
+    <ClInclude Include="src\formats\pdf\pdfium\pdfium_backend.h" />
+    <ClInclude Include="src\formats\pdf\pdfium\pdfium_writer_symbols.h" />
+    <ClInclude Include="src\formats\pdf\reader\pdf_reader.h" />
+    <ClInclude Include="src\formats\pdf\reader\pdf_reader_internal.h" />
+    <ClInclude Include="src\formats\pdf\writer\pdf_writer.h" />
+    <ClInclude Include="src\formats\pdf\writer\pdf_writer_internal.h" />
+    <ClInclude Include="src\formats\remote_images.h" />
+    <ClInclude Include="src\gen\html\include\litehtml.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\background.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\borders.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\codepoint.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\css_length.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\css_margins.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\css_offsets.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\css_parser.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\css_position.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\css_properties.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\css_selector.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\css_tokenizer.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\document.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\document_container.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_anchor.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_base.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_before_after.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_body.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_break.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_cdata.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_comment.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_div.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_font.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_image.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_link.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_para.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_script.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_space.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_style.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_table.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_td.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_text.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_title.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\el_tr.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\element.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\encodings.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\flex_item.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\flex_line.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\font_description.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\formatting_context.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\gradient.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\html.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\html_microsyntaxes.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\html_tag.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\iterators.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\line_box.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\master_css.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\media_query.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\num_cvt.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\os_types.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\render_block.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\render_block_context.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\render_flex.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\render_image.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\render_inline.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\render_inline_context.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\render_item.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\render_table.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\scroll_view.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\string_id.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\style.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\stylesheet.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\table.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\types.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\url.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\url_path.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\utf8_strings.h" />
+    <ClInclude Include="src\gen\html\include\litehtml\web_color.h" />
+    <ClInclude Include="src\nodes\html_label.h" />
+    <ClInclude Include="src\nodes\latex_label.h" />
+    <ClInclude Include="src\nodes\latex_label_3d.h" />
+    <ClInclude Include="src\nodes\markdown_label.h" />
+    <ClInclude Include="src\nodes\mermaid_label.h" />
+    <ClInclude Include="src\register_types.h" />
+    <ClInclude Include="src\formats\html\layout\unicode_hyphenation_compose.inc" />
+    <ClInclude Include="src\formats\html\layout\unicode_hyphenation_skip.inc" />
+    <ClInclude Include="src\formats\html\layout\unicode_hyphenation_word_break.inc" />
+    <ClInclude Include="src\formats\html\layout\unicode_line_break.inc" />
+    <ClInclude Include="src\formats\html\layout\unicode_text_autospace.inc" />
+    <ClInclude Include="src\formats\html\text\unicode_case_folding.inc" />
+    <ClInclude Include="src\formats\html\text\unicode_emphasis_skip.inc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

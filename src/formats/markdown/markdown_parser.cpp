@@ -1,7 +1,7 @@
 #include "markdown_parser.h"
 #include "markdown_html.h"
 
-#include "formats/html/html_markup.h"
+#include "formats/html/markup/html_markup.h"
 
 #include <algorithm>
 #include <climits>
@@ -712,7 +712,7 @@ MarkdownInlineSpanParseResult parse_inline_spans(const String& p_text, const Mar
 		MarkdownInlineSpan span;
 		span.text = String::utf8(raw.data() + start, static_cast<int64_t>(end - start));
 		if (p_options.parse_html && p_decode) {
-			span.text = docrender::decode_html_entities(span.text);
+			span.text = dockit::decode_html_entities(span.text);
 		}
 		span.start = static_cast<int64_t>(output.length());
 		output += span.text;
@@ -739,8 +739,8 @@ MarkdownInlineSpanParseResult parse_inline_spans(const String& p_text, const Mar
 			if (skip_inline_latex(i)) {
 				continue;
 			}
-			docrender::MarkdownHTMLTag tag;
-			if (p_options.parse_html && raw[i] == '<' && docrender::scan_markdown_html_tag(raw, i, tag)) {
+			dockit::MarkdownHTMLTag tag;
+			if (p_options.parse_html && raw[i] == '<' && dockit::scan_markdown_html_tag(raw, i, tag)) {
 				i = tag.end - 1;
 				continue;
 			}
@@ -765,8 +765,8 @@ MarkdownInlineSpanParseResult parse_inline_spans(const String& p_text, const Mar
 			if (skip_inline_latex(i)) {
 				continue;
 			}
-			docrender::MarkdownHTMLTag tag;
-			if (p_options.parse_html && raw[i] == '<' && docrender::scan_markdown_html_tag(raw, i, tag)) {
+			dockit::MarkdownHTMLTag tag;
+			if (p_options.parse_html && raw[i] == '<' && dockit::scan_markdown_html_tag(raw, i, tag)) {
 				i = tag.end - 1;
 				continue;
 			}
@@ -823,16 +823,16 @@ MarkdownInlineSpanParseResult parse_inline_spans(const String& p_text, const Mar
 		}
 
 		if (p_options.parse_html && raw[pos] == '<') {
-			docrender::MarkdownHTMLTag tag;
-			if (docrender::scan_markdown_html_tag(raw, pos, tag)) {
+			dockit::MarkdownHTMLTag tag;
+			if (dockit::scan_markdown_html_tag(raw, pos, tag)) {
 				const std::string& name = tag.name;
 				if (!tag.closing && name == "img") {
 					MarkdownInlineSpan span;
 					span.html_image = true;
-					span.image_uri = docrender::decode_html_entities(tag.image.src, true);
-					span.image_title = docrender::decode_html_entities(tag.image.title, true);
+					span.image_uri = dockit::decode_html_entities(tag.image.src, true);
+					span.image_title = dockit::decode_html_entities(tag.image.title, true);
 					span.image_size = tag.image.size;
-					span.text = docrender::decode_html_entities(tag.image.alt, true);
+					span.text = dockit::decode_html_entities(tag.image.alt, true);
 					if (span.text.is_empty()) {
 						span.text = String::chr(0xfffc);
 					}
@@ -862,7 +862,7 @@ MarkdownInlineSpanParseResult parse_inline_spans(const String& p_text, const Mar
 				const bool styled = name == "span";
 				size_t close_end = 0;
 				const size_t close = !tag.closing && !tag.self_closing && (bold || italic || strike || code || highlight || link || styled)
-					? docrender::find_markdown_html_close(raw, tag, close_end) : std::string::npos;
+					? dockit::find_markdown_html_close(raw, tag, close_end) : std::string::npos;
 				if (close == std::string::npos) {
 					emit_plain(pos, tag.end, false);
 					pos = tag.end;
@@ -872,7 +872,7 @@ MarkdownInlineSpanParseResult parse_inline_spans(const String& p_text, const Mar
 				const String inner = String::utf8(raw.data() + tag.end, close - tag.end);
 				MarkdownInlineSpanParseResult parsed;
 				if (code) {
-					parsed.output_text = docrender::decode_html_entities(inner);
+					parsed.output_text = dockit::decode_html_entities(inner);
 					MarkdownInlineSpan span;
 					span.text = parsed.output_text;
 					span.end = span.text.length();
@@ -881,9 +881,9 @@ MarkdownInlineSpanParseResult parse_inline_spans(const String& p_text, const Mar
 				else {
 					parsed = parse_inline_spans(inner, p_options);
 				}
-				const docrender::HTMLInlineColors colors = styled
-					? docrender::parse_html_inline_colors(docrender::decode_html_entities(tag.style, true)) : docrender::HTMLInlineColors{};
-				const String uri = link ? docrender::decode_html_entities(tag.href, true) : String();
+				const dockit::HTMLInlineColors colors = styled
+					? dockit::parse_html_inline_colors(dockit::decode_html_entities(tag.style, true)) : dockit::HTMLInlineColors{};
+				const String uri = link ? dockit::decode_html_entities(tag.href, true) : String();
 				const int64_t start = output.length();
 				output += parsed.output_text;
 				for (MarkdownInlineSpan& span : parsed.spans) {
@@ -1409,7 +1409,7 @@ MarkdownParseResult parse_markdown_document(const String& p_text, const Markdown
 		}
 
 		if (p_options.parse_html) {
-			if (const auto range = docrender::scan_markdown_html_block(lines, index, max_index, !paragraph_accumulator.is_empty())) {
+			if (const auto range = dockit::scan_markdown_html_block(lines, index, max_index, !paragraph_accumulator.is_empty())) {
 				flush_all();
 				state.in_list = false;
 				state.in_blockquote = false;

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLLabelElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML label for a form control.
+	</brief_description>
+	<description>
+		An explicit [code]for[/code] ID is resolved in the label's tree. An implicit label uses the first labelable descendant.
+	</description>
+	<methods>
+		<method name="get_control" qualifiers="const">
+			<return type="HTMLElement" />
+			<description>
+				Returns the labeled control or [code]null[/code].
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="html_for" type="String" setter="set_html_for" getter="get_html_for">
+			The raw [code]for[/code] attribute.
+		</member>
+	</members>
+</class>

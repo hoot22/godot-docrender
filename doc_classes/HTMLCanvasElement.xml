@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLCanvasElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>A handle to an HTML canvas element and its intrinsic pixel buffer.</brief_description>
+	<description>
+		Returned by DOM queries for [code]&lt;canvas&gt;[/code]. The default backing size is 300 by 150 pixels. CSS controls the displayed box independently from the backing image. Resizing either intrinsic dimension clears the image and resets the 2D context state. Backing storage is limited to 8192 pixels per dimension and 16 million pixels total.
+	</description>
+	<methods>
+		<method name="get_context">
+			<return type="HTMLCanvasRenderingContext2D" />
+			<param index="0" name="context_id" type="String" />
+			<description>Returns the cached 2D context for [code]2d[/code], or [code]null[/code] for unsupported context IDs or invalid handles.</description>
+		</method>
+		<method name="get_image" qualifiers="const">
+			<return type="Image" />
+			<description>Returns a copy of the backing RGBA image. A canvas without a created context returns a transparent image at its intrinsic size.</description>
+		</method>
+		<method name="to_data_url" qualifiers="const">
+			<return type="String" />
+			<param index="0" name="type" type="String" default="&quot;image/png&quot;" />
+			<param index="1" name="quality" type="float" default="0.92" />
+			<description>Encodes the backing image as a base64 data URL. PNG, JPEG, and WebP are supported. Unsupported MIME types fall back to PNG. Quality is clamped to [code]0.0[/code] through [code]1.0[/code] for lossy formats.</description>
+		</method>
+	</methods>
+	<members>
+		<member name="height" type="int" setter="set_height" getter="get_height" default="150">The intrinsic backing height in pixels. Assigning a new value clears the backing image and resets its context state.</member>
+		<member name="width" type="int" setter="set_width" getter="get_width" default="300">The intrinsic backing width in pixels. Assigning a new value clears the backing image and resets its context state.</member>
+	</members>
+</class>

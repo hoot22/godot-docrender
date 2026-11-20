@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLWindow" inherits="HTMLEventTarget" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		The event target for a live document window.
+	</brief_description>
+	<description>
+		Every document exposes one window handle through [method HTMLDocumentNode.get_default_view]. Listeners registered on it run first in the capture phase and last in the bubble phase, which makes it the natural place for shortcuts and document-wide handlers. The first successful layout dispatches [code]DOMContentLoaded[/code] on the document and then [code]load[/code] on the window. A changed HTML viewport dispatches a non-bubbling [code]resize[/code] event after layout; initial layout does not dispatch one. Godot OS window focus notifications dispatch non-bubbling [code]focus[/code] and [code]blur[/code] events. A window becomes invalid when the layout replaces or clears its document. Omitted [code]passive[/code] defaults to [code]true[/code] for [code]wheel[/code], [code]touchstart[/code], and [code]touchmove[/code].
+	</description>
+	<methods>
+		<method name="get_document">
+			<return type="HTMLDocumentNode" />
+			<description>
+				Returns the document node this window belongs to, or [code]null[/code] when the window is invalid.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="document" type="HTMLDocumentNode" setter="" getter="get_document">
+			The document node this window belongs to.
+		</member>
+	</members>
+</class>

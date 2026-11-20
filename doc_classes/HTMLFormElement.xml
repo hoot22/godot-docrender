@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLFormElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML form with ordered form data.
+	</brief_description>
+	<description>
+		Use [method get_controls] to inspect associations and [method HTMLLabel.submit_form] to validate and submit through Godot signals.
+	</description>
+	<methods>
+		<method name="get_controls" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<description>
+				Returns a tree-order snapshot of the associated controls.
+			</description>
+		</method>
+		<method name="get_form_data" qualifiers="const">
+			<return type="Dictionary[]" />
+			<param index="0" name="submitter" type="HTMLElement" default="null" />
+			<description>
+				Returns ordered dictionaries with [code]name[/code] and [code]value[/code] keys. Repeated names remain separate. File entries hold [HTMLInputFile] values. The optional submitter must be enabled and associated with this form. An image submitter produces two coordinate entries whose values default to [code]0[/code].
+			</description>
+		</method>
+		<method name="reset">
+			<return type="int" enum="Error" />
+			<description>
+				Restores all associated controls to their markup defaults, clears edit state, and schedules one layout update when connected.
+			</description>
+		</method>
+	</methods>
+</class>

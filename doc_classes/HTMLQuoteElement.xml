@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLQuoteElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML quotation.
+	</brief_description>
+	<description>
+		Represents [code]&lt;q&gt;[/code] and [code]&lt;blockquote&gt;[/code].
+	</description>
+	<members>
+		<member name="cite" type="String" setter="set_cite" getter="get_cite">
+			The reflected quotation source.
+		</member>
+	</members>
+</class>

@@ -23,8 +23,11 @@
 		</method>
 	</methods>
 	<members>
+		<member name="document" type="MermaidDocument" setter="set_document" getter="get_document">
+			The Mermaid resource to display, such as an imported [code].mmd[/code] or [code].mermaid[/code] file. The diagram updates when the resource changes or is reimported. Set this to [code]null[/code] to use [member text].
+		</member>
 		<member name="text" type="String" setter="set_text" getter="get_text" default="&quot;&quot;">
-			The Mermaid diagram source, for example [code]flowchart LR; A[Start] --&gt; B[Done][/code].
+			The Mermaid diagram source to display when [member document] is unset, for example [code]flowchart LR; A[Start] --&gt; B[Done][/code].
 		</member>
 		<member name="theme_mode" type="int" setter="set_theme_mode" getter="get_theme_mode" enum="MermaidLabel.ThemeMode" default="0">
 			The default palette for the diagram.

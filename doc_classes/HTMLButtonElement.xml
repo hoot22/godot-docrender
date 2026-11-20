@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLButtonElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A handle to an HTML button element.
+	</brief_description>
+	<description>
+		Returned by queries and [method HTMLLayout.create_element] for [code]&lt;button&gt;[/code]. In [HTMLLabel], an enabled button can run a command, submit its associated form, or reset it according to its type.
+	</description>
+	<methods>
+		<method name="get_form" qualifiers="const">
+			<return type="HTMLFormElement" />
+			<description>
+				Returns the associated form or [code]null[/code].
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="disabled" type="bool" setter="set_disabled" getter="is_disabled">
+			Whether the [code]disabled[/code] attribute is present. Setting this to [code]false[/code] removes the attribute.
+		</member>
+		<member name="name" type="String" setter="set_name" getter="get_name">
+			The button's source [code]name[/code] attribute.
+		</member>
+		<member name="type" type="String" setter="set_type" getter="get_type">
+			The button's source [code]type[/code] attribute. An absent attribute returns an empty string.
+		</member>
+		<member name="value" type="String" setter="set_value" getter="get_value">
+			The button's source [code]value[/code] attribute.
+		</member>
+	</members>
+</class>

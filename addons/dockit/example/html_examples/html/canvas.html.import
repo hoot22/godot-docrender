@@ -1,0 +1,15 @@
+[remap]
+
+importer="dockit.html_document"
+importer_version=12
+type="HTMLDocument"
+uid="uid://dtsx5rt1ok41b"
+path="res://.godot/imported/canvas.html-06919ab0db1ac8790ed9094d0f687864.res"
+
+[deps]
+
+source_file="res://addons/dockit/example/html_examples/html/canvas.html"
+dest_files=["res://.godot/imported/canvas.html-06919ab0db1ac8790ed9094d0f687864.res"]
+
+[params]
+

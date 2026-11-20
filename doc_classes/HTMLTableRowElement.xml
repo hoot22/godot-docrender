@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLTableRowElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A row in an HTML table.
+	</brief_description>
+	<description>
+		Cell queries use the immediate children and return stable element handles.
+	</description>
+	<methods>
+		<method name="delete_cell">
+			<return type="int" />
+			<param index="0" name="index" type="int" />
+			<description>
+				Detaches a cell and keeps its handle valid. Pass [code]-1[/code] to detach the last cell. Returns [constant ERR_INVALID_PARAMETER] for an invalid index.
+			</description>
+		</method>
+		<method name="get_cells" qualifiers="const">
+			<return type="HTMLTableCellElement[]" />
+			<description>
+				Returns a tree-order snapshot of the immediate header and data cells.
+			</description>
+		</method>
+		<method name="insert_cell">
+			<return type="HTMLTableCellElement" />
+			<param index="0" name="index" type="int" default="-1" />
+			<description>
+				Inserts a data cell at the given index. Pass [code]-1[/code] to append. Returns [code]null[/code] for an invalid index.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="row_index" type="int" setter="" getter="get_row_index">
+			Zero-based position in the table or [code]-1[/code] when outside a table.
+		</member>
+		<member name="section_row_index" type="int" setter="" getter="get_section_row_index">
+			Zero-based position in the parent section or table. Returns [code]-1[/code] without either parent.
+		</member>
+	</members>
+</class>

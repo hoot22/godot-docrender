@@ -1,5 +1,6 @@
 #pragma once
 
+#include "formats/mermaid/mermaid_document.h"
 #include "formats/mermaid/mermaid_render.h"
 
 #include <godot_cpp/classes/control.hpp>
@@ -18,6 +19,8 @@ public:
 
 	void set_text(const godot::String& p_text);
 	godot::String get_text() const;
+	void set_document(const godot::Ref<MermaidDocument>& p_document);
+	godot::Ref<MermaidDocument> get_document() const;
 	void set_theme_mode(ThemeMode p_mode);
 	ThemeMode get_theme_mode() const;
 	godot::Ref<godot::Texture2D> get_texture() const;
@@ -31,6 +34,7 @@ protected:
 
 private:
 	godot::String text;
+	godot::Ref<MermaidDocument> document;
 	ThemeMode theme_mode = THEME_AUTO;
 	MermaidRenderCache render_cache;
 	godot::Ref<godot::Texture2D> texture;

@@ -1,6 +1,6 @@
 #include "pdf_writer_internal.h"
 
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 #include <cmath>
 
 namespace godot {

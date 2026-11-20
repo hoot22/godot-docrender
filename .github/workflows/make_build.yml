@@ -1,12 +1,99 @@
 # For syntax, see https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
-# This workflow is triggered manually on the "Actions" tab on GitHub, and can be used to create releases.
 
-name: Build Godot DocRender
+name: Build Godot Dockit
+
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to create and publish, for example v1.0.1. Leave empty only when publishing is disabled.
+        required: false
+        type: string
+      title:
+        description: Release title. Defaults to the tag.
+        required: false
+        type: string
+      notes:
+        description: Release notes. Use \n for line breaks; they are prepended to the generated notes.
+        required: false
+        type: string
+      publish:
+        description: Publish a GitHub Release after the build.
+        required: false
+        type: boolean
+        default: true
+      generate_notes:
+        description: Append the automatically generated release notes.
+        required: false
+        type: boolean
+        default: true
+      draft:
+        description: Save the release as a draft so the title and notes can be edited before publishing.
+        required: false
+        type: boolean
+        default: false
+      prerelease:
+        description: Mark the release as a pre-release.
+        required: false
+        type: boolean
+        default: false
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
 
 jobs:
+  prepare:
+    name: Validate release inputs
+    runs-on: ubuntu-22.04
+    outputs:
+      tag: ${{ steps.meta.outputs.tag }}
+      title: ${{ steps.meta.outputs.title }}
+      asset: ${{ steps.meta.outputs.asset }}
+      publish: ${{ steps.meta.outputs.publish }}
+    steps:
+      # Fail fast so a typo in the tag does not waste a full matrix build.
+      - name: Resolve release metadata
+        id: meta
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref_name }}
+          INPUT_TAG: ${{ inputs.tag }}
+          INPUT_TITLE: ${{ inputs.title }}
+          INPUT_PUBLISH: ${{ inputs.publish }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            publish="${INPUT_PUBLISH:-false}"
+            tag="$(printf '%s' "$INPUT_TAG" | tr -d '[:space:]')"
+          else
+            publish=true
+            tag="$REF_NAME"
+          fi
+          if [ "$publish" = "true" ]; then
+            if [ -z "$tag" ]; then
+              echo "::error::Enter a release tag such as v1.0.1, or disable 'publish' to only build."
+              exit 1
+            fi
+            if ! printf '%s' "$tag" | grep -Eq '^v[0-9A-Za-z._-]+$'; then
+              echo "::error::Release tags must start with 'v' and use only letters, digits, '.', '_' or '-' (received '$tag')."
+              exit 1
+            fi
+          fi
+          title="${INPUT_TITLE:-$tag}"
+          asset="godot-dockit-$tag.zip"
+          {
+            echo "tag=$tag"
+            echo "title=$title"
+            echo "asset=$asset"
+            echo "publish=$publish"
+          } >> "$GITHUB_OUTPUT"
+          echo "publish=$publish tag=${tag:-none} title=${title:-none}"
+
   build:
+    name: Build ${{ matrix.target.platform }} / ${{ matrix.target.arch }} / ${{ matrix.target-type }}
+    needs: prepare
     strategy:
       fail-fast: false
       matrix:
@@ -39,141 +126,120 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: true
+          submodules: recursive
+          persist-credentials: false
 
-      # Add linux x86_32 toolchain
-      - name: Install multilib support
-        if: ${{ matrix.target.platform == 'linux' && matrix.target.arch == 'x86_32' }}
-        run: |
-          sudo apt-get update && sudo apt-get install -y gcc-multilib g++-multilib
-
-      # Setup dependencies
-      - name: Setup godot-cpp
-        uses: ./godot-cpp/.github/actions/setup-godot-cpp
+      - name: Build Dockit
+        uses: ./.github/actions/build-extension
         with:
           platform: ${{ matrix.target.platform }}
-          em-version: 3.1.62
+          arch: ${{ matrix.target.arch }}
+          target: ${{ matrix.target-type }}
+          precision: ${{ matrix.float-precision }}
 
-      - name: Install Merman SDK
-        if: ${{ matrix.target.platform == 'windows' && matrix.target.arch == 'x86_64' }}
-        run: python scripts/fetch_merman_sdk.py
-
-      - name: Install PDFium SDK
-        if: ${{ matrix.target.platform == 'windows' && matrix.target.arch == 'x86_64' }}
-        run: python scripts/fetch_pdfium_sdk.py
-
-      # Remove committed/pre-existing binaries so each matrix artifact only contains its own build output.
-      - name: Clean bundled binary outputs
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path addons/docrender/bin | Out-Null
-          $binary_patterns = @("*.dll", "*.so", "*.a", "*.wasm", "*.lib", "*.exp", "*.pdb")
-          foreach ($pattern in $binary_patterns) {
-            Get-ChildItem addons/docrender/bin -File -Filter $pattern | Remove-Item -Force
-          }
-          Get-ChildItem addons/docrender/bin -Directory -Filter "*.framework" | Remove-Item -Recurse -Force
-
-      # Build GDExtension (with caches)
-
-      - name: Restore .scons_cache
-        uses: ./godot-cpp/.github/actions/godot-cache-restore
-        with:
-          scons-cache: ${{ github.workspace }}/.scons-cache/
-          cache-name: ${{ matrix.target.platform }}_${{ matrix.target.arch }}_${{ matrix.float-precision }}_${{ matrix.target-type }}
-
-      - name: Build Godot DocRender GDExtension
-        shell: sh
-        env:
-          SCONS_CACHE: ${{ github.workspace }}/.scons-cache/
-        run: |
-          scons godot-docrender target=${{ matrix.target-type }} platform=${{ matrix.target.platform }} arch=${{ matrix.target.arch }} precision=${{ matrix.float-precision }}
-
-      - name: Save .scons_cache
-        uses: ./godot-cpp/.github/actions/godot-cache-save
-        with:
-          scons-cache: ${{ github.workspace }}/.scons-cache/
-          cache-name: ${{ matrix.target.platform }}_${{ matrix.target.arch }}_${{ matrix.float-precision }}_${{ matrix.target-type }}
-
-      # Clean up compilation files
-      - name: Windows - Delete compilation files
-        if: ${{ matrix.target.platform == 'windows' }}
-        shell: pwsh
-        run: |
-          Remove-Item addons/docrender/bin/* -Include *.exp,*.lib,*.pdb -Force
-
-      # Keep binaries under bin/ in the uploaded artifact.
       - name: Stage Build Artifact
-        shell: pwsh
-        run: |
-          $stage = Join-Path $env:GITHUB_WORKSPACE "artifact"
-          if (Test-Path $stage) {
-            Remove-Item $stage -Recurse -Force
-          }
-
-          $stage_bin = Join-Path $stage "bin"
-          New-Item -ItemType Directory -Force -Path $stage_bin | Out-Null
-
-          $build_outputs = @(Get-ChildItem addons/docrender/bin | Where-Object { $_.Name -like "*${{ matrix.target.platform }}*${{ matrix.target-type }}*" })
-          if ($build_outputs.Count -eq 0) {
-            throw "No build outputs found for ${{ matrix.target.platform }} ${{ matrix.target.arch }} ${{ matrix.target-type }}"
-          }
-
-          foreach ($item in $build_outputs) {
-            Copy-Item -LiteralPath $item.FullName -Destination $stage_bin -Recurse -Force
-          }
-
-          if ("${{ matrix.target.platform }}-${{ matrix.target.arch }}" -eq "windows-x86_64") {
-            Copy-Item -LiteralPath addons/docrender/bin/pdfium.dll -Destination $stage_bin -ErrorAction Stop
-            $pdfium_sdk = Join-Path $env:GITHUB_WORKSPACE "src/thirdparty/pdfium-sdk"
-            $pdfium_licenses = Join-Path $stage "PDFium-LICENSES"
-            New-Item -ItemType Directory -Path $pdfium_licenses | Out-Null
-            foreach ($item in @("LICENSE", "licenses")) {
-              Copy-Item -LiteralPath (Join-Path $pdfium_sdk $item) -Destination $pdfium_licenses -Recurse -ErrorAction Stop
-            }
-
-            $merman_licenses = Join-Path $stage "Merman-LICENSES"
-            New-Item -ItemType Directory -Path $merman_licenses | Out-Null
-            $sdk = Join-Path $env:GITHUB_WORKSPACE "src/thirdparty/merman-sdk"
-            foreach ($item in @("LICENSE-APACHE", "LICENSE-MIT", "SOURCE_AVAILABILITY.md", "THIRD_PARTY_NOTICES.md", "THIRD_PARTY_LICENSES")) {
-              Copy-Item -LiteralPath (Join-Path $sdk $item) -Destination $merman_licenses -Recurse
-            }
-          }
+        run: python scripts/package_addon.py stage artifact ${{ matrix.target.platform }} ${{ matrix.target.arch }} ${{ matrix.target-type }}
 
       # Upload the build
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: godot-docrender-${{ matrix.target.platform }}-${{ matrix.target.arch }}-${{ matrix.float-precision }}-${{ matrix.target-type }}
+          name: godot-dockit-${{ matrix.target.platform }}-${{ matrix.target.arch }}-${{ matrix.float-precision }}-${{ matrix.target-type }}
           if-no-files-found: error
-          path: |
-            ${{ github.workspace }}/artifact/**
+          overwrite: true
+          path: artifact/
 
-      # Upload addon metadata once so the merged artifact can be copied directly as an addon.
-      - name: Upload Addon Files Artifact
-        if: ${{ matrix.target.platform == 'linux' && matrix.target.arch == 'x86_64' && matrix.target-type == 'template_debug' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: godot-docrender-addon-files
-          path: |
-            ${{ github.workspace }}/addons/docrender/docrender.gdextension
-            ${{ github.workspace }}/addons/docrender/THIRD-PARTY-NOTICES.md
-            ${{ github.workspace }}/addons/docrender/godot-cpp-LICENSE.md
-            ${{ github.workspace }}/addons/docrender/MicroTeX-LICENSES.txt
-            ${{ github.workspace }}/addons/docrender/LiteHTML-LICENSES/**
-            ${{ github.workspace }}/addons/docrender/icons/**
-            ${{ github.workspace }}/addons/docrender/translations/**
-            ${{ github.workspace }}/addons/docrender/docs/**
-            ${{ github.workspace }}/addons/docrender/example/**
-
-  # Merge the build and addon files into one Godot DocRender artifact.
-  # If you comment out this step, all the builds will be uploaded individually.
-  merge:
+  package:
     runs-on: ubuntu-22.04
     needs: build
     steps:
-      - name: Merge Artifacts
-        uses: actions/upload-artifact/merge@v4
+      - uses: actions/checkout@v4
         with:
-          name: godot-docrender
-          pattern: godot-docrender-*
-          delete-merged: false
+          persist-credentials: false
+
+      - name: Download Target Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: godot-dockit-*
+          merge-multiple: true
+          path: artifact/
+
+      - name: Verify and Assemble Addon
+        run: python3 scripts/package_addon.py assemble artifact
+
+      - name: Upload Complete Addon
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-dockit
+          if-no-files-found: error
+          overwrite: true
+          path: artifact/
+
+  release:
+    name: Publish GitHub Release
+    if: needs.prepare.outputs.publish == 'true'
+    needs: [prepare, package]
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: Download Verified Addon
+        uses: actions/download-artifact@v4
+        with:
+          name: godot-dockit
+          path: artifact/
+
+      # A manual run creates its tag from the commit it was dispatched on.
+      - name: Reject an existing tag
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+        run: |
+          set -euo pipefail
+          if gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$TAG" >/dev/null 2>&1; then
+            echo "::error::Tag $TAG already exists. Choose another tag or push the existing one."
+            exit 1
+          fi
+
+      - name: Package addon archive
+        env:
+          ASSET: ${{ needs.prepare.outputs.asset }}
+        run: |
+          set -euo pipefail
+          (cd artifact && zip -qr "../$ASSET" .)
+          unzip -tq "$ASSET"
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+          TITLE: ${{ needs.prepare.outputs.title }}
+          ASSET: ${{ needs.prepare.outputs.asset }}
+          NOTES: ${{ inputs.notes }}
+          GENERATE_NOTES: ${{ inputs.generate_notes }}
+          DRAFT: ${{ inputs.draft }}
+          PRERELEASE: ${{ inputs.prerelease }}
+        run: |
+          set -euo pipefail
+          printf '%b' "$NOTES" > release-notes.md
+          args=("$TAG" "$ASSET" --repo "$GITHUB_REPOSITORY" --title "$TITLE")
+          if [ -s release-notes.md ]; then
+            args+=(--notes-file release-notes.md)
+          fi
+          if [ "${GENERATE_NOTES:-true}" = "true" ]; then
+            args+=(--generate-notes)
+          fi
+          if [ "${DRAFT:-false}" = "true" ]; then
+            args+=(--draft)
+          fi
+          if [ "${PRERELEASE:-false}" = "true" ]; then
+            args+=(--prerelease)
+          fi
+          if [ "$EVENT_NAME" = "push" ]; then
+            args+=(--verify-tag)
+          else
+            args+=(--target "$GITHUB_SHA")
+          fi
+          gh release create "${args[@]}"

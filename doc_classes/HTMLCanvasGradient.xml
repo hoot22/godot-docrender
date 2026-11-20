@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLCanvasGradient" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>A linear color gradient used by an HTML canvas 2D context.</brief_description>
+	<description>Created by [method HTMLCanvasRenderingContext2D.create_linear_gradient]. Add color stops in any order; duplicate offsets retain their insertion order.</description>
+	<methods>
+		<method name="add_color_stop">
+			<return type="int" enum="Error" />
+			<param index="0" name="offset" type="float" />
+			<param index="1" name="color" type="Variant" />
+			<description>Adds a stop at an offset from [code]0.0[/code] to [code]1.0[/code]. Color may be a Godot [Color] or CSS color string. Returns [constant OK] on success.</description>
+		</method>
+	</methods>
+</class>

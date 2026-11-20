@@ -4,6 +4,7 @@
 #include <godot_cpp/classes/quad_mesh.hpp>
 #include <godot_cpp/classes/standard_material3d.hpp>
 
+#include "formats/latex/latex_document.h"
 #include "formats/latex/tex_render.h"
 
 namespace godot {
@@ -34,6 +35,8 @@ public:
 
 	void set_text(const godot::String& p_text);
 	godot::String get_text() const;
+	void set_document(const godot::Ref<LatexDocument>& p_document);
+	godot::Ref<LatexDocument> get_document() const;
 	void set_display_mode(bool p_enabled);
 	bool is_display_mode() const;
 	void set_font_size(int p_size);
@@ -76,6 +79,7 @@ protected:
 
 private:
 	godot::String text;
+	godot::Ref<LatexDocument> document;
 	bool display_mode = true;
 	int font_size = 32;
 	godot::HorizontalAlignment horizontal_alignment = godot::HORIZONTAL_ALIGNMENT_CENTER;

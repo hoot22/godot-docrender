@@ -76,6 +76,7 @@ StyleCopReport.xml
 *.ilk
 *.meta
 *.obj
+*.os
 *.iobj
 *.pch
 *.pdb
@@ -363,6 +364,7 @@ MigrationBackup/
 FodyWeavers.xsd
 
 .sconsign.dblite
+/src/gen/doc_data.gen.cpp
 /src/gen/microtex_fonts.gen.h
 /src/gen/math/
 /src/gen/html/

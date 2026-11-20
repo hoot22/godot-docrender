@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLOptGroupElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A labeled group of HTML dropdown options.
+	</brief_description>
+	<description>
+		Disabling the group prevents users from selecting its options.
+	</description>
+	<members>
+		<member name="label" type="String" setter="set_label" getter="get_label">
+			The heading shown for the option group.
+		</member>
+		<member name="disabled" type="bool" setter="set_disabled" getter="is_disabled">
+			Reflects the disabled attribute.
+		</member>
+	</members>
+</class>

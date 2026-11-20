@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLOListElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A handle to an HTML ordered list.
+	</brief_description>
+	<description>
+		Represents an [code]&lt;ol&gt;[/code] element. Changing its reflected attributes updates the markers on the next layout.
+	</description>
+	<members>
+		<member name="reversed" type="bool" setter="set_reversed" getter="is_reversed">
+			If [code]true[/code], the [code]reversed[/code] attribute is present and numbering counts down.
+		</member>
+		<member name="start" type="int" setter="set_start" getter="get_start">
+			The first item number. Reading a missing or invalid [code]start[/code] attribute returns [code]1[/code]. A reversed list with no explicit start counts down from its number of items when rendered.
+		</member>
+		<member name="type" type="String" setter="set_type" getter="get_type">
+			The reflected marker type. Values [code]1[/code], [code]a[/code], [code]A[/code], [code]i[/code], and [code]I[/code] set the default numbering style. CSS can override it.
+		</member>
+	</members>
+</class>

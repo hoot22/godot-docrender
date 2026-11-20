@@ -1,0 +1,15 @@
+[remap]
+
+importer="dockit.html_document"
+importer_version=12
+type="HTMLDocument"
+uid="uid://bi6o5wvj2qghd"
+path="res://.godot/imported/label.html-7e307ea2126a43719bb2a6aee6b62107.res"
+
+[deps]
+
+source_file="res://addons/dockit/example/html_examples/html/label.html"
+dest_files=["res://.godot/imported/label.html-7e307ea2126a43719bb2a6aee6b62107.res"]
+
+[params]
+

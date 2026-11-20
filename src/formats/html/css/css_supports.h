@@ -1,6 +1,6 @@
 #pragma once
 
-#include <litehtml/css_tokenizer.h>
+#include "css_token_compat.h"
 
 #include <optional>
 

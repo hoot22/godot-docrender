@@ -1,0 +1,75 @@
+name: Build Dockit
+description: Install the target SDKs and build the Dockit GDExtension with SCons.
+
+inputs:
+  platform:
+    description: SCons target platform.
+    required: true
+  arch:
+    description: SCons target architecture.
+    required: true
+  target:
+    description: SCons build target.
+    required: true
+  precision:
+    description: Godot floating-point precision.
+    default: single
+
+runs:
+  using: composite
+  steps:
+    - name: Install multilib support
+      if: inputs.platform == 'linux' && inputs.arch == 'x86_32'
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc-multilib g++-multilib
+
+    - name: Install Linux ARM32 toolchain
+      if: inputs.platform == 'linux' && inputs.arch == 'arm32'
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y g++-arm-linux-gnueabihf
+
+    - name: Set up godot-cpp
+      uses: ./godot-cpp/.github/actions/setup-godot-cpp
+      with:
+        platform: ${{ inputs.platform }}
+        windows-compiler: msvc
+        em-version: 4.0.11
+        scons-version: 4.11.1
+
+    - name: Install Merman and PDFium SDKs
+      if: inputs.platform == 'windows' && inputs.arch == 'x86_64'
+      shell: bash
+      run: |
+        python scripts/fetch_merman_sdk.py
+        python scripts/fetch_pdfium_sdk.py
+
+    - name: Restore SCons cache
+      uses: ./godot-cpp/.github/actions/godot-cache-restore
+      with:
+        cache-name: ${{ inputs.platform }}_${{ inputs.arch }}_${{ inputs.precision }}_${{ inputs.target }}
+
+    - name: Build GDExtension
+      shell: bash
+      env:
+        SCONS_CACHE: ${{ github.workspace }}/.scons-cache/
+        BUILD_PLATFORM: ${{ inputs.platform }}
+        BUILD_ARCH: ${{ inputs.arch }}
+        BUILD_TARGET: ${{ inputs.target }}
+        BUILD_PRECISION: ${{ inputs.precision }}
+      run: |
+        build_options=()
+        if [[ "$BUILD_PLATFORM-$BUILD_ARCH" == linux-arm32 ]]; then
+          build_options+=(linux_toolchain_prefix=arm-linux-gnueabihf-)
+        elif [[ "$BUILD_PLATFORM-$BUILD_ARCH" == windows-x86_64 ]]; then
+          build_options+=(merman_sdk=src/thirdparty/merman-sdk pdfium_sdk=src/thirdparty/pdfium-sdk)
+        fi
+        scons godot-dockit "platform=$BUILD_PLATFORM" "arch=$BUILD_ARCH" "target=$BUILD_TARGET" "precision=$BUILD_PRECISION" "${build_options[@]}"
+
+    - name: Save SCons cache
+      uses: ./godot-cpp/.github/actions/godot-cache-save
+      with:
+        cache-name: ${{ inputs.platform }}_${{ inputs.arch }}_${{ inputs.precision }}_${{ inputs.target }}

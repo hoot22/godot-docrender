@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLVideoElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A video element with optional playback and fullscreen controls.
+	</brief_description>
+	<description>
+		An [HTMLLabel] owns the playback session for a connected video. Projects can install compatible VLC or FFmpeg add-ons to decode local video.
+	</description>
+	<methods>
+		<method name="exit_fullscreen">
+			<return type="void" />
+			<description>
+				Closes the video fullscreen presentation and keeps the current playback session.
+			</description>
+		</method>
+		<method name="is_fullscreen">
+			<return type="bool" />
+			<description>
+				Returns whether the video is presented in fullscreen.
+			</description>
+		</method>
+		<method name="pause">
+			<return type="void" />
+			<description>
+				Pauses video playback at the current position.
+			</description>
+		</method>
+		<method name="play">
+			<return type="int" enum="Error" />
+			<description>
+				Requests playback. Returns [constant ERR_UNAVAILABLE] when the requested backend is missing.
+			</description>
+		</method>
+		<method name="request_fullscreen">
+			<return type="int" enum="Error" />
+			<description>
+				Opens a separate fullscreen window on a supported desktop or fills the host viewport. Returns [constant ERR_BUSY] if another video is fullscreen in the same host window.
+			</description>
+		</method>
+		<method name="seek">
+			<return type="int" enum="Error" />
+			<param index="0" name="seconds" type="float" />
+			<description>
+				Requests a seek to [param seconds]. The target is clamped to the video duration. Returns [constant ERR_UNAVAILABLE] when seeking is unavailable.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="autoplay" type="bool" setter="set_autoplay" getter="is_autoplay_enabled" default="false">
+			Starts playback automatically at runtime. Editor previews require user input.
+		</member>
+		<member name="controls" type="bool" setter="set_controls" getter="has_controls" default="false">
+			Requests built-in controls. The video prepares its intrinsic size before playback, including in the editor. The video is drawn black and its controls are disabled when no selected backend is available.
+		</member>
+		<member name="current_src" type="String" setter="" getter="get_current_src" default="&quot;&quot;">
+			The original local resource path of the selected video.
+		</member>
+		<member name="current_time" type="float" setter="" getter="get_current_time" default="0.0">
+			The current playback position in seconds. Use [method seek] to change it.
+		</member>
+		<member name="duration" type="float" setter="" getter="get_duration" default="0.0">
+			The video duration in seconds, or zero while unknown.
+		</member>
+		<member name="height" type="int" setter="set_height" getter="get_height" default="0">
+			The HTML height attribute in CSS pixels.
+		</member>
+		<member name="loop" type="bool" setter="set_loop" getter="is_looping" default="false">
+			Restarts the video when it reaches the end.
+		</member>
+		<member name="muted" type="bool" setter="set_muted" getter="is_muted" default="false">
+			Whether video audio is muted. The HTML attribute supplies the initial state.
+		</member>
+		<member name="paused" type="bool" setter="" getter="is_paused" default="true">
+			Whether video playback is paused or stopped.
+		</member>
+		<member name="poster" type="String" setter="set_poster" getter="get_poster" default="&quot;&quot;">
+			The local poster image displayed before a video frame is available.
+		</member>
+		<member name="src" type="String" setter="set_src" getter="get_src" default="&quot;&quot;">
+			The local video source. If omitted, the player tries the child [code]&lt;source&gt;[/code] elements in order.
+		</member>
+		<member name="video_height" type="int" setter="" getter="get_video_height" default="0">
+			The intrinsic video height in pixels, or zero while unknown.
+		</member>
+		<member name="video_width" type="int" setter="" getter="get_video_width" default="0">
+			The intrinsic video width in pixels, or zero while unknown.
+		</member>
+		<member name="volume" type="float" setter="set_volume" getter="get_volume" default="1.0">
+			Linear video audio volume from [code]0.0[/code] to [code]1.0[/code].
+		</member>
+		<member name="width" type="int" setter="set_width" getter="get_width" default="0">
+			The HTML width attribute in CSS pixels.
+		</member>
+	</members>
+</class>

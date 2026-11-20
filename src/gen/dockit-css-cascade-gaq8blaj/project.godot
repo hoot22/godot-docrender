@@ -1,0 +1,10 @@
+config_version=5
+
+[application]
+config/name="Dockit CSS cascade test"
+
+[debug]
+file_logging/enable_file_logging=false
+
+[rendering]
+shader_compiler/shader_cache/enabled=false

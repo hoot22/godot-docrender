@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLHeadElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		The metadata container of an HTML document.
+	</brief_description>
+	<description>
+		Represents [code]&lt;head&gt;[/code]. Its children can be queried and edited through [HTMLElement].
+	</description>
+</class>

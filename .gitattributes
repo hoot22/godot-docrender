@@ -2,8 +2,8 @@
 * text=auto eol=lf
 
 # Preserve the notice files as supplied in the upstream SDK archives.
-/addons/docrender/PDFium-LICENSES/** -text
-/addons/docrender/Merman-LICENSES/** -text
+/addons/dockit/PDFium-LICENSES/** -text
+/addons/dockit/Merman-LICENSES/** -text
 
 # Only include the addons folder when downloading from the Asset Library.
 /**        export-ignore

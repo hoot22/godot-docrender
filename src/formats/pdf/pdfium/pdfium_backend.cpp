@@ -2,7 +2,7 @@
 
 #include <godot_cpp/classes/file_access.hpp>
 
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 #include <godot_cpp/variant/char_string.hpp>
 
 #include <algorithm>
@@ -32,7 +32,7 @@ namespace godot::pdfium {
 		return ERR_FILE_CANT_READ;
 	}
 
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 	namespace {
 		std::shared_ptr<Api>& cached_api() {
 			static std::shared_ptr<Api> api;
@@ -56,20 +56,20 @@ namespace godot::pdfium {
 		HMODULE extension_module = nullptr;
 		const DWORD module_flags = GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT;
 		if (!GetModuleHandleExW(module_flags, DLL_NAME, &extension_module)) {
-			r_message = "Could not locate the DocRender extension module.";
+			r_message = "Could not locate the Dockit extension module.";
 			return false;
 		}
 		wchar_t extension_path[PATH_CAPACITY];
 		const DWORD path_length = GetModuleFileNameW(extension_module, extension_path, PATH_CAPACITY);
 		if (path_length == 0 || path_length >= PATH_CAPACITY) {
-			r_message = "Could not determine the DocRender extension path.";
+			r_message = "Could not determine the Dockit extension path.";
 			return false;
 		}
 		const String path = String(extension_path).get_base_dir().path_join(String(DLL_NAME));
 		const CharWideString native_path = path.replace("/", "\\").wide_string();
 		library = LoadLibraryExW(native_path.get_data(), nullptr, LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR | LOAD_LIBRARY_SEARCH_DEFAULT_DIRS);
 		if (library == nullptr) {
-			r_message = vformat("Could not load %s (Windows error %d). Install the DocRender PDFium DLL.", path,
+			r_message = vformat("Could not load %s (Windows error %d). Install the Dockit PDFium DLL.", path,
 				static_cast<uint32_t>(GetLastError()));
 			return false;
 		}

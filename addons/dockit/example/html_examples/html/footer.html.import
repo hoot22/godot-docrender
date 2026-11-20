@@ -1,0 +1,15 @@
+[remap]
+
+importer="dockit.html_document"
+importer_version=12
+type="HTMLDocument"
+uid="uid://b2rtvqku5pi8w"
+path="res://.godot/imported/footer.html-bd01426689efd8b643029e8143a21f82.res"
+
+[deps]
+
+source_file="res://addons/dockit/example/html_examples/html/footer.html"
+dest_files=["res://.godot/imported/footer.html-bd01426689efd8b643029e8143a21f82.res"]
+
+[params]
+

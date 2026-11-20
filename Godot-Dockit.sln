@@ -1,0 +1,29 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.12.12405.243 stable
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Godot-Dockit", "Godot-Dockit.vcxproj", "{B1CED6EE-09CE-4425-2B7D-C101FDB344A3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B1CED6EE-09CE-4425-2B7D-C101FDB344A3}.Debug|x64.ActiveCfg = Debug|x64
+		{B1CED6EE-09CE-4425-2B7D-C101FDB344A3}.Debug|x64.Build.0 = Debug|x64
+		{B1CED6EE-09CE-4425-2B7D-C101FDB344A3}.Debug|x86.ActiveCfg = Debug|Win32
+		{B1CED6EE-09CE-4425-2B7D-C101FDB344A3}.Release|x64.ActiveCfg = Release|x64
+		{B1CED6EE-09CE-4425-2B7D-C101FDB344A3}.Release|x64.Build.0 = Release|x64
+		{B1CED6EE-09CE-4425-2B7D-C101FDB344A3}.Release|x86.ActiveCfg = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E1D85A1B-C1AC-487F-8BF1-FAEDBE2D0CCA}
+	EndGlobalSection
+EndGlobal

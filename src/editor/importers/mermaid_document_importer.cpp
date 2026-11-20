@@ -1,15 +1,15 @@
 #include "mermaid_document_importer.h"
 
-#include "formats/docrender_source.h"
+#include "formats/dockit_source.h"
 #include "formats/mermaid/mermaid_document.h"
 
 namespace godot {
 	String MermaidDocumentImporter::_get_importer_name() const {
-		return "docrender.mermaid_document";
+		return "dockit.mermaid_document";
 	}
 
 	String MermaidDocumentImporter::_get_visible_name() const {
-		return tr("Mermaid Document", "Godot DocRender");
+		return tr("Mermaid Document", "Godot Dockit");
 	}
 
 	PackedStringArray MermaidDocumentImporter::_get_recognized_extensions() const {
@@ -33,6 +33,6 @@ namespace godot {
 
 	Error MermaidDocumentImporter::_import(const String& p_source_file, const String& p_save_path, const Dictionary&,
 		const TypedArray<String>&, const TypedArray<String>&) const {
-		return docrender::import_document<MermaidDocument>(p_source_file, p_save_path);
+		return dockit::import_document<MermaidDocument>(p_source_file, p_save_path);
 	}
 } // namespace godot

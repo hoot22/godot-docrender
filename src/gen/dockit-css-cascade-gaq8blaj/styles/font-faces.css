@@ -1,0 +1,4 @@
+@import "nested/font-regular.css";
+@font-face { font-family: "Probe Face"; src: url(../fonts/arialbd.ttf); font-weight: bold; }
+@font-face { font-family: "Probe Face"; src: url(../fonts/georgiai.ttf); font-style: italic; }
+@font-face { font-family: "Collection Probe";src: url("../fonts/cambria.ttc#Cambria%4Dath") format(collection); }

@@ -1,0 +1,15 @@
+[remap]
+
+importer="dockit.html_document"
+importer_version=12
+type="HTMLDocument"
+uid="uid://kxbbr7p350l6"
+path="res://.godot/imported/select.html-2b6f8be7d98a58c5ea21668bda2db83d.res"
+
+[deps]
+
+source_file="res://addons/dockit/example/html_examples/html/select.html"
+dest_files=["res://.godot/imported/select.html-2b6f8be7d98a58c5ea21668bda2db83d.res"]
+
+[params]
+

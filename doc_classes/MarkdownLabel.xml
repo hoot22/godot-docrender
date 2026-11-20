@@ -4,28 +4,9 @@
 		A Control node for rendering Markdown text with scroll, text selection, search, and streaming support.
 	</brief_description>
 	<description>
-		MarkdownLabel is a [Control] node that renders Markdown text. It provides scrolling, text selection, text search, link click detection, and streaming text support suitable for real-time output (e.g., AI chat).
-
-		Supported Markdown features:
-		- ATX headings (h1–h6)
-		- Fenced code blocks with optional language tag
-		- Blockquotes (including nested)
-		- Ordered and unordered lists, task lists
-		- Thematic breaks (horizontal rules)
-		- Inline formatting: bold, italic, bold-italic, inline code, strikethrough, ==highlight==
-		- Links ([code][url]text[/url][/code]) and images
-		- Footnotes ([code][^id][/code] reference and [code][^id]: definition[/code])
-		- Tables
-		- LaTeX math when [member parse_latex] is enabled
-		- Mermaid diagrams when [member parse_mermaid] is enabled
-
-		Markdown images and HTML [code]&lt;img&gt;[/code] elements shrink proportionally to fit the available content width and height. With [member fit_content] enabled, the control grows vertically with its content.
-
-		[b]Streaming:[/b] When [member streaming_enabled] is [code]true[/code], [method append_text] performs incremental re-parsing of only the unstable tail region (controlled by [member max_unstable_lines]). Enable [member deferred_layout_enabled] to coalesce streaming layout updates and minimum-size notifications. Call [method finish_stream] after the last append to force a full re-parse for correct final layout.
-
-		[b]Theme:[/b] All visual properties are read from the Godot theme system under the type name [code]"MarkdownLabel"[/code]. See the project documentation for the complete list of theme properties (fonts, font sizes, colors, styleboxes, constants, and icons).
-
-		[b]Note:[/b] This node programmatically creates its internal scroll container, margin container, and canvas children in [constant Node.NOTIFICATION_ENTER_TREE]. Do not add child nodes manually.
+		MarkdownLabel displays Markdown text in a [Control] node and provides scrolling, text selection, search, link handling, and streaming output. Images are scaled to fit the content area. When [member fit_content] is enabled, the control height grows with its content.
+		Configure streaming with [member streaming_enabled], [method append_text], [member max_unstable_lines], and [member deferred_layout_enabled]. Call [method finish_stream] after the final append to parse and lay out the complete text.
+		At [constant Node.NOTIFICATION_ENTER_TREE], the node creates internal scrolling, margin, and drawing nodes. Avoid adding child nodes manually.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -269,7 +250,7 @@
 			<param index="0" name="anchor" type="String" />
 			<param index="1" name="align" type="float" default="0.0" />
 			<description>
-				Scrolls to the first Markdown heading or laid-out HTML element with the given anchor ID. Pass the case-sensitive ID without [code]#[/code]. [param align] ranges from [code]0.0[/code] at the top of the viewport to [code]1.0[/code] at the bottom. With [member fit_content] enabled, this scrolls the nearest ancestor [ScrollContainer] with vertical scrolling enabled, when present. Returns [code]false[/code] if the anchor does not exist.
+				Scrolls to the first Markdown heading or laid-out HTML element with the given anchor ID. Pass the case-sensitive ID without [code]#[/code]. [param align] ranges from [code]0.0[/code] at the top of the viewport to [code]1.0[/code] at the bottom. HTML anchors scroll their own containers first and use CSS scroll margins for the Markdown viewport. With [member fit_content] enabled, this scrolls the nearest ancestor [ScrollContainer] with vertical scrolling enabled, when present. Returns [code]false[/code] if the anchor does not exist.
 			</description>
 		</method>
 		<method name="scroll_to_search_result">

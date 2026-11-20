@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLTextAreaElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A handle to an HTML multiline text field.
+	</brief_description>
+	<description>
+		Returned by queries and [method HTMLLayout.create_element] for [code]&lt;textarea&gt;[/code]. Edit the current value with [member value] and the source text with [member default_value]. A changed value belongs to the current layout. Fields render in [HTMLLayout] and can be edited in [HTMLLabel].
+		The default size uses [code]rows[/code] and [code]cols[/code]. CSS can override the size, wrapping and [code]resize[/code] behavior. In [HTMLLabel], Enter inserts a newline and Tab moves to the next focusable element. Drag the bottom-right handle to resize a field that allows it.
+	</description>
+	<methods>
+		<method name="get_form" qualifiers="const">
+			<return type="HTMLFormElement" />
+			<description>
+				Returns the associated form or [code]null[/code].
+			</description>
+		</method>
+		<method name="get_selection_start" qualifiers="const">
+			<return type="int" />
+			<description>
+				Returns the selection start, or [code]-1[/code] for an invalid textarea handle.
+			</description>
+		</method>
+		<method name="get_selection_end" qualifiers="const">
+			<return type="int" />
+			<description>
+				Returns the selection end, or [code]-1[/code] for an invalid textarea handle.
+			</description>
+		</method>
+		<method name="set_selection_range">
+			<return type="void" />
+			<param index="0" name="start" type="int" />
+			<param index="1" name="end" type="int" />
+			<description>
+				Sets a multi-line selection using Godot string character indices. Indices snap to grapheme boundaries. Visual line breaks do not change the indices.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="default_value" type="String" setter="set_default_value" getter="get_default_value">
+			The child text used as the initial value.
+		</member>
+		<member name="value" type="String" setter="set_value" getter="get_value">
+			The current value with LF line endings. Setting it from script does not emit a user editing signal.
+		</member>
+	</members>
+</class>

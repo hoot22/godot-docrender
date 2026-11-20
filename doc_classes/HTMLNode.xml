@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLNode" inherits="HTMLEventTarget" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A live DOM node owned by an HTML layout.
+	</brief_description>
+	<methods>
+		<method name="get_mutation_revision" qualifiers="const">
+			<return type="int" />
+			<description>
+				Returns [member mutation_revision].
+			</description>
+		</method>
+		<method name="get_node_type" qualifiers="const">
+			<return type="int" enum="HTMLNode.NodeType" />
+			<description>
+				Returns the node's type, including for an invalidated handle.
+			</description>
+		</method>
+		<method name="is_valid" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns whether the handle still refers to a node in its current layout.
+			</description>
+		</method>
+		<method name="is_connected" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns whether the node is connected to its document tree. A detached node can stay valid.
+			</description>
+		</method>
+		<method name="get_parent_node" qualifiers="const">
+			<return type="HTMLNode" />
+			<description>
+				Returns the parent node, including a document or fragment. Returns [code]null[/code] for a root.
+			</description>
+		</method>
+		<method name="get_child_nodes" qualifiers="const">
+			<return type="HTMLNode[]" />
+			<description>
+				Returns a snapshot of the direct child nodes in tree order, including text and comments.
+			</description>
+		</method>
+		<method name="get_first_child" qualifiers="const">
+			<return type="HTMLNode" />
+			<description>
+				Returns the first direct child node, or [code]null[/code].
+			</description>
+		</method>
+		<method name="get_next_sibling" qualifiers="const">
+			<return type="HTMLNode" />
+			<description>
+				Returns the next sibling node, or [code]null[/code].
+			</description>
+		</method>
+		<method name="get_root_node" qualifiers="const">
+			<return type="HTMLNode" />
+			<description>
+				Returns the root of the current tree. A detached node may be its own root.
+			</description>
+		</method>
+		<method name="contains" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="node" type="HTMLNode" />
+			<description>
+				Returns whether [param node] is this node or one of its descendants.
+			</description>
+		</method>
+		<method name="compare_document_position" qualifiers="const">
+			<return type="int" />
+			<param index="0" name="node" type="HTMLNode" />
+			<description>
+				Returns an OR of [enum DocumentPosition] flags describing the position of [param node] relative to this node.
+			</description>
+		</method>
+		<method name="is_equal_node" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="node" type="HTMLNode" />
+			<description>
+				Compares node types, attributes, character data, and child nodes recursively.
+			</description>
+		</method>
+		<method name="normalize">
+			<return type="int" enum="Error" />
+			<description>
+				Merges adjacent text nodes and detaches empty text nodes. The first nonempty text node retains its identity.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="assigned_slot" type="HTMLElement" setter="" getter="get_assigned_slot">The slot assigned to this node, or null if no slot is assigned or its shadow root is closed.</member>
+
+		<member name="mutation_revision" type="int" getter="get_mutation_revision">
+			The local modification revision of this logical node, starting at [code]1[/code]. Invalid handles return [code]0[/code]. Actual changes to attributes, character data, direct children, tree placement, and live form values advance this revision. Descendant edits, focus, hover, selections, scrolling, layout, and media playback progress do not. Repeated writes of the same value do not advance it. Detached nodes keep counting; text replacement and adoption preserve the logical revision, while clones start independently. Compare snapshots of the same node; revision differences are not an operation count or an ordering between nodes. This property is read-only and is not serialized.
+		</member>
+	</members>
+	<constants>
+		<constant name="ELEMENT_NODE" value="1" enum="NodeType">
+			An element node.
+		</constant>
+		<constant name="TEXT_NODE" value="3" enum="NodeType">
+			A text node.
+		</constant>
+		<constant name="COMMENT_NODE" value="8" enum="NodeType">
+			A comment node.
+		</constant>
+		<constant name="DOCUMENT_NODE" value="9" enum="NodeType">
+			The live document node.
+		</constant>
+		<constant name="DOCUMENT_FRAGMENT_NODE" value="11" enum="NodeType">
+			A detached document fragment.
+		</constant>
+		<constant name="POSITION_DISCONNECTED" value="1" enum="DocumentPosition">
+			The nodes belong to separate trees.
+		</constant>
+		<constant name="POSITION_PRECEDING" value="2" enum="DocumentPosition">
+			The other node comes before this one.
+		</constant>
+		<constant name="POSITION_FOLLOWING" value="4" enum="DocumentPosition">
+			The other node comes after this one.
+		</constant>
+		<constant name="POSITION_CONTAINS" value="8" enum="DocumentPosition">
+			The other node contains this one.
+		</constant>
+		<constant name="POSITION_CONTAINED_BY" value="16" enum="DocumentPosition">
+			The other node is contained by this one.
+		</constant>
+		<constant name="POSITION_IMPLEMENTATION_SPECIFIC" value="32" enum="DocumentPosition">
+			The relative order depends on the implementation.
+		</constant>
+	</constants>
+</class>

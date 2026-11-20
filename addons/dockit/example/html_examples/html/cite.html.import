@@ -1,0 +1,15 @@
+[remap]
+
+importer="dockit.html_document"
+importer_version=12
+type="HTMLDocument"
+uid="uid://ewjsinycpki2"
+path="res://.godot/imported/cite.html-454460e0a3bd2eef64df3c2b46888f81.res"
+
+[deps]
+
+source_file="res://addons/dockit/example/html_examples/html/cite.html"
+dest_files=["res://.godot/imported/cite.html-454460e0a3bd2eef64df3c2b46888f81.res"]
+
+[params]
+

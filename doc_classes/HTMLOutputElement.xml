@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLOutputElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML form result.
+	</brief_description>
+	<description>
+		Represents [code]&lt;output&gt;[/code]. Form reset restores its default text.
+	</description>
+	<methods>
+		<method name="get_form" qualifiers="const">
+			<return type="HTMLFormElement" />
+			<description>
+				Returns the associated form or [code]null[/code].
+			</description>
+		</method>
+		<method name="get_labels" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<description>
+				Returns associated [HTMLLabelElement] handles in tree order.
+			</description>
+		</method>
+		<method name="reset">
+			<return type="void" />
+			<description>
+				Restores the default text.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="value" type="String" setter="set_value" getter="get_value">
+			The displayed result.
+		</member>
+		<member name="default_value" type="String" setter="set_default_value" getter="get_default_value">
+			The text restored on reset.
+		</member>
+		<member name="name" type="String" setter="set_name" getter="get_name">
+			The reflected name attribute.
+		</member>
+		<member name="html_for" type="String" setter="set_html_for" getter="get_html_for">
+			The reflected space-separated list of control IDs.
+		</member>
+	</members>
+</class>

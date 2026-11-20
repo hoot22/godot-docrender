@@ -4,9 +4,10 @@
 #include <godot_cpp/variant/packed_string_array.hpp>
 
 #include <limits>
+#include <memory>
 #include <mutex>
 
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 #include <fpdf_annot.h>
 #include <fpdf_attachment.h>
 #include <fpdf_catalog.h>
@@ -314,7 +315,7 @@ namespace godot::pdfium {
 		String& r_message
 	);																				// 读取 PDF 文件字节并在失败时写出诊断信息
 
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 	enum class Group {
 #define PDFIUM_GROUP_ENUM(group, symbols) group,
 		PDFIUM_GROUPS(PDFIUM_GROUP_ENUM)

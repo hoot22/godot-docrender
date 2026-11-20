@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLArticleElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML article element.
+	</brief_description>
+	<description>
+		Dockit's typed handle for [code]&lt;article&gt;[/code]. The element uses the shared [HTMLElement] API and normal block layout.
+	</description>
+</class>

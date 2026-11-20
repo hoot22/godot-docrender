@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLMediaEvent" inherits="HTMLEvent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An audio or video playback lifecycle event.
+	</brief_description>
+	<description>
+		Events such as [code]play[/code], [code]pause[/code], [code]timeupdate[/code], [code]seeked[/code], and [code]ended[/code] are dispatched on their media element. Only states exposed by the active local media backend are reported.
+	</description>
+</class>

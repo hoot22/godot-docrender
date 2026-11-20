@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLTableSectionElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A row group in an HTML table.
+	</brief_description>
+	<description>
+		Represents the table head, a table body, or the table foot. Row operations address immediate child rows.
+	</description>
+	<methods>
+		<method name="delete_row">
+			<return type="int" />
+			<param index="0" name="index" type="int" />
+			<description>
+				Detaches the row at the given index and preserves its handle. Pass [code]-1[/code] to detach the last row. Returns [constant OK] if the list is empty and the index is [code]-1[/code].
+			</description>
+		</method>
+		<method name="get_rows" qualifiers="const">
+			<return type="HTMLTableRowElement[]" />
+			<description>
+				Returns a snapshot of the rows.
+			</description>
+		</method>
+		<method name="insert_row">
+			<return type="HTMLTableRowElement" />
+			<param index="0" name="index" type="int" default="-1" />
+			<description>
+				Inserts a row at the given index. Pass [code]-1[/code] to append. Returns [code]null[/code] for an invalid index.
+			</description>
+		</method>
+	</methods>
+</class>

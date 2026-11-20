@@ -5,20 +5,42 @@
 	</brief_description>
 	<description>
 		Use [method parse] to load an HTML document or fragment and [method layout] to set its viewport size. Call [method draw] from the target [CanvasItem]'s [method CanvasItem._draw] callback. Call [method CanvasItem.queue_redraw] after changing the document, viewport size, or drawing position.
-		Supports block and inline layout, lists, tables, text, backgrounds, and local images. Borders support [code]solid[/code], [code]dashed[/code], [code]dotted[/code], and [code]double[/code], with separate styles, widths, and colors per side. [code]border-radius[/code] rounds backgrounds, borders, and images, and clips overflowing children when [code]overflow: hidden[/code] is set. Backgrounds support [code]linear-gradient()[/code], [code]radial-gradient()[/code], and [code]conic-gradient()[/code] with sRGB color interpolation.
+		Supports block and inline layout, lists, tables, Flexbox, Grid, text, backgrounds, masks, clipping paths, and local images. Borders support solid, dashed, dotted, double, groove, ridge, inset, and outset styles, with separate styles, widths, and colors per side. [code]border-radius[/code] rounds backgrounds, borders, and images, and clips overflowing children when [code]overflow: hidden[/code] is set. Backgrounds support linear, radial, and conic gradients, image sets, and color interpolation spaces.
 		Text uses the project theme's default font or Godot's fallback font. Run the renderer on the main thread.
 		[code]box-shadow[/code] supports offsets, blur, spread, and comma-separated layers. Use [code]inset[/code] for an inner shadow. Shadows follow [code]border-radius[/code] and leave layout and scroll ranges unaffected.
 		[code]text-shadow[/code] supports horizontal and vertical offsets, optional blur and color, and comma-separated layers. The first layer is drawn closest to the text. Use [code]none[/code] to clear inherited text shadows.
-		CSS [code]transform[/code] supports 2D translation, rotation, and scaling. [code]transform-origin[/code] sets their pivot in the element's border box. Drawing, element and link hit tests, and text selection follow the transformed boxes.
+		CSS [code]transform[/code] supports 2D and 3D transforms, individual [code]translate[/code], [code]rotate[/code], and [code]scale[/code] properties, perspective, and [code]transform-origin[/code]. Drawing, element and link hit tests, and text selection follow the transformed boxes.
 	</description>
 	<tutorials>
-		<link title="CSS support reference">https://github.com/LuYingYiLong/godot-docrender/blob/main/addons/docrender/docs/html_css_support.md</link>
+		<link title="CSS support reference">https://github.com/LuYingYiLong/godot-dockit/blob/main/addons/dockit/docs/html_css_support.md</link>
 	</tutorials>
 	<methods>
+		<method name="get_base_uri" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns the effective base URL for document-relative resources. The first connected [HTMLBaseElement] with an [code]href[/code] attribute can replace the source URL or the configured base directory.
+			</description>
+		</method>
+		<method name="adopt_node">
+			<return type="HTMLElement" />
+			<param index="0" name="element" type="HTMLElement" />
+			<description>
+				Moves [param element] and its descendants to this layout and returns the same handle. Existing descendant handles also follow the move. The subtree is detached and can be inserted under a parent in this layout. Adopting within the same layout detaches the subtree.
+				Form controls keep their current values, modified flags, checked state, and selection. The source ends focus and input method composition for the moved subtree and discards its pending input commit signals.
+				Moving a connected subtree schedules reflow in the source. The target lays it out when it is inserted into the target document tree.
+				Returns [code]null[/code] if the handle is invalid, the element is the source document root, or the target has no successful [method parse].
+			</description>
+		</method>
 		<method name="clear">
 			<return type="void" />
 			<description>
 				Releases the document, layout, and drawing resources, and clears the last error.
+			</description>
+		</method>
+		<method name="create_document_fragment">
+			<return type="HTMLDocumentFragment" />
+			<description>
+				Creates an empty fragment owned by this layout. Returns [code]null[/code] if the layout has no successful [method parse].
 			</description>
 		</method>
 		<method name="create_element">
@@ -58,6 +80,12 @@
 				Returns the frontmost element at the given document pixel position, accounting for overflow clipping. Returns [code]null[/code] when there is no hit or no layout.
 			</description>
 		</method>
+		<method name="get_hovered_elements" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<description>
+				Returns the elements matched by CSS [code]:hover[/code], ordered from the innermost element outward to the document root. The array is empty when the pointer is outside the content, during a selection drag, and while a modal dialog blocks interaction. The chain only updates through [method HTMLLabel] interaction processing.
+			</description>
+		</method>
 		<method name="get_element_by_id" qualifiers="const">
 			<return type="HTMLElement" />
 			<param index="0" name="id" type="String" />
@@ -76,7 +104,7 @@
 			<return type="Dictionary[]" />
 			<description>
 				Returns a copy of the CSS diagnostics collected during the latest style calculation. Each dictionary contains [code]kind[/code], [code]property[/code], [code]value[/code], [code]source[/code], and [code]path[/code].
-				[code]kind[/code] is [code]unknown_property[/code], [code]unsupported_value[/code], or [code]not_rendered[/code]. [code]source[/code] is [code]inline_style[/code], [code]style_element[/code], [code]stylesheet[/code], or [code]local_stylesheet[/code]. Only local stylesheets include a resource [code]path[/code].
+				[code]kind[/code] is [code]unknown_property[/code], [code]unsupported_value[/code], or [code]not_rendered[/code]. [code]source[/code] is [code]inline_style[/code], [code]style_element[/code], [code]stylesheet[/code], [code]local_stylesheet[/code], or [code]remote_stylesheet[/code]. External stylesheets include a resource path or response URL in [code]path[/code].
 			</description>
 		</method>
 		<method name="get_render_error" qualifiers="const">
@@ -85,10 +113,16 @@
 				Returns the diagnostic message from the last failed parse or layout. A successful parse or layout clears the message.
 			</description>
 		</method>
+		<method name="get_accessible_text" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns text in document order for assistive technologies. CSS alternatives specified after the slash in [code]content[/code] replace the spoken content, including explicit empty alternatives. Image [code]alt[/code] attributes supply text when no CSS alternative applies. Returns an empty string before layout.
+			</description>
+		</method>
 		<method name="get_plain_text" qualifiers="const">
 			<return type="String" />
 			<description>
-				Returns the laid-out text in document order. Block boundaries and explicit line breaks are represented by newlines, and table cells are separated by tabs. Soft wrapping does not add newlines. Returns an empty string before layout.
+				Returns the laid-out text in document order, using the original characters for the [code]text-transform[/code] CSS property. Block boundaries and explicit line breaks are represented by newlines. Preserved tab characters stay as tabs, and table cells are separated by tabs. Soft wrapping does not add newlines. Returns an empty string before layout.
 			</description>
 		</method>
 		<method name="get_selection_rects" qualifiers="const">
@@ -106,6 +140,16 @@
 				Returns the nearest caret offset in [method get_plain_text] for a point in document coordinates. Returns [code]0[/code] when there is no text.
 			</description>
 		</method>
+		<method name="import_node">
+			<return type="HTMLElement" />
+			<param index="0" name="element" type="HTMLElement" />
+			<param index="1" name="deep" type="bool" default="false" />
+			<description>
+				Copies [param element] into this layout as a detached element with a new handle. The source can belong to any layout. See [method HTMLElement.clone_node] for what [param deep] copies and how form controls retain their state. The copy remains valid if the source layout is cleared.
+				Insert the copy under a parent in this layout to lay it out. Relative resource paths resolve from this layout's base directory. On an empty document, the first import also makes [code]html[/code], [code]head[/code], and [code]body[/code] available to queries.
+				Returns [code]null[/code] if the source handle is invalid or this layout has no successful [method parse].
+			</description>
+		</method>
 		<method name="layout">
 			<return type="int" enum="Error" />
 			<param index="0" name="viewport_size" type="Vector2i" />
@@ -119,8 +163,9 @@
 			<param index="1" name="base_dir" type="String" default="&quot;res://&quot;" />
 			<param index="2" name="stylesheet" type="String" default="&quot;&quot;" />
 			<description>
-				Replaces the document and resets its layout. An empty string creates an empty document. Styles come from inline attributes, [code]&lt;style&gt;[/code] elements, [code]&lt;link rel="stylesheet"&gt;[/code], and the optional stylesheet text. Use [code]@import[/code] to include UTF-8 [code].css[/code] files within the project. Relative URLs in a CSS file are resolved from that file's directory. Relative URLs in HTML and stylesheet text are resolved from [param base_dir]. Paths may use [code]../[/code] within the project or absolute [code]res://[/code] paths. Images can be imported PNG, JPEG, WebP, or SVG textures. Missing or unsupported assets are skipped. Returns [constant OK] on success, [constant ERR_INVALID_PARAMETER] for a base directory outside [code]res://[/code], or [constant ERR_PARSE_ERROR] if the document cannot be parsed.
-				The additional [param stylesheet] contributes author rules after the document's stylesheets. The cascade compares [code]!important[/code], inline style precedence, selector specificity, and source order, in that order.
+				Replaces the document and resets its layout. An empty string creates an empty document. Styles come from inline attributes, [code]&lt;style&gt;[/code] elements, [code]&lt;link rel="stylesheet"&gt;[/code], and the optional stylesheet text. Use [code]@import[/code] to include UTF-8 [code].css[/code] files under the Godot resource or user data directory. Relative URLs in a CSS file are resolved from that file's directory. Relative URLs in HTML and stylesheet text are resolved from [param base_dir]. Asset URLs accept [code]res://[/code], [code]user://[/code], and registered [code]uid://[/code] references. Images can be imported PNG, JPEG, WebP, or SVG textures. Missing or unsupported assets are skipped. Returns [constant OK] on success, [constant ERR_INVALID_PARAMETER] for a base directory outside [code]res://[/code] or [code]user://[/code], or [constant ERR_PARSE_ERROR] if the document cannot be parsed.
+				The additional [param stylesheet] contributes author rules after the document's stylesheets. The author cascade compares [code]!important[/code], inline style precedence, cascade layer, selector specificity, and source order, in that order. A rule in the additional stylesheet wins by source order when all earlier criteria are equal. In a document without author layers, [code]revert[/code] and [code]revert-layer[/code] restore the pre-author defaults and HTML presentational hints.
+				Invalid literal declarations are ignored. Custom properties and longhand declarations are cascaded before [code]var()[/code] substitution. If substitution makes the winning value invalid, that longhand uses [code]unset[/code]. A shorthand with [code]var()[/code] is resolved once per element and only updates the longhands it wins. CSS-wide keywords produced by substitution are evaluated as usual. On a custom property, the keyword is applied before substituting values that reference that property.
 			</description>
 		</method>
 		<method name="query_selector" qualifiers="const">
@@ -134,7 +179,205 @@
 			<return type="HTMLElement[]" />
 			<param index="0" name="selector" type="String" />
 			<description>
-				Returns matching elements from the litehtml element tree in document order, with each element included once. Tags, classes, IDs, attributes, combinators, and comma-separated lists are supported. Queries include hidden elements and are available after parsing. Invalid or unsupported selectors report an error and return an empty array.
+				Returns matching elements from the document element tree in document order, with each element included once. Queries support tags, classes, IDs, attributes, combinators, selector lists, structural pseudo-classes, relational [code]:has()[/code], forgiving [code]:is()[/code] and [code]:where()[/code], [code]:lang()[/code], [code]:dir()[/code], and supported state selectors. Queries include hidden elements and are available after parsing. Invalid or unsupported selectors report an error and return an empty array.
+			</description>
+		</method>
+		<method name="get_document_node" qualifiers="const">
+			<return type="HTMLDocumentNode" />
+			<description>
+				Returns the live document node, or [code]null[/code] before a document exists.
+			</description>
+		</method>
+		<method name="get_document_element" qualifiers="const">
+			<return type="HTMLElement" />
+			<description>
+				Returns the root element of the live document.
+			</description>
+		</method>
+		<method name="get_head" qualifiers="const">
+			<return type="HTMLElement" />
+			<description>
+				Returns the document's head element, if present.
+			</description>
+		</method>
+		<method name="get_body" qualifiers="const">
+			<return type="HTMLElement" />
+			<description>
+				Returns the document's body or frameset element, if present.
+			</description>
+		</method>
+		<method name="get_title" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns the HTML document title with runs of ASCII whitespace collapsed.
+			</description>
+		</method>
+		<method name="set_title">
+			<return type="int" enum="Error" />
+			<param index="0" name="title" type="String" />
+			<description>
+				Edits the title of this layout's live document.
+			</description>
+		</method>
+		<method name="get_elements_by_tag_name" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<param index="0" name="name" type="String" />
+			<description>
+				Returns a snapshot of elements with the given tag name in tree order. Pass [code]*[/code] for all elements.
+			</description>
+		</method>
+		<method name="get_elements_by_class_name" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<param index="0" name="names" type="String" />
+			<description>
+				Returns a snapshot of elements matching all of the whitespace-separated class names.
+			</description>
+		</method>
+		<method name="get_elements_by_name" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<param index="0" name="name" type="String" />
+			<description>
+				Returns a snapshot of elements whose HTML [code]name[/code] attribute matches exactly.
+			</description>
+		</method>
+		<method name="create_text_node">
+			<return type="HTMLTextNode" />
+			<param index="0" name="data" type="String" />
+			<description>
+				Creates a detached text node in this layout.
+			</description>
+		</method>
+		<method name="create_comment">
+			<return type="HTMLCommentNode" />
+			<param index="0" name="data" type="String" />
+			<description>
+				Creates a detached comment in this layout.
+			</description>
+		</method>
+		<method name="parse_fragment">
+			<return type="HTMLDocumentFragment" />
+			<param index="0" name="html" type="String" />
+			<param index="1" name="context" type="HTMLElement" default="null" />
+			<description>
+				Parses a detached fragment in the specified element's context. The default context is [code]body[/code].
+			</description>
+		</method>
+		<method name="import_fragment">
+			<return type="HTMLDocumentFragment" />
+			<param index="0" name="fragment" type="HTMLDocumentFragment" />
+			<description>
+				Deep-copies the source fragment into this layout.
+			</description>
+		</method>
+		<method name="adopt_fragment">
+			<return type="HTMLDocumentFragment" />
+			<param index="0" name="fragment" type="HTMLDocumentFragment" />
+			<description>
+				Transfers an independent fragment and its existing handles into this layout. A fragment owned by a template can be transferred with its template element.
+			</description>
+		</method>
+		<method name="get_elements_at" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<param index="0" name="position" type="Vector2" />
+			<description>
+				Returns the elements at the given document position in front-to-back hit order, with each element included once.
+			</description>
+		</method>
+		<method name="create_range">
+			<return type="HTMLRange" />
+			<description>
+				Creates a live range with both endpoints at the start of the DOM document.
+			</description>
+		</method>
+		<method name="get_selection" qualifiers="const">
+			<return type="HTMLSelection" />
+			<description>
+				Returns the live document selection, or [code]null[/code] if the document is unavailable.
+			</description>
+		</method>
+		<method name="get_computed_style">
+			<return type="Dictionary" />
+			<param index="0" name="element" type="HTMLElement" />
+			<param index="1" name="pseudo" type="String" default="&quot;&quot;" />
+			<description>
+				Returns a snapshot of serialized computed CSS properties. Lengths that depend on a layout box can retain percentages. See [method HTMLElement.get_bounding_rect] for geometry.
+			</description>
+		</method>
+		<method name="get_computed_style_property">
+			<return type="String" />
+			<param index="0" name="element" type="HTMLElement" />
+			<param index="1" name="name" type="String" />
+			<param index="2" name="pseudo" type="String" default="&quot;&quot;" />
+			<description>
+				Returns a serialized computed value for a connected element, including sampled animation values. Pass [code]::before[/code], [code]::after[/code], [code]::marker[/code], [code]::placeholder[/code], [code]::selection[/code], or [code]::backdrop[/code] to inspect a supported pseudo-element. Returns an empty string if the value is unavailable.
+			</description>
+		</method>
+		<method name="get_stylesheets">
+			<return type="Dictionary[]" />
+			<description>
+				Returns the author stylesheets in source order. Each dictionary includes [code]id[/code], [code]owner[/code], [code]source[/code], [code]path[/code], [code]media[/code], and [code]disabled[/code]. The additional stylesheet is last. IDs apply to the current layout generation.
+			</description>
+		</method>
+		<method name="get_css_rules">
+			<return type="PackedStringArray" />
+			<param index="0" name="stylesheet" type="int" />
+			<description>
+				Returns a serialized snapshot of the top-level rules in the stylesheet identified by [param stylesheet]. Grouped and imported rules retain their place in the list.
+			</description>
+		</method>
+		<method name="insert_rule">
+			<return type="int" enum="Error" />
+			<param index="0" name="stylesheet" type="int" />
+			<param index="1" name="rule" type="String" />
+			<param index="2" name="index" type="int" default="0" />
+			<description>
+				Inserts one CSS rule at the given zero-based index. The edit applies to this layout. Invalid rules or indices leave the stylesheet as it was.
+			</description>
+		</method>
+		<method name="delete_rule">
+			<return type="int" enum="Error" />
+			<param index="0" name="stylesheet" type="int" />
+			<param index="1" name="index" type="int" />
+			<description>
+				Deletes the top-level rule at the given zero-based index in this layout.
+			</description>
+		</method>
+		<method name="supports_css" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="property_or_condition" type="String" />
+			<param index="1" name="value" type="String" default="&quot;&quot;" />
+			<description>
+				Tests a CSS property and value, or a [code]@supports[/code] condition when [param value] is empty. Registered custom properties support a documented subset of [code]@property[/code] syntax; see the CSS support reference.
+			</description>
+		</method>
+		<method name="supports_selector" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="selector" type="String" />
+			<description>
+				Tests whether the selector is accepted by the CSS selector parser.
+			</description>
+		</method>
+		<method name="matches_media" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="query" type="String" />
+			<description>
+				Tests the media query against the current CSS viewport and preferences.
+			</description>
+		</method>
+		<method name="get_animations">
+			<return type="HTMLAnimation[]" />
+			<param index="0" name="element" type="HTMLElement" default="null" />
+			<description>
+				Returns CSS animations, CSS transitions, and scripted animations. Pass an element to restrict the snapshot to that target.
+			</description>
+		</method>
+		<method name="animate">
+			<return type="HTMLAnimation" />
+			<param index="0" name="element" type="HTMLElement" />
+			<param index="1" name="keyframes" type="Dictionary[]" />
+			<param index="2" name="options" type="Dictionary" default="{}" />
+			<description>
+				Creates a scripted animation on the current layout clock. Keyframe dictionaries contain CSS property values and optional [code]offset[/code] and [code]easing[/code]. Options include [code]duration[/code], [code]delay[/code], [code]iterations[/code], [code]easing[/code], [code]direction[/code], and [code]fill[/code]. Times are in seconds. Returns [code]null[/code] for invalid input or an empty effect.
 			</description>
 		</method>
 	</methods>

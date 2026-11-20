@@ -1,0 +1,15 @@
+[remap]
+
+importer="dockit.html_document"
+importer_version=12
+type="HTMLDocument"
+uid="uid://buudvvkcjqvib"
+path="res://.godot/imported/dialog.html-bea9b3382dec0cb3983634dd420b5418.res"
+
+[deps]
+
+source_file="res://addons/dockit/example/html_examples/html/dialog.html"
+dest_files=["res://.godot/imported/dialog.html-bea9b3382dec0cb3983634dd420b5418.res"]
+
+[params]
+

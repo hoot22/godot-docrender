@@ -1,0 +1,57 @@
+[configuration]
+
+entry_symbol = "dockit_library_init"
+compatibility_minimum = "4.5"
+reload = false
+
+[libraries]
+
+android.debug.arm32 = "bin/libdockit.android.template_debug.arm32.so"
+android.debug.arm64 = "bin/libdockit.android.template_debug.arm64.so"
+android.debug.x86_32 = "bin/libdockit.android.template_debug.x86_32.so"
+android.debug.x86_64 = "bin/libdockit.android.template_debug.x86_64.so"
+android.release.arm32 = "bin/libdockit.android.template_release.arm32.so"
+android.release.arm64 = "bin/libdockit.android.template_release.arm64.so"
+android.release.x86_32 = "bin/libdockit.android.template_release.x86_32.so"
+android.release.x86_64 = "bin/libdockit.android.template_release.x86_64.so"
+
+ios.debug = "bin/libdockit.ios.template_debug.a"
+ios.release = "bin/libdockit.ios.template_release.a"
+
+linux.debug.arm32 = "bin/libdockit.linux.template_debug.arm32.so"
+linux.debug.arm64 = "bin/libdockit.linux.template_debug.arm64.so"
+linux.debug.x86_32 = "bin/libdockit.linux.template_debug.x86_32.so"
+linux.debug.x86_64 = "bin/libdockit.linux.template_debug.x86_64.so"
+linux.release.arm32 = "bin/libdockit.linux.template_release.arm32.so"
+linux.release.arm64 = "bin/libdockit.linux.template_release.arm64.so"
+linux.release.x86_32 = "bin/libdockit.linux.template_release.x86_32.so"
+linux.release.x86_64 = "bin/libdockit.linux.template_release.x86_64.so"
+
+macos.debug = "bin/libdockit.macos.template_debug.framework"
+macos.release = "bin/libdockit.macos.template_release.framework"
+
+web.debug.wasm32 = "bin/libdockit.web.template_debug.wasm32.wasm"
+web.release.wasm32 = "bin/libdockit.web.template_release.wasm32.wasm"
+
+windows.debug.arm64 = "bin/dockit.windows.template_debug.arm64.dll"
+windows.debug.x86_32 = "bin/dockit.windows.template_debug.x86_32.dll"
+windows.debug.x86_64 = "bin/dockit.windows.template_debug.x86_64.dll"
+windows.release.arm64 = "bin/dockit.windows.template_release.arm64.dll"
+windows.release.x86_32 = "bin/dockit.windows.template_release.x86_32.dll"
+windows.release.x86_64 = "bin/dockit.windows.template_release.x86_64.dll"
+
+[dependencies]
+
+windows.x86_64.dockit_pdf_reader = {
+	"bin/pdfium.dll": "",
+	"PDFium-LICENSES": "",
+}
+
+[icons]
+
+MarkdownLabel = "icons/markdown_label.svg"
+LatexLabel = "icons/latex_label.svg"
+LatexLabel3D = "icons/latex_label_3d.svg"
+MermaidLabel = "icons/mermaid_label.svg"
+HTMLLabel = "icons/html_label.svg"
+PDFTexture = "icons/pdf_texture.svg"

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLTableCellElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML table data cell or header cell.
+	</brief_description>
+	<description>
+		Represents a [code]&lt;td&gt;[/code] or [code]&lt;th&gt;[/code] element.
+	</description>
+	<members>
+		<member name="abbr" type="String" setter="set_abbr" getter="get_abbr">
+			The short label of a header cell.
+		</member>
+		<member name="cell_index" type="int" setter="" getter="get_cell_index">
+			Zero-based position in the parent row or [code]-1[/code] without a row parent.
+		</member>
+		<member name="col_span" type="int" setter="set_col_span" getter="get_col_span">
+			The reflected column span. Reads are limited to 1 through 1000.
+		</member>
+		<member name="headers" type="String" setter="set_headers" getter="get_headers">
+			The source attribute listing header IDs.
+		</member>
+		<member name="row_span" type="int" setter="set_row_span" getter="get_row_span">
+			The reflected row span. Reads are limited to 0 through 65534. Zero spans the remaining rows in the row group.
+		</member>
+		<member name="scope" type="String" setter="set_scope" getter="get_scope">
+			The canonical header scope keyword. Missing and unknown values read as an empty string.
+		</member>
+	</members>
+</class>

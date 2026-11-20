@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLScriptElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An inert script or data element.
+	</brief_description>
+	<description>
+		Represents [code]&lt;script&gt;[/code]. Its text and attributes are accessible to GDScript as DOM data. A runtime [HTMLLabel] can use a script with type [code]text/gdscript[/code] to select a project script from [member HTMLLabel.behavior_scripts].
+	</description>
+	<members>
+		<member name="async" type="bool" setter="set_async" getter="is_async">
+			Reflects the [code]async[/code] attribute.
+		</member>
+		<member name="defer" type="bool" setter="set_defer" getter="is_defer">
+			Reflects the [code]defer[/code] attribute.
+		</member>
+		<member name="no_module" type="bool" setter="set_no_module" getter="is_no_module">
+			Reflects the [code]nomodule[/code] attribute.
+		</member>
+		<member name="src" type="String" setter="set_src" getter="get_src">
+			The original source attribute.
+		</member>
+		<member name="text" type="String" setter="set_text_content" getter="get_text_content">
+			The text inside the element.
+		</member>
+		<member name="type" type="String" setter="set_type" getter="get_type">
+			The declared script or data type.
+		</member>
+	</members>
+</class>

@@ -1,6 +1,6 @@
 #include "script_editor_preview_plugin.h"
 
-#include "docrender_source_editor.h"
+#include "dockit_source_editor.h"
 
 #include <godot_cpp/classes/code_edit.hpp>
 #include <godot_cpp/classes/editor_interface.hpp>
@@ -115,14 +115,14 @@ namespace godot {
 		MenuButton* mode_menu = memnew(MenuButton);
 		mode_menu->set_name(get_menu_name());
 		mode_menu->set_auto_translate_mode(Node::AUTO_TRANSLATE_MODE_DISABLED);
-		mode_menu->set_text(tr("Preview", "Godot DocRender"));
+		mode_menu->set_text(tr("Preview", "Godot Dockit"));
 		mode_menu->set_flat(false);
 		mode_menu->set_theme_type_variation("FlatMenuButton");
 		mode_menu->set_switch_on_hover(true);
 		PopupMenu* popup = mode_menu->get_popup();
-		popup->add_radio_check_item(tr("View Source", "Godot DocRender"), VIEW_SOURCE);
-		popup->add_radio_check_item(tr("Open Preview to the Right", "Godot DocRender"), VIEW_SPLIT);
-		popup->add_radio_check_item(tr("Preview Only", "Godot DocRender"), VIEW_PREVIEW);
+		popup->add_radio_check_item(tr("View Source", "Godot Dockit"), VIEW_SOURCE);
+		popup->add_radio_check_item(tr("Open Preview to the Right", "Godot Dockit"), VIEW_SPLIT);
+		popup->add_radio_check_item(tr("Preview Only", "Godot Dockit"), VIEW_PREVIEW);
 		popup->connect("id_pressed", callable_mp(this, &ScriptEditorPreviewPlugin::select_view_mode));
 		mode_menu->hide();
 		toolbar->add_child(mode_menu);
@@ -236,7 +236,7 @@ namespace godot {
 			}
 		}
 		// Imported sources are tracked even when ScriptEditor's list is filtered.
-		return DocRenderSourceEditorPlugin::get_source_path(p_tab->get_instance_id());
+		return DockitSourceEditorPlugin::get_source_path(p_tab->get_instance_id());
 	}
 
 	void ScriptEditorPreviewPlugin::set_preview_source(CodeEdit* p_source, Control* p_preview) {

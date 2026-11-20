@@ -1,0 +1,3 @@
+.order { width: 22px; } .import_order { width: 22px; }
+.reimport_order { width: 24px; } .unused { width: bogus; }
+#invalid_nested { width: 58px; width: var(--nested-width); }

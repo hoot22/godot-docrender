@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLHeadingElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A handle to an HTML heading element.
+	</brief_description>
+	<description>
+		Returned by queries and [method HTMLLayout.create_element] for [code]&lt;h1&gt;[/code] through [code]&lt;h6&gt;[/code]. Use [method get_level] to read its heading level.
+	</description>
+	<methods>
+		<method name="get_level" qualifiers="const">
+			<return type="int" />
+			<description>
+				Returns the heading level from [code]1[/code] through [code]6[/code], or [code]0[/code] if the handle is invalid.
+			</description>
+		</method>
+	</methods>
+</class>

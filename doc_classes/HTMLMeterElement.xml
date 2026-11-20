@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLMeterElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML measurement gauge.
+	</brief_description>
+	<description>
+		Represents [code]&lt;meter&gt;[/code]. The fill reflects the normalized value and its proximity to the optimum range.
+	</description>
+	<methods>
+		<method name="get_labels" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<description>
+				Returns associated [HTMLLabelElement] handles in tree order.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="min" type="float" setter="set_min" getter="get_min">
+			The effective lower bound.
+		</member>
+		<member name="max" type="float" setter="set_max" getter="get_max">
+			The effective upper bound.
+		</member>
+		<member name="value" type="float" setter="set_value" getter="get_value">
+			The current value clamped to the effective range.
+		</member>
+		<member name="low" type="float" setter="set_low" getter="get_low">
+			The normalized low threshold.
+		</member>
+		<member name="high" type="float" setter="set_high" getter="get_high">
+			The normalized high threshold.
+		</member>
+		<member name="optimum" type="float" setter="set_optimum" getter="get_optimum">
+			The normalized optimum value.
+		</member>
+	</members>
+</class>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLDataListElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML list of input suggestions.
+	</brief_description>
+	<description>
+		Represents [code]&lt;datalist&gt;[/code]. An input associates it through the list attribute.
+	</description>
+	<methods>
+		<method name="get_options" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<description>
+				Returns candidate [HTMLOptionElement] handles in tree order.
+			</description>
+		</method>
+	</methods>
+</class>

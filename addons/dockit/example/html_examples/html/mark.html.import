@@ -1,0 +1,15 @@
+[remap]
+
+importer="dockit.html_document"
+importer_version=12
+type="HTMLDocument"
+uid="uid://dlcgs72t7mt4m"
+path="res://.godot/imported/mark.html-fa5468f2e75be2ff3f6a2b022313ef68.res"
+
+[deps]
+
+source_file="res://addons/dockit/example/html_examples/html/mark.html"
+dest_files=["res://.godot/imported/mark.html-fa5468f2e75be2ff3f6a2b022313ef68.res"]
+
+[params]
+

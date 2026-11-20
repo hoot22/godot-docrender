@@ -1,0 +1,15 @@
+[remap]
+
+importer="dockit.html_document"
+importer_version=12
+type="HTMLDocument"
+uid="uid://dyfkam5vx0ypn"
+path="res://.godot/imported/kbd.html-ed462072daaa535b7402ae013d9eebdc.res"
+
+[deps]
+
+source_file="res://addons/dockit/example/html_examples/html/kbd.html"
+dest_files=["res://.godot/imported/kbd.html-ed462072daaa535b7402ae013d9eebdc.res"]
+
+[params]
+

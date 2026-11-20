@@ -5,9 +5,30 @@ from scripts.litehtml.build import build_litehtml
 
 merman_sdk_option = ARGUMENTS.pop("merman_sdk", None)
 pdfium_sdk_option = ARGUMENTS.pop("pdfium_sdk", None)
-env = SConscript("godot-cpp/SConstruct")
+linux_toolchain_prefix = ARGUMENTS.pop("linux_toolchain_prefix", "")
+if ARGUMENTS.get("platform") == "ios":
+    # MicroTeX uses std::filesystem, which is available starting with iOS 13.
+    ARGUMENTS.setdefault("ios_min_version", "13.0")
+if linux_toolchain_prefix:
+    if ARGUMENTS.get("platform") != "linux":
+        print("linux_toolchain_prefix requires platform=linux.")
+        Exit(1)
+    # Set the tools before godot-cpp creates its own compilation targets.
+    env = Environment(tools=["default"], PLATFORM="")
+    env.Replace(CC=linux_toolchain_prefix + "gcc", CXX=linux_toolchain_prefix + "g++",
+                AR=linux_toolchain_prefix + "ar", RANLIB=linux_toolchain_prefix + "ranlib")
+    env = SConscript("godot-cpp/SConstruct", exports={"env": env})
+else:
+    env = SConscript("godot-cpp/SConstruct")
+
+# SCons takes SHLIBPREFIX from the build host, so cross-compiling these targets
+# from Windows would drop the "lib" prefix the GDExtension descriptor declares.
+if env["platform"] in ("linux", "android", "web"):
+    env["SHLIBPREFIX"] = "lib"
 
 env.Append(CPPPATH=["src/"])
+if env["platform"] == "windows":
+    env.AppendUnique(LIBS=["dwrite"])
 if env.get("is_msvc", False):
     env.AppendUnique(CCFLAGS=["/utf-8", "/wd4828"])
 
@@ -18,12 +39,17 @@ def enable_cpp_exceptions(build_env):
         build_env.AppendUnique(CXXFLAGS=["/EHsc"])
     else:
         build_env["CXXFLAGS"] = [flag for flag in build_env["CXXFLAGS"] if flag != "-fno-exceptions"]
-        build_env.AppendUnique(CXXFLAGS=["-fexceptions"])
         if env["platform"] == "web":
-            env.AppendUnique(LINKFLAGS=["-fexceptions"])
+            build_env.AppendUnique(CXXFLAGS=["-fwasm-exceptions"])
+            env.AppendUnique(LINKFLAGS=["-fwasm-exceptions"])
+        else:
+            build_env.AppendUnique(CXXFLAGS=["-fexceptions"])
 
 
 mermaid_env = env.Clone()
+if merman_sdk_option and not (env["platform"] == "windows" and env["arch"] == "x86_64" and env.get("is_msvc", False)):
+    print("The Merman SDK requires the Windows x64 MSVC toolchain.")
+    Exit(1)
 if env["platform"] == "windows" and env["arch"] == "x86_64" and env.get("is_msvc", False):
     merman_sdk = Path(merman_sdk_option or "src/thirdparty/merman-sdk")
     if (merman_sdk / "include/merman.h").is_file() and (merman_sdk / "lib/merman_ffi.lib").is_file():
@@ -38,14 +64,16 @@ if env["platform"] == "windows" and env["arch"] == "x86_64" and env.get("is_msvc
 
 tex_render = File("src/formats/latex/tex_render.cpp")
 mermaid_render = File("src/formats/mermaid/mermaid_render.cpp")
-html_sources = (Glob("src/formats/html/*.cpp") + Glob("src/formats/html/css/*.cpp")
-                + Glob("src/formats/html/layout/*.cpp") + Glob("src/formats/html/layout/grid/*.cpp"))
+html_sources = Glob("src/formats/html/*.cpp") + Glob("src/nodes/html_label*.cpp")
+for folder in ("backend", "css", "dom", "elements", "events", "layout", "layout/grid", "markup", "paint", "resources", "text"):
+    html_sources += Glob(f"src/formats/html/{folder}/*.cpp")
 pdfium_sources = (Glob("src/formats/pdf/reader/*.cpp") + Glob("src/formats/pdf/writer/*.cpp")
                   + Glob("src/formats/pdf/pdfium/*.cpp"))
 format_sources = Glob("src/formats/*.cpp") + Glob("src/formats/*/*.cpp")
 special_format_sources = [tex_render, mermaid_render] + html_sources
 sources = Glob("src/*.cpp") + [source for source in format_sources if source not in special_format_sources]
-sources += Glob("src/nodes/*.cpp") + Glob("src/editor/*.cpp") + Glob("src/editor/importers/*.cpp")
+sources += [source for source in Glob("src/nodes/*.cpp") if source not in html_sources]
+sources += Glob("src/editor/*.cpp") + Glob("src/editor/importers/*.cpp")
 mermaid_object = mermaid_env.StaticObject if env["platform"] == "ios" else mermaid_env.SharedObject
 sources += mermaid_object(mermaid_render)
 
@@ -55,8 +83,8 @@ if env["platform"] == "windows" and env["arch"] == "x86_64":
     pdfium_sdk = Path(pdfium_sdk_option or "src/thirdparty/pdfium-sdk")
     pdfium_library = pdfium_sdk / "bin/pdfium.dll"
     if (pdfium_sdk / "include/fpdfview.h").is_file() and pdfium_library.is_file():
-        pdfium_env.AppendUnique(CPPPATH=[str(pdfium_sdk / "include")], CPPDEFINES=["DOCRENDER_PDFIUM_ENABLED"])
-        pdfium_dll = env.Install("addons/docrender/bin", str(pdfium_library))
+        pdfium_env.AppendUnique(CPPPATH=[str(pdfium_sdk / "include")], CPPDEFINES=["DOCKIT_PDFIUM_ENABLED"])
+        pdfium_dll = env.Install("addons/dockit/bin", str(pdfium_library))
     elif pdfium_sdk_option:
         print(f"Missing PDFium headers or DLL in {pdfium_sdk}.")
         Exit(1)
@@ -123,27 +151,28 @@ if env["target"] in ["editor", "template_debug"]:
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
-        "addons/docrender/bin/libdocrender.{}.{}.framework/libdocrender.{}.{}".format(
+        "addons/dockit/bin/libdockit.{}.{}.framework/libdockit.{}.{}".format(
             env["platform"], env["target"], env["platform"], env["target"]
         ),
         source=sources,
+        SHLIBSUFFIX="",
     )
 elif env["platform"] == "ios":
     if env["ios_simulator"]:
         library = env.StaticLibrary(
-            "addons/docrender/bin/libdocrender.{}.{}.simulator.a".format(env["platform"], env["target"]),
+            "addons/dockit/bin/libdockit.{}.{}.simulator.a".format(env["platform"], env["target"]),
             source=sources,
         )
     else:
         library = env.StaticLibrary(
-            "addons/docrender/bin/libdocrender.{}.{}.a".format(env["platform"], env["target"]),
+            "addons/dockit/bin/libdockit.{}.{}.a".format(env["platform"], env["target"]),
             source=sources,
         )
 else:
     library = env.SharedLibrary(
-        "addons/docrender/bin/docrender{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+        "addons/dockit/bin/dockit{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
         source=sources,
     )
 
 # The GDExtension descriptor loads the packaged libraries by their existing paths.
-Default(Alias("godot-docrender", library + pdfium_dll))
+Default(Alias("godot-dockit", library + pdfium_dll))

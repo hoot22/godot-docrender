@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLPreElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A handle to an HTML preformatted text element.
+	</brief_description>
+	<description>
+		Represents a [code]&lt;pre&gt;[/code] element. Its default CSS preserves spaces and line breaks.
+	</description>
+</class>

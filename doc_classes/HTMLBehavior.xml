@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLBehavior" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		Base class for project scripts attached to an HTML label.
+	</brief_description>
+	<description>
+		Extend this class with a GDScript that can be constructed without arguments. Add it to [member HTMLLabel.behavior_scripts] to register an alias, or refer to a local GDScript path from an HTML [code]&lt;script type="text/gdscript"&gt;[/code] element. Enable [member HTMLLabel.behaviors_enabled] to run behaviors. Local [code]res://[/code], [code]user://[/code], [code]uid://[/code], and document-relative script paths are supported; network script URLs are rejected.
+		The behavior exposes its host through [member label] while attached. Timers, frame callbacks, and requests started by this instance are canceled when it detaches.
+	</description>
+	<methods>
+		<method name="_attach" qualifiers="virtual">
+			<return type="void" />
+			<param index="0" name="label" type="HTMLLabel" />
+			<description>
+				Called after the host's document has been laid out if [method _attach_document] is not overridden.
+			</description>
+		</method>
+		<method name="_attach_document" qualifiers="virtual">
+			<return type="void" />
+			<param index="0" name="document" type="HTMLDocumentNode" />
+			<description>
+				Called after the host's document has been laid out. Use [param document] to query, create, and edit nodes in the live DOM. The host is also available through [member label]. If both attach hooks are overridden, only this hook is called.
+			</description>
+		</method>
+		<method name="_detach" qualifiers="virtual">
+			<return type="void" />
+			<description>
+				Called when the behavior is detached. [member document] and [member label] remain available during this call. Asynchronous work is canceled immediately after the hook returns.
+			</description>
+		</method>
+		<method name="cancel_frame">
+			<return type="void" />
+			<param index="0" name="id" type="int" />
+			<description>
+				Cancels a recurring callback created by [method on_frame].
+			</description>
+		</method>
+		<method name="cancel_request">
+			<return type="void" />
+			<param index="0" name="id" type="int" />
+			<description>
+				Cancels a request created by [method request]. A canceled request does not call its completion callback.
+			</description>
+		</method>
+		<method name="clear_timer">
+			<return type="void" />
+			<param index="0" name="id" type="int" />
+			<description>
+				Cancels a timeout or interval created by [method set_timeout] or [method set_interval].
+			</description>
+		</method>
+		<method name="get_document" qualifiers="const">
+			<return type="HTMLDocumentNode" />
+			<description>
+				Returns the current live DOM. It is available during both attach hooks and [method _detach], and is [code]null[/code] before attachment and after [method _detach] returns.
+			</description>
+		</method>
+		<method name="get_label" qualifiers="const">
+			<return type="HTMLLabel" />
+			<description>
+				Returns the attached host or [code]null[/code] outside the behavior's attachment lifecycle.
+			</description>
+		</method>
+		<method name="get_local_storage" qualifiers="const">
+			<return type="HTMLBehaviorStorage" />
+			<description>
+				Returns persistent storage for this document namespace. It is shared by behavior instances using the same namespace.
+			</description>
+		</method>
+		<method name="get_session_storage" qualifiers="const">
+			<return type="HTMLBehaviorStorage" />
+			<description>
+				Returns storage shared by behavior instances on this [HTMLLabel] and retained across its navigations.
+			</description>
+		</method>
+		<method name="on_frame">
+			<return type="int" />
+			<param index="0" name="callback" type="Callable" />
+			<description>
+				Calls [param callback] every idle frame with the frame delta in seconds. Returns an ID for [method cancel_frame], or [code]0[/code] if the callback is invalid or the behavior is detached.
+			</description>
+		</method>
+		<method name="request">
+			<return type="int" />
+			<param index="0" name="url" type="String" />
+			<param index="1" name="options" type="Dictionary" />
+			<param index="2" name="callback" type="Callable" />
+			<description>
+				Starts an asynchronous HTTP request. [param options] accepts [code]method[/code] (GET, HEAD, POST, PUT, DELETE, OPTIONS, or PATCH), [code]headers[/code] as a Dictionary, [code]body[/code] as a String, [code]max_body_size[/code], [code]timeout[/code], and [code]track_redirects[/code]. The callback receives a Dictionary with [code]url[/code], [code]status_code[/code], [code]headers[/code], [code]body[/code], and [code]error[/code]. Returns an ID for [method cancel_request], or [code]0[/code] if the URL or options are invalid.
+			</description>
+		</method>
+		<method name="set_interval">
+			<return type="int" />
+			<param index="0" name="callback" type="Callable" />
+			<param index="1" name="interval" type="float" />
+			<description>
+				Calls [param callback] repeatedly at the given interval in seconds. Returns an ID for [method clear_timer], or [code]0[/code] if the callback, interval, or attachment is invalid.
+			</description>
+		</method>
+		<method name="set_timeout">
+			<return type="int" />
+			<param index="0" name="callback" type="Callable" />
+			<param index="1" name="delay" type="float" />
+			<description>
+				Calls [param callback] once after [param delay] seconds. Returns an ID for [method clear_timer], or [code]0[/code] if the callback, delay, or attachment is invalid.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="document" type="HTMLDocumentNode" setter="" getter="get_document">
+			The live DOM of the attached behavior.
+		</member>
+		<member name="label" type="HTMLLabel" setter="" getter="get_label">
+			The current host, available from the attach hooks through [method _detach]. It is [code]null[/code] before attachment and after detachment.
+		</member>
+		<member name="local_storage" type="HTMLBehaviorStorage" setter="" getter="get_local_storage">
+			Persistent string key-value storage for the current document namespace.
+		</member>
+		<member name="session_storage" type="HTMLBehaviorStorage" setter="" getter="get_session_storage">
+			String key-value storage retained for this host's session.
+		</member>
+	</members>
+</class>

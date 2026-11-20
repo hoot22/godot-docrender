@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLErrorEvent" inherits="HTMLEvent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An error event carrying a readable message and error value.
+	</brief_description>
+	<members>
+		<member name="message" type="String" setter="set_message" getter="get_message">
+			A description of the failure.
+		</member>
+		<member name="filename" type="String" setter="set_filename" getter="get_filename">
+			The source file associated with the failure, if available.
+		</member>
+		<member name="line_number" type="int" setter="set_line_number" getter="get_line_number">
+			The source line associated with the failure, if available.
+		</member>
+		<member name="column_number" type="int" setter="set_column_number" getter="get_column_number">
+			The source column associated with the failure, if available.
+		</member>
+		<member name="error" type="Variant" setter="set_error" getter="get_error">
+			The underlying error value, when available.
+		</member>
+	</members>
+</class>

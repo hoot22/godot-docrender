@@ -1,0 +1,15 @@
+[remap]
+
+importer="dockit.html_document"
+importer_version=12
+type="HTMLDocument"
+uid="uid://bk4l13f7o4qmg"
+path="res://.godot/imported/dl.html-6f23181cffef5c6214112a1fb59eddc6.res"
+
+[deps]
+
+source_file="res://addons/dockit/example/html_examples/html/dl.html"
+dest_files=["res://.godot/imported/dl.html-6f23181cffef5c6214112a1fb59eddc6.res"]
+
+[params]
+

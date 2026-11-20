@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLAnimationEvent" inherits="HTMLEvent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A CSS animation lifecycle event.
+	</brief_description>
+	<members>
+		<member name="animation_name" type="String" setter="set_animation_name" getter="get_animation_name">
+			The CSS animation name.
+		</member>
+		<member name="elapsed_time" type="float" setter="set_elapsed_time" getter="get_elapsed_time">
+			The elapsed animation time in seconds.
+		</member>
+		<member name="pseudo_element" type="String" setter="set_pseudo_element" getter="get_pseudo_element">
+			The generated pseudo-element name, or an empty string for the element itself.
+		</member>
+	</members>
+</class>

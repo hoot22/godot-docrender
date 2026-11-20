@@ -13,11 +13,11 @@ namespace godot {
 	}
 
 	String PDFTextureImporter::_get_importer_name() const {
-		return "docrender.pdf_texture";
+		return "dockit.pdf_texture";
 	}
 
 	String PDFTextureImporter::_get_visible_name() const {
-		return tr("PDF Texture", "Godot DocRender");
+		return tr("PDF Texture", "Godot Dockit");
 	}
 
 	PackedStringArray PDFTextureImporter::_get_recognized_extensions() const {

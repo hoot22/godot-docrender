@@ -1,7 +1,7 @@
 #pragma once
 
-#include <litehtml/html.h>
-#include <litehtml/style.h>
+#include "css_declarations.h"
+#include "css_value_helpers.h"
 
 namespace litehtml {
 	const char* css_keywords(string_id name);
@@ -13,11 +13,13 @@ namespace litehtml {
 		void add_parsed_property(string_id name, property_value value) {
 			properties.insert_or_assign(name, std::move(value));
 		}
-		void parse_box(string_id name, const css_token_vector& value, bool important);
+		void parse_box(string_id name, const css_token_vector& value, const string& baseurl, bool important);
 		void parse_background_and_border(string_id name, const css_token_vector& value, const string& baseurl,
 			bool important, document_container* container);
+		void parse_mask(string_id name, const css_token_vector& tokens, const string& baseurl,
+			bool important, document_container* container);
 		void parse_text(string_id name, const css_token_vector& value, bool important, document_container* container);
-		void parse_layout(string_id name, const css_token_vector& value, bool important);
+		void parse_layout(string_id name, const css_token_vector& value, const string& baseurl, bool important, document_container* container);
 		props_map take_properties() { return std::move(properties); }
 
 	private:
@@ -29,15 +31,18 @@ namespace litehtml {
 
 		// parse comma-separated list of keywords
 		void parse_keyword_comma_list(string_id name, const css_token_vector& tokens, bool important);
-		void parse_background_position(const css_token_vector& tokens, bool important);
+		void parse_background_repeat(string_id name, const css_token_vector& tokens, bool important);
+		void parse_background_position(string_id name, const css_token_vector& tokens, bool important);
 		void parse_background_size(const css_token_vector& tokens, bool important);
 
+		void parse_outline(string_id name, const css_token_vector& tokens, bool important, document_container* container);
+		void parse_border_image(string_id name, const css_token_vector& tokens, const string& baseurl,
+			bool important, document_container* container);
 		void parse_border(const css_token_vector& tokens, bool important, document_container* container);
 		void parse_border_side(string_id name, const css_token_vector& tokens, bool important, document_container* container);
 		void parse_border_radius(const css_token_vector& tokens, bool important);
 
-		static bool parse_list_style_image(const css_token& tok, string& url);
-		void parse_list_style(const css_token_vector& tokens, string baseurl, bool important);
+		void parse_list_style(const css_token_vector& tokens, const string& baseurl, bool important, document_container* container);
 
 		void parse_font(css_token_vector tokens, bool important);
 		void parse_text_decoration(const css_token_vector& tokens, bool important, document_container* container);
@@ -82,5 +87,4 @@ namespace litehtml {
 		add_parsed_property(string_id(top + 3), property_value(values[count == 4 ? 3 : count > 1 ? 1 : 0], important));
 	}
 
-	const vector<string_id>& css_longhands(string_id name);
 }

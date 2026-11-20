@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLInputFile" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A read-only handle to a file selected through an HTML input.
+	</brief_description>
+	<description>
+		Returned by [method HTMLInputElement.get_files] and as the value of a file entry in [method HTMLFormElement.get_form_data]. The handle retains access to the selected file while referenced and exposes its base name.
+	</description>
+	<methods>
+		<method name="read_bytes">
+			<return type="PackedByteArray" />
+			<param index="0" name="offset" type="int" />
+			<param index="1" name="count" type="int" />
+			<description>
+				Reads up to [param count] bytes at the zero-based [param offset]. Returns an empty array when the range is empty, invalid, or outside the file.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="name" type="String" setter="" getter="get_name">
+			The selected file's base name.
+		</member>
+		<member name="size" type="int" setter="" getter="get_size">
+			The selected file's size in bytes at selection time.
+		</member>
+	</members>
+</class>

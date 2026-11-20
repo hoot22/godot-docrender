@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLEvent" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A DOM event delivered to element listeners.
+	</brief_description>
+	<description>
+		Events are created by the engine for real input and layout activity, and by scripts for synthetic dispatch. Scripts assign [member type], [member bubbles], and [member cancelable] before calling [method HTMLEventTarget.dispatch_event]. [member target], [member current_target], [member event_phase], and [member default_prevented] are read-only and controlled by the dispatcher.
+		The propagation path runs from the window through the document node and the element chain to the target. [method composed_path] returns that path during dispatch and an empty array after dispatch ends. The [member composed] flag controls whether events originating in a shadow tree cross its boundary. Targets are retargeted to the host for listeners outside that tree. Listeners registered with [code]passive[/code] cannot cancel the default action.
+		[method prevent_default] cancels the built-in action that follows the event, such as following a link, activating a button, toggling a checkbox, or inserting typed text. [method HTMLNode.dispatch_event] returns [code]false[/code] when the default action was cancelled.
+		When a listener cancels an event, the [HTMLLabel] signal that reports the same action is not emitted. Events without listeners behave exactly like the documented signal-only API.
+	</description>
+	<methods>
+		<method name="composed_path">
+			<return type="HTMLEventTarget[]" />
+			<description>
+				Returns the propagation path of the current dispatch, with the target first and the window last. The array is empty outside event dispatch.
+			</description>
+		</method>
+		<method name="prevent_default">
+			<return type="void" />
+			<description>
+				Cancels the built-in action for this event. Has no effect unless [member cancelable] is [code]true[/code], or when the running listener was registered with [code]passive[/code].
+			</description>
+		</method>
+		<method name="stop_propagation">
+			<return type="void" />
+			<description>
+				Stops the event from reaching later nodes in the propagation path. Listeners already queued on the current node still run.
+			</description>
+		</method>
+		<method name="stop_immediate_propagation">
+			<return type="void" />
+			<description>
+				Stops the event from reaching later nodes and skips the remaining listeners registered on the current node.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="type" type="StringName" setter="set_type" getter="get_type">
+			The event type, such as [code]click[/code] or [code]keydown[/code]. Assignment is ignored while the event is being dispatched.
+		</member>
+		<member name="target" type="HTMLEventTarget" setter="" getter="get_target">
+			The target the event was dispatched to. It does not change during propagation.
+		</member>
+		<member name="current_target" type="HTMLEventTarget" setter="" getter="get_current_target">
+			The target whose listeners are running. Use it to implement a listener shared by several targets.
+		</member>
+		<member name="event_phase" type="int" setter="" getter="get_event_phase" enum="HTMLEvent.EventPhase">
+			The propagation phase the event is currently in.
+		</member>
+		<member name="bubbles" type="bool" setter="set_bubbles" getter="get_bubbles">
+			If [code]true[/code], the event propagates from the target's parent up to the document node after the target phase. Assignment is ignored while the event is being dispatched.
+		</member>
+		<member name="cancelable" type="bool" setter="set_cancelable" getter="get_cancelable">
+			If [code]true[/code], [method prevent_default] can cancel the built-in action. Assignment is ignored while the event is being dispatched.
+		</member>
+		<member name="composed" type="bool" setter="set_composed" getter="get_composed">
+			Whether an event originating in a shadow tree can propagate across its boundary.
+		</member>
+		<member name="default_prevented" type="bool" setter="" getter="is_default_prevented">
+			Whether a listener cancelled the built-in action.
+		</member>
+		<member name="trusted" type="bool" setter="" getter="is_trusted">
+			Whether the engine synthesized the event from real input. Events created by scripts report [code]false[/code].
+		</member>
+		<member name="time_stamp" type="int" setter="" getter="get_time_stamp">
+			The millisecond timestamp taken when the event was first dispatched.
+		</member>
+	</members>
+	<constants>
+		<constant name="PHASE_NONE" value="0" enum="EventPhase">
+			The event is not being dispatched.
+		</constant>
+		<constant name="PHASE_CAPTURING" value="1" enum="EventPhase">
+			The event is travelling from the document down to the target's parent.
+		</constant>
+		<constant name="PHASE_AT_TARGET" value="2" enum="EventPhase">
+			The event is at its target.
+		</constant>
+		<constant name="PHASE_BUBBLING" value="3" enum="EventPhase">
+			The event is travelling from the target's parent up to the document node.
+		</constant>
+	</constants>
+</class>

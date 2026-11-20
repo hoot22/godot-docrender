@@ -3,7 +3,7 @@
 #include "pdf_writer.h"
 #include "formats/pdf/pdfium/pdfium_backend.h"
 
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 #include <godot_cpp/core/math.hpp>
 #include <godot_cpp/variant/char_string.hpp>
 
@@ -20,7 +20,7 @@ namespace godot {
 		Error unavailable();														// 记录并返回当前构建缺少 PDFium 支持的错误
 		void clear_error();															// 清除上一次操作的错误状态
 
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 		struct EditablePage {
 			FPDF_PAGE handle;
 			bool dirty = false;
@@ -113,7 +113,7 @@ namespace godot {
 	};
 } // namespace godot
 
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 #define PDF_WRITE_OR_RETURN(group, result) \
 	std::lock_guard guard(pdfium::mutex()); \
 	if (!state->require(pdfium::Group::writer_##group)) { return result; } \

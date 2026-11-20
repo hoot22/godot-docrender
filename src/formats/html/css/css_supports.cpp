@@ -1,6 +1,7 @@
 #include "css_supports.h"
 
 #include "css_declarations.h"
+#include "css_font_face.h"
 
 #include <litehtml/css_parser.h>
 #include <litehtml/css_selector.h>
@@ -33,7 +34,21 @@ namespace litehtml {
 
 		std::optional<bool> evaluate_test(const css_token& p_test, document_mode p_mode, int p_depth) {
 			if (p_test.type == CV_FUNCTION) {
-				if (lowcase(p_test.name) == "selector") return supports_css_selector(p_test.value, p_mode);
+				const auto function = lowcase(p_test.name);
+				if (function == "selector") return supports_css_selector(p_test.value, p_mode);
+				if (is_one_of(function, "font-tech", "font-format", "at-rule")) {
+					int index = 0;
+					const int size = static_cast<int>(p_test.value.size());
+					skip_whitespace(p_test.value, index);
+					if (index == size) return false;
+					const auto& argument = p_test.value[index++];
+					skip_whitespace(p_test.value, index);
+					if (index != size) return false;
+					if (function == "font-tech") return supports_font_tech(argument.ident());
+					if (function == "font-format") return supports_font_format(argument.ident());
+					return argument.type == AT_KEYWORD && is_one_of(lowcase(argument.name), "font-face",
+						"font-feature-values", "counter-style", "property", "supports", "media", "import", "layer", "scope", "container");
+				}
 				return false;
 			}
 			if (p_test.type != ROUND_BLOCK) return {};

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLFieldSetElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A group of HTML form controls.
+	</brief_description>
+	<description>
+		When disabled, the fieldset disables its controls except those inside its first direct [HTMLLegendElement].
+	</description>
+	<methods>
+		<method name="get_form" qualifiers="const">
+			<return type="HTMLFormElement" />
+			<description>
+				Returns the associated form or [code]null[/code].
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="disabled" type="bool" setter="set_disabled" getter="is_disabled">
+			Reflects the disabled attribute.
+		</member>
+	</members>
+</class>

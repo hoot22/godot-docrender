@@ -1,13 +1,13 @@
 #include "markdown_html.h"
 
-#include "formats/html/html_markup.h"
+#include "formats/html/markup/html_markup.h"
 
 #include <cstdint>
 #include <string_view>
 
 using namespace godot;
 
-namespace docrender {
+namespace dockit {
 	namespace {
 		bool ascii_alpha(char p_char) {
 			return (p_char >= 'a' && p_char <= 'z') || (p_char >= 'A' && p_char <= 'Z');

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extract and check the Simplified Chinese editor catalogs for Godot DocRender."""
+"""Extract and check the Simplified Chinese editor catalogs for Godot Dockit."""
 
 import argparse
 from collections import defaultdict
@@ -14,9 +14,9 @@ from babel.messages.catalog import Catalog
 from babel.messages.pofile import read_po, write_po
 
 ROOT = Path(__file__).resolve().parents[1]
-CATALOGS = ROOT / "addons/docrender/translations"
+CATALOGS = ROOT / "addons/dockit/translations"
 LOCALE = "zh_Hans"
-EDITOR_TEXT = re.compile(r'\btr\(\s*("(?:\\.|[^"\\])*")\s*,\s*("Godot DocRender")\s*\)')
+EDITOR_TEXT = re.compile(r'\btr\(\s*("(?:\\.|[^"\\])*")\s*,\s*("Godot Dockit")\s*\)')
 PROPERTY = re.compile(r'\bADD_PROPERTYI?\(PropertyInfo\(Variant::\w+,\s*"([^"]+)"')
 PROPERTY_GROUP = re.compile(r'\bADD_(?:SUB)?GROUP\("([^"]+)"')
 STOP_WORDS = set("a an and as at by for in not of on or over per the then to with".split())
@@ -79,7 +79,7 @@ def collect_sources():
 
 
 def template(messages):
-    catalog = Catalog(project="Godot DocRender")
+    catalog = Catalog(project="Godot Dockit")
     for (source, context), locations in sorted(messages.items()):
         catalog.add(source, context=context, auto_comments=sorted(locations))
     return catalog
@@ -89,7 +89,7 @@ def load_catalog(path):
     if path.exists():
         with path.open("rb") as stream:
             return read_po(stream, locale=LOCALE, abort_invalid=True)
-    return Catalog(locale=LOCALE, project="Godot DocRender", charset="utf-8", fuzzy=False)
+    return Catalog(locale=LOCALE, project="Godot Dockit", charset="utf-8", fuzzy=False)
 
 
 def check_catalog(path, catalog, messages):

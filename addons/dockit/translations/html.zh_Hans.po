@@ -1,0 +1,266 @@
+# Dockit native HTML control translations.
+msgid ""
+msgstr ""
+"Project-Id-Version: Godot Dockit\n"
+"Language: zh_Hans\n"
+"Language-Team: Simplified Chinese\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "file_input.button"
+msgid "Choose File"
+msgstr "选择文件"
+
+msgctxt "file_input.button"
+msgid "Choose Files"
+msgstr "选择文件"
+
+msgctxt "file_input.status"
+msgid "No file chosen"
+msgstr "未选择任何文件"
+
+msgctxt "file_dialog.title"
+msgid "Choose File"
+msgstr "选择文件"
+
+msgctxt "file_filter.category"
+msgid "Images"
+msgstr "图像"
+
+msgctxt "file_filter.category"
+msgid "Audio"
+msgstr "音频"
+
+msgctxt "file_filter.category"
+msgid "Video"
+msgstr "视频"
+
+msgctxt "file_filter.category"
+msgid "Plain text"
+msgstr "纯文本"
+
+msgctxt "file_filter.category"
+msgid "JPEG"
+msgstr "JPEG 图像"
+
+msgctxt "file_filter.category"
+msgid "MPEG audio"
+msgstr "MPEG 音频"
+
+msgctxt "input.default_action"
+msgid "Submit"
+msgstr "提交"
+
+msgctxt "input.default_action"
+msgid "Reset"
+msgstr "重置"
+
+msgctxt "input_context_menu"
+msgid "Undo"
+msgstr "撤销"
+
+msgctxt "input_context_menu"
+msgid "Redo"
+msgstr "重做"
+
+msgctxt "input_context_menu"
+msgid "Cut"
+msgstr "剪切"
+
+msgctxt "input_context_menu"
+msgid "Copy"
+msgstr "复制"
+
+msgctxt "input_context_menu"
+msgid "Paste"
+msgstr "粘贴"
+
+msgctxt "input_context_menu"
+msgid "Select All"
+msgstr "全选"
+
+msgctxt "time_picker.month"
+msgid "January"
+msgstr "一月"
+
+msgctxt "time_picker.month"
+msgid "February"
+msgstr "二月"
+
+msgctxt "time_picker.month"
+msgid "March"
+msgstr "三月"
+
+msgctxt "time_picker.month"
+msgid "April"
+msgstr "四月"
+
+msgctxt "time_picker.month"
+msgid "May"
+msgstr "五月"
+
+msgctxt "time_picker.month"
+msgid "June"
+msgstr "六月"
+
+msgctxt "time_picker.month"
+msgid "July"
+msgstr "七月"
+
+msgctxt "time_picker.month"
+msgid "August"
+msgstr "八月"
+
+msgctxt "time_picker.month"
+msgid "September"
+msgstr "九月"
+
+msgctxt "time_picker.month"
+msgid "October"
+msgstr "十月"
+
+msgctxt "time_picker.month"
+msgid "November"
+msgstr "十一月"
+
+msgctxt "time_picker.month"
+msgid "December"
+msgstr "十二月"
+
+msgctxt "time_picker.weekday"
+msgid "Mon"
+msgstr "周一"
+
+msgctxt "time_picker.weekday"
+msgid "Tue"
+msgstr "周二"
+
+msgctxt "time_picker.weekday"
+msgid "Wed"
+msgstr "周三"
+
+msgctxt "time_picker.weekday"
+msgid "Thu"
+msgstr "周四"
+
+msgctxt "time_picker.weekday"
+msgid "Fri"
+msgstr "周五"
+
+msgctxt "time_picker.weekday"
+msgid "Sat"
+msgstr "周六"
+
+msgctxt "time_picker.weekday"
+msgid "Sun"
+msgstr "周日"
+
+msgctxt "time_picker.meridiem"
+msgid "AM"
+msgstr "上午"
+
+msgctxt "time_picker.meridiem"
+msgid "PM"
+msgstr "下午"
+
+msgctxt "time_picker.month_year"
+msgid "{month} {year}"
+msgstr "{year}年{month}"
+
+msgctxt "time_picker"
+msgid "Week"
+msgstr "周"
+
+msgctxt "time_picker"
+msgid "Clear"
+msgstr "清除"
+
+msgctxt "time_picker"
+msgid "This month"
+msgstr "本月"
+
+msgctxt "time_picker"
+msgid "This week"
+msgstr "本周"
+
+msgctxt "time_picker"
+msgid "Today"
+msgstr "今天"
+
+msgctxt "accessibility.role"
+msgid "heading"
+msgstr "标题"
+
+msgctxt "accessibility.role"
+msgid "heading level {level}"
+msgstr "标题级别 {level}"
+
+msgctxt "accessibility.role"
+msgid "main"
+msgstr "主内容"
+
+msgctxt "accessibility.role"
+msgid "navigation"
+msgstr "导航"
+
+msgctxt "accessibility.role"
+msgid "banner"
+msgstr "横幅"
+
+msgctxt "accessibility.role"
+msgid "content information"
+msgstr "内容信息"
+
+msgctxt "accessibility.role"
+msgid "complementary"
+msgstr "补充内容"
+
+msgctxt "accessibility.role"
+msgid "form"
+msgstr "表单"
+
+msgctxt "accessibility.role"
+msgid "search"
+msgstr "搜索"
+
+msgctxt "accessibility.role"
+msgid "region"
+msgstr "区域"
+
+msgctxt "accessibility.state"
+msgid "expanded"
+msgstr "已展开"
+
+msgctxt "accessibility.state"
+msgid "collapsed"
+msgstr "已折叠"
+
+msgctxt "accessibility.state"
+msgid "mixed"
+msgstr "混合"
+
+msgctxt "accessibility.state"
+msgid "pressed"
+msgstr "已按下"
+
+msgctxt "accessibility.state"
+msgid "not pressed"
+msgstr "未按下"
+
+msgctxt "accessibility.state"
+msgid "invalid"
+msgstr "无效"
+
+msgctxt "media.error"
+msgid "No supported audio source could be opened."
+msgstr "无法打开受支持的音频源。"
+
+msgctxt "media.error"
+msgid "No supported local video source was found."
+msgstr "未找到受支持的本地视频源。"
+
+msgctxt "media.error"
+msgid "The selected video backends could not open any source."
+msgstr "所选视频后端无法打开任何源。"

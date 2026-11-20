@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLTableColElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML table column or column group.
+	</brief_description>
+	<description>
+		Represents a [code]&lt;col&gt;[/code] or [code]&lt;colgroup&gt;[/code] element.
+	</description>
+	<members>
+		<member name="span" type="int" setter="set_span" getter="get_span">
+			The reflected span. Reads are limited to 1 through 1000.
+		</member>
+	</members>
+</class>

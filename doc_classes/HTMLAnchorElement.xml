@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLAnchorElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A handle to an HTML anchor element.
+	</brief_description>
+	<description>
+		Returned by queries and [method HTMLLayout.create_element] for [code]&lt;a&gt;[/code]. Use [method HTMLLabel.activate_element] to activate a link from script.
+	</description>
+	<methods>
+		<method name="get_resolved_href" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns the link address resolved against the current document base. Activating a link still reports the original [member href].
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="href" type="String" setter="set_href" getter="get_href">
+			The original [code]href[/code] attribute. An empty or missing value cannot be activated.
+		</member>
+		<member name="text" type="String" setter="set_text_content" getter="get_text_content">
+			The descendant text content. Assigning a value replaces the children with plain text.
+		</member>
+	</members>
+</class>

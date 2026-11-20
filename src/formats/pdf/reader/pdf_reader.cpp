@@ -79,7 +79,7 @@ namespace godot {
 	}
 
 	bool PDFReader::is_supported() {
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 		return true;
 #else
 		return false;
@@ -87,7 +87,7 @@ namespace godot {
 	}
 
 	bool PDFReader::is_available() {
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 		String message;
 		return bool(pdfium::acquire(message));
 #else
@@ -96,7 +96,7 @@ namespace godot {
 	}
 
 	PackedStringArray PDFReader::get_capabilities() {
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 		String message;
 		const auto api = pdfium::acquire(message);
 		if (api) {
@@ -107,7 +107,7 @@ namespace godot {
 	}
 
 	void PDFReader::shutdown_backend() {
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 		pdfium::shutdown();
 #endif
 	}
@@ -124,7 +124,7 @@ namespace godot {
 
 	bool PDFReader::is_open() const {
 		std::lock_guard guard(pdfium::mutex());
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 		return state->document != nullptr;
 #else
 		return false;
@@ -133,7 +133,7 @@ namespace godot {
 
 	void PDFReader::close() {
 		std::lock_guard guard(pdfium::mutex());
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 		state->release_document();
 #endif
 		state->clear_error();
@@ -160,7 +160,7 @@ namespace godot {
 
 	Error PDFReader::open_bytes(PackedByteArray p_bytes, const String& p_password, const String& p_source) {
 		std::lock_guard guard(pdfium::mutex());
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 		String message;
 		auto api = pdfium::acquire(message);
 		if (!api) {
@@ -191,7 +191,7 @@ namespace godot {
 		return render(p_page, &p_region, p_dpi, p_flags, p_rotation, p_background);
 	}
 
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 	using namespace pdfium;
 
 	namespace {

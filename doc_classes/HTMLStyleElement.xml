@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLStyleElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A stylesheet written directly in the document.
+	</brief_description>
+	<description>
+		Represents [code]&lt;style&gt;[/code]. Changing its text discards previously edited CSSOM rules and resets the sheet's runtime disabled state. Changing [member media] or [member disabled] preserves the associated stylesheet ID and rules.
+	</description>
+	<methods>
+		<method name="get_stylesheet_id" qualifiers="const">
+			<return type="int" />
+			<description>
+				Returns the layout's CSSOM ID for the associated stylesheet, or [code]0[/code] if there is no associated sheet. Use the ID with [method HTMLLayout.get_css_rules], [method HTMLLayout.insert_rule], and [method HTMLLayout.delete_rule].
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="disabled" type="bool" setter="set_disabled" getter="is_disabled">
+			Disables the associated sheet at runtime. With no associated sheet, this property reads [code]false[/code] and writes have no effect.
+		</member>
+		<member name="media" type="String" setter="set_media" getter="get_media">
+			The media query list that controls when the stylesheet applies.
+		</member>
+		<member name="sheet" type="HTMLStyleSheet" setter="" getter="get_sheet">
+			The associated stylesheet, or [code]null[/code] when no stylesheet is associated.
+		</member>
+		<member name="text" type="String" setter="set_text_content" getter="get_text_content">
+			The original CSS text of the element. Read edited CSSOM rules using [method get_stylesheet_id] and [method HTMLLayout.get_css_rules].
+		</member>
+		<member name="type" type="String" setter="set_type" getter="get_type">
+			The declared MIME type of the inline stylesheet. An empty value defaults to [code]text/css[/code].
+		</member>
+	</members>
+</class>

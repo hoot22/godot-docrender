@@ -1,0 +1,1 @@
+body { margin: 0; #imported_set { width: 28px; height: 20px; background: image-set("../set-low.svg", var(--missing, "set-high.svg") 2dppx) no-repeat; } }

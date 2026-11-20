@@ -4,6 +4,7 @@
 #include <godot_cpp/classes/label_settings.hpp>
 #include <godot_cpp/classes/style_box.hpp>
 
+#include "formats/latex/latex_document.h"
 #include "formats/latex/tex_render.h"
 
 class LatexLabel : public godot::Control {
@@ -14,6 +15,8 @@ public:
 
 	void set_text(const godot::String& p_text);
 	godot::String get_text() const;
+	void set_document(const godot::Ref<LatexDocument>& p_document);
+	godot::Ref<LatexDocument> get_document() const;
 	void set_label_settings(const godot::Ref<godot::LabelSettings>& p_settings);
 	godot::Ref<godot::LabelSettings> get_label_settings() const;
 	void set_horizontal_alignment(godot::HorizontalAlignment p_alignment);
@@ -34,6 +37,7 @@ protected:
 
 private:
 	godot::String text;
+	godot::Ref<LatexDocument> document;
 	godot::Ref<godot::LabelSettings> label_settings;
 	godot::Ref<godot::StyleBox> normal_style;
 	godot::Ref<godot::StyleBox> focus_style;

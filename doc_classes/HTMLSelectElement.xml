@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLSelectElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML select control.
+	</brief_description>
+	<description>
+		[HTMLLabel] draws a dropdown or list box and emits [signal HTMLLabel.select_changed] for user changes. Script assignments update selection silently.
+	</description>
+	<methods>
+		<method name="get_options" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<description>
+				Returns the options as a tree-order snapshot of [HTMLOptionElement] handles.
+			</description>
+		</method>
+		<method name="get_form" qualifiers="const">
+			<return type="HTMLFormElement" />
+			<description>
+				Returns the associated form or [code]null[/code].
+			</description>
+		</method>
+		<method name="get_selected_options" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<description>
+				Returns the selected options in tree order.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="name" type="String" setter="set_name" getter="get_name">
+			The name used for the form entry.
+		</member>
+		<member name="disabled" type="bool" setter="set_disabled" getter="is_disabled">
+			Reflects the disabled attribute.
+		</member>
+		<member name="required" type="bool" setter="set_required" getter="is_required">
+			Whether submission requires a selection other than the placeholder.
+		</member>
+		<member name="value" type="String" setter="set_value" getter="get_value">
+			The first selected option value. Assigning a matching value selects only that option. An unmatched assignment clears the selection.
+		</member>
+		<member name="selected_index" type="int" setter="set_selected_index" getter="get_selected_index">
+			Zero-based selected index. [code]-1[/code] means no selection.
+		</member>
+		<member name="multiple" type="bool" setter="set_multiple" getter="is_multiple">
+			Whether the list accepts multiple selections.
+		</member>
+		<member name="size" type="int" setter="set_size" getter="get_size">
+			The requested visible row count. The default value is 0.
+		</member>
+	</members>
+</class>

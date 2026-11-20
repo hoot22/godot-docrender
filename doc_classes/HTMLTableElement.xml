@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLTableElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML table with row and section editing.
+	</brief_description>
+	<description>
+		Create tables with [method HTMLLayout.create_element] or query them by selector. Table edits operate on the current layout. Collections are typed array snapshots. Removed sections and rows retain their handles.
+	</description>
+	<methods>
+		<method name="create_caption">
+			<return type="HTMLTableCaptionElement" />
+			<description>
+				Returns the existing caption or creates it.
+			</description>
+		</method>
+		<method name="create_t_body">
+			<return type="HTMLTableSectionElement" />
+			<description>
+				Creates a table body after the last existing body, or appends it if there are no bodies.
+			</description>
+		</method>
+		<method name="create_t_foot">
+			<return type="HTMLTableSectionElement" />
+			<description>
+				Returns the existing table foot or creates it.
+			</description>
+		</method>
+		<method name="create_t_head">
+			<return type="HTMLTableSectionElement" />
+			<description>
+				Returns the existing table head or creates it.
+			</description>
+		</method>
+		<method name="delete_caption">
+			<return type="int" />
+			<description>
+				Detaches the first direct caption, if present.
+			</description>
+		</method>
+		<method name="delete_row">
+			<return type="int" />
+			<param index="0" name="index" type="int" />
+			<description>
+				Detaches the row at the given index and preserves its handle. Pass [code]-1[/code] to detach the last row. Returns [constant OK] if the list is empty and the index is [code]-1[/code].
+			</description>
+		</method>
+		<method name="delete_t_foot">
+			<return type="int" />
+			<description>
+				Detaches the first direct table foot, if present.
+			</description>
+		</method>
+		<method name="delete_t_head">
+			<return type="int" />
+			<description>
+				Detaches the first direct table head, if present.
+			</description>
+		</method>
+		<method name="get_rows" qualifiers="const">
+			<return type="HTMLTableRowElement[]" />
+			<description>
+				Returns a snapshot with head rows first, followed by body and direct rows, then foot rows.
+			</description>
+		</method>
+		<method name="get_t_bodies" qualifiers="const">
+			<return type="HTMLTableSectionElement[]" />
+			<description>
+				Returns a tree-order snapshot of the immediate table bodies.
+			</description>
+		</method>
+		<method name="insert_row">
+			<return type="HTMLTableRowElement" />
+			<param index="0" name="index" type="int" default="-1" />
+			<description>
+				Inserts a row in the target row's parent. An empty table uses its last body or creates one. Pass [code]-1[/code] to append. Returns [code]null[/code] for an invalid index.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="caption" type="HTMLTableCaptionElement" setter="set_caption" getter="get_caption">
+			The first direct caption. Setting this to [code]null[/code] detaches it.
+		</member>
+		<member name="t_foot" type="HTMLTableSectionElement" setter="set_t_foot" getter="get_t_foot">
+			The first direct table foot. Assign a [code]&lt;tfoot&gt;[/code] handle from the same layout or [code]null[/code].
+		</member>
+		<member name="t_head" type="HTMLTableSectionElement" setter="set_t_head" getter="get_t_head">
+			The first direct table head. Assign a [code]&lt;thead&gt;[/code] handle from the same layout or [code]null[/code].
+		</member>
+	</members>
+</class>

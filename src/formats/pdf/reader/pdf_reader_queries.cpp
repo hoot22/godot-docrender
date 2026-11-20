@@ -1,6 +1,6 @@
 #include "pdf_reader_internal.h"
 
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 #include <godot_cpp/variant/char_string.hpp>
 #include <godot_cpp/variant/packed_float32_array.hpp>
 #include <godot_cpp/variant/packed_int64_array.hpp>
@@ -10,7 +10,7 @@
 #endif
 
 namespace godot {
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 	using namespace pdfium;
 
 #define PDF_TEXT_OR_RETURN(result) \

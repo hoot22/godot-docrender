@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLKeyboardEvent" inherits="HTMLEvent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A key event for [code]keydown[/code] and [code]keyup[/code].
+	</brief_description>
+	<description>
+		Delivered to the focused element, or to the document body when no element has focus. Cancelling [code]keydown[/code] suppresses the built-in handling for the same press, including focus traversal with Tab, activation with Enter and Space, and text insertion in focused fields. Key events are not delivered while an input method is composing text.
+	</description>
+	<members>
+		<member name="keycode" type="int" setter="set_keycode" getter="get_keycode">
+			The layout-dependent key code, using the [enum Key] values, or [code]0[/code] when unavailable.
+		</member>
+		<member name="physical_keycode" type="int" setter="set_physical_keycode" getter="get_physical_keycode">
+			The layout-independent physical key code, using the [enum Key] values.
+		</member>
+		<member name="key_label" type="int" setter="set_key_label" getter="get_key_label">
+			The label of the key in the user's layout, using the [enum Key] values.
+		</member>
+		<member name="unicode" type="int" setter="set_unicode" getter="get_unicode">
+			The Unicode code point produced by the press, or [code]0[/code] for non-printing keys.
+		</member>
+		<member name="shift_pressed" type="bool" setter="set_shift_pressed" getter="is_shift_pressed">
+			Whether Shift was held.
+		</member>
+		<member name="ctrl_pressed" type="bool" setter="set_ctrl_pressed" getter="is_ctrl_pressed">
+			Whether Ctrl was held.
+		</member>
+		<member name="alt_pressed" type="bool" setter="set_alt_pressed" getter="is_alt_pressed">
+			Whether Alt was held.
+		</member>
+		<member name="meta_pressed" type="bool" setter="set_meta_pressed" getter="is_meta_pressed">
+			Whether Meta was held.
+		</member>
+		<member name="echo" type="bool" setter="set_echo" getter="is_echo">
+			Whether the event repeats because the key is held down.
+		</member>
+	</members>
+</class>

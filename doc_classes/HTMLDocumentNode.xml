@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLDocumentNode" inherits="HTMLNode" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		The root node of a live HTMLLayout document.
+	</brief_description>
+	<description>
+		Queries and edits the live DOM of one layout. It becomes invalid when that layout clears or replaces its document. Queries and creation methods on an invalid document node return [code]null[/code] or empty arrays. [member visibility_state] reflects whether the owning [HTMLLabel] is effectively visible in the scene tree; changes dispatch [code]visibilitychange[/code] on this document.
+	</description>
+	<methods>
+		<method name="create_document_fragment">
+			<return type="HTMLDocumentFragment" />
+			<description>
+				Creates an empty document fragment owned by this document.
+			</description>
+		</method>
+		<method name="create_element">
+			<return type="HTMLElement" />
+			<param index="0" name="tag_name" type="String" />
+			<description>
+				Creates a detached element owned by this document.
+			</description>
+		</method>
+		<method name="create_text_node">
+			<return type="HTMLTextNode" />
+			<param index="0" name="data" type="String" />
+			<description>
+				Creates a detached text node owned by this document.
+			</description>
+		</method>
+		<method name="get_base_uri" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns the current base URL of this document.
+			</description>
+		</method>
+		<method name="get_visibility_state" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns [code]visible[/code] or [code]hidden[/code] based on the owning [HTMLLabel]'s effective scene-tree visibility.
+			</description>
+		</method>
+		<method name="get_element_by_id" qualifiers="const">
+			<return type="HTMLElement" />
+			<param index="0" name="id" type="String" />
+			<description>
+				Returns the first element with the given case-sensitive ID, or [code]null[/code].
+			</description>
+		</method>
+		<method name="query_selector" qualifiers="const">
+			<return type="HTMLElement" />
+			<param index="0" name="selector" type="String" />
+			<description>
+				Returns the first element in document order that matches [param selector], or [code]null[/code].
+			</description>
+		</method>
+		<method name="query_selector_all" qualifiers="const">
+			<return type="HTMLElement[]" />
+			<param index="0" name="selector" type="String" />
+			<description>
+				Returns a snapshot of all matching elements in document order.
+			</description>
+		</method>
+		<method name="get_default_view">
+			<return type="HTMLWindow" />
+			<description>
+				Returns the window event target for this document. Listeners registered on it receive events from every connected node.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="body" type="HTMLElement" setter="" getter="get_body">
+			The document's body or frameset element, if present.
+		</member>
+		<member name="default_view" type="HTMLWindow" setter="" getter="get_default_view">
+			The window event target for this document.
+		</member>
+		<member name="document_element" type="HTMLElement" setter="" getter="get_document_element">
+			The document's root element.
+		</member>
+		<member name="active_element" type="HTMLElement" setter="" getter="get_active_element">
+			The connected element focused in the owning [HTMLLabel], or [code]null[/code] when the label has no focused DOM element.
+		</member>
+		<member name="design_mode" type="String" setter="set_design_mode" getter="get_design_mode" default="&quot;off&quot;">
+			Set to [code]on[/code] to make the document body editable, or [code]off[/code] to disable document-wide editing. Other values are ignored.
+		</member>
+		<member name="visibility_state" type="String" setter="" getter="get_visibility_state">
+			The effective visibility of the owning [HTMLLabel]: [code]visible[/code] or [code]hidden[/code]. A change dispatches [code]visibilitychange[/code] on this document.
+		</member>
+	</members>
+</class>

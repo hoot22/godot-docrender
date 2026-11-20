@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLStyleSheet" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A handle to an element's stylesheet in an HTML layout.
+	</brief_description>
+	<description>
+		Read [member HTMLLinkElement.sheet] or [member HTMLStyleElement.sheet] to get the stylesheet. It shares its rules with the layout's numeric CSSOM API. Changing the media condition or disabled state keeps the handle valid. Replacing the source, removing the owner from the document, or clearing or replacing the layout invalidates the handle.
+	</description>
+	<methods>
+		<method name="delete_rule">
+			<return type="int" enum="Error" />
+			<param index="0" name="index" type="int" />
+			<description>
+				Deletes the top-level rule at the given zero-based [param index]. Returns [constant ERR_INVALID_PARAMETER] for a stale handle or invalid index.
+			</description>
+		</method>
+		<method name="get_css_rules" qualifiers="const">
+			<return type="PackedStringArray" />
+			<description>
+				Returns a snapshot of the serialized top-level rules. A stale handle returns an empty array.
+			</description>
+		</method>
+		<method name="insert_rule">
+			<return type="int" enum="Error" />
+			<param index="0" name="rule" type="String" />
+			<param index="1" name="index" type="int" default="0" />
+			<description>
+				Inserts one CSS [param rule] at the given zero-based [param index]. Uses the same validation as [method HTMLLayout.insert_rule]. A stale handle returns [constant ERR_INVALID_PARAMETER].
+			</description>
+		</method>
+		<method name="is_valid" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns whether the handle still refers to the associated stylesheet.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="disabled" type="bool" setter="" getter="is_disabled">
+			Whether the associated stylesheet is disabled. Set the owning element's disabled property to change this state.
+		</member>
+		<member name="href" type="String" setter="" getter="get_href">
+			The resolved resource path or final response URL of an external stylesheet. Inline stylesheets return an empty string.
+		</member>
+		<member name="id" type="int" setter="" getter="get_id">
+			The ID used by the layout's numeric CSSOM methods. A stale handle returns [code]0[/code].
+		</member>
+		<member name="media" type="String" setter="" getter="get_media">
+			The owning element's current media query list.
+		</member>
+		<member name="owner_node" type="HTMLElement" setter="" getter="get_owner_node">
+			The element that owns the associated stylesheet. A stale handle returns [code]null[/code].
+		</member>
+	</members>
+</class>

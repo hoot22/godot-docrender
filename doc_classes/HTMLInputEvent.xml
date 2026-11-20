@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLInputEvent" inherits="HTMLEvent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An input edit event such as [code]beforeinput[/code] or [code]input[/code].
+	</brief_description>
+	<description>
+		[code]beforeinput[/code] is cancelable and runs before supported keyboard, paste, cut, and history edits. Cancelling it leaves the editor value unchanged.
+	</description>
+	<members>
+		<member name="data" type="String" setter="set_data" getter="get_data">
+			Text inserted by this edit, or an empty string when the edit does not insert text.
+		</member>
+		<member name="input_type" type="StringName" setter="set_input_type" getter="get_input_type">
+			The edit operation, such as [code]insertText[/code], [code]deleteContentBackward[/code], or [code]historyUndo[/code].
+		</member>
+		<member name="is_composing" type="bool" setter="set_is_composing" getter="is_composing">
+			Whether the edit belongs to an active IME composition.
+		</member>
+	</members>
+</class>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLBodyElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		The body element of an HTML document.
+	</brief_description>
+	<description>
+		Represents [code]&lt;body&gt;[/code]. Use the inherited API to read and edit its contents.
+	</description>
+</class>

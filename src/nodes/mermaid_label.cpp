@@ -1,5 +1,7 @@
 #include "mermaid_label.h"
 
+#include "editor/dockit_source_editor.h"
+
 using namespace godot;
 
 MermaidLabel::MermaidLabel() {
@@ -9,6 +11,8 @@ MermaidLabel::MermaidLabel() {
 void MermaidLabel::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_text", "text"), &MermaidLabel::set_text);
 	ClassDB::bind_method(D_METHOD("get_text"), &MermaidLabel::get_text);
+	ClassDB::bind_method(D_METHOD("set_document", "document"), &MermaidLabel::set_document);
+	ClassDB::bind_method(D_METHOD("get_document"), &MermaidLabel::get_document);
 	ClassDB::bind_method(D_METHOD("set_theme_mode", "mode"), &MermaidLabel::set_theme_mode);
 	ClassDB::bind_method(D_METHOD("get_theme_mode"), &MermaidLabel::get_theme_mode);
 	ClassDB::bind_method(D_METHOD("get_texture"), &MermaidLabel::get_texture);
@@ -19,6 +23,7 @@ void MermaidLabel::_bind_methods() {
 	BIND_ENUM_CONSTANT(THEME_DARK);
 
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "text", PROPERTY_HINT_MULTILINE_TEXT), "set_text", "get_text");
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "document", PROPERTY_HINT_RESOURCE_TYPE, "MermaidDocument"), "set_document", "get_document");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "theme_mode", PROPERTY_HINT_ENUM, "Auto,Light,Dark"), "set_theme_mode", "get_theme_mode");
 	ADD_SIGNAL(MethodInfo("render_finished"));
 }
@@ -52,12 +57,34 @@ void MermaidLabel::_notification(int p_what) {
 void MermaidLabel::set_text(const String& p_text) {
 	if (text != p_text) {
 		text = p_text;
-		refresh_render();
+		if (document.is_null()) {
+			refresh_render();
+		}
 	}
 }
 
 String MermaidLabel::get_text() const {
 	return text;
+}
+
+void MermaidLabel::set_document(const Ref<MermaidDocument>& p_document) {
+	if (document == p_document) {
+		return;
+	}
+	const Callable changed = callable_mp(this, &MermaidLabel::refresh_render);
+	if (document.is_valid()) {
+		document->disconnect("changed", changed);
+	}
+	document = p_document;
+	if (document.is_valid()) {
+		DockitSourceEditorPlugin::observe_source_document(document);
+		document->connect("changed", changed, CONNECT_DEFERRED);
+	}
+	refresh_render();
+}
+
+Ref<MermaidDocument> MermaidLabel::get_document() const {
+	return document;
 }
 
 void MermaidLabel::set_theme_mode(ThemeMode p_mode) {
@@ -101,14 +128,15 @@ bool MermaidLabel::uses_light_theme() const {
 }
 
 void MermaidLabel::refresh_render() {
+	const String source = document.is_valid() ? document->get_text() : text;
 	Ref<Texture2D> next_texture;
 	String next_error;
 	bool completed = false;
 	if (is_inside_tree()) {
 		HashSet<String> sources;
-		if (!text.strip_edges().is_empty()) {
+		if (!source.strip_edges().is_empty()) {
 			if (MermaidRender::is_available()) {
-				sources.insert(text);
+				sources.insert(source);
 			}
 			else {
 				next_error = "This build does not include the Merman rendering backend.";
@@ -124,14 +152,14 @@ void MermaidLabel::refresh_render() {
 		palette.node_text = theme_color("node_text_color");
 		palette.line = theme_color("line_color");
 		render_cache.update(sources, palette);
-		if (const MermaidRenderCache::Result* result = render_cache.get_result(text)) {
+		if (const MermaidRenderCache::Result* result = render_cache.get_result(source)) {
 			next_texture = result->texture;
 			next_error = result->error;
 			completed = true;
 		}
 		const bool pending = render_cache.has_pending();
 		set_process_internal(pending);
-		if (!completed && pending && texture.is_valid() && rendered_source == text) {
+		if (!completed && pending && texture.is_valid() && rendered_source == source) {
 			return;
 		}
 	}
@@ -140,7 +168,7 @@ void MermaidLabel::refresh_render() {
 		return;
 	}
 	texture = next_texture;
-	rendered_source = texture.is_valid() ? text : String();
+	rendered_source = texture.is_valid() ? source : String();
 	render_error = next_error;
 	update_minimum_size();
 	update_configuration_warnings();

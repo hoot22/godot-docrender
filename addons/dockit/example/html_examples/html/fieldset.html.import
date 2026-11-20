@@ -1,0 +1,15 @@
+[remap]
+
+importer="dockit.html_document"
+importer_version=12
+type="HTMLDocument"
+uid="uid://befk76dpmj2ss"
+path="res://.godot/imported/fieldset.html-31ad7e5b14a29a1f16147f0e4ca5fd83.res"
+
+[deps]
+
+source_file="res://addons/dockit/example/html_examples/html/fieldset.html"
+dest_files=["res://.godot/imported/fieldset.html-31ad7e5b14a29a1f16147f0e4ca5fd83.res"]
+
+[params]
+

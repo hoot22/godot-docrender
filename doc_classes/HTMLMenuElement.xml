@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLMenuElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		An HTML menu list.
+	</brief_description>
+	<description>
+		Represents the [code]&lt;menu&gt;[/code] element.
+	</description>
+	<members>
+		<member name="compact" type="bool" setter="set_compact" getter="is_compact">
+			Reflects the legacy compact attribute.
+		</member>
+	</members>
+</class>

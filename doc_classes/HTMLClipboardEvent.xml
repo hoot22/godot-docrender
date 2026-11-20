@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLClipboardEvent" inherits="HTMLEvent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A copy, cut, or paste event.
+	</brief_description>
+	<description>
+		The [member clipboard_data] payload is limited to [code]text/plain[/code]. Cancelling [code]paste[/code] prevents the default insertion; cancelling [code]cut[/code] prevents deletion of the selected text.
+	</description>
+	<members>
+		<member name="clipboard_data" type="HTMLDataTransfer" setter="set_clipboard_data" getter="get_clipboard_data">
+			The text payload available to the clipboard handler.
+		</member>
+	</members>
+</class>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLToggleEvent" inherits="HTMLEvent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A disclosure state change event.
+	</brief_description>
+	<description>
+		[code]beforetoggle[/code] is cancelable and describes the proposed state. [code]toggle[/code] reports the accepted state after the update.
+	</description>
+	<members>
+		<member name="old_state" type="String" setter="set_old_state" getter="get_old_state">
+			The previous state, [code]open[/code] or [code]closed[/code].
+		</member>
+		<member name="new_state" type="String" setter="set_new_state" getter="get_new_state">
+			The resulting state, [code]open[/code] or [code]closed[/code].
+		</member>
+	</members>
+</class>

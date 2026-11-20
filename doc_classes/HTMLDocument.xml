@@ -6,8 +6,8 @@
 	<description>
 		Load an imported [code].html[/code] or [code].htm[/code] file, or create an [HTMLDocument] and set its [member text]. Assign the resource to [member HTMLLabel.document] for automatic display. Use [method create_layout] when drawing directly.
 		Scripts that previously called [code]HTMLDocument.new().parse(html)[/code] should call [code]HTMLLayout.new().parse(html)[/code]. Each [HTMLLayout] keeps its own parsed document, viewport, and drawing state.
-		The HTML importer embeds linked and imported CSS and records their textures as resource dependencies for export. Reimport the HTML file after changing a linked stylesheet.
-		Imported documents include local image dependencies from all media query branches. In a selected-scenes export preset, add [code]addons/docrender/docrender.gdextension[/code] to the include filter so the exported project can load DocRender classes.
+		The HTML importer embeds linked and imported CSS and records their textures and local [code]@font-face[/code] fonts as resource dependencies for export. Reimport the HTML file after changing a linked stylesheet.
+		Imported documents include local image dependencies from all media query branches. In a selected-scenes export preset, add [code]addons/dockit/dockit.gdextension[/code] to the include filter so the exported project can load Dockit classes.
 	</description>
 	<methods>
 		<method name="create_layout" qualifiers="const">
@@ -16,13 +16,20 @@
 				Parses a snapshot of this resource into a new [HTMLLayout]. Call [method HTMLLayout.layout] with the target viewport size, then [method HTMLLayout.draw] to display it. See [method HTMLLayout.get_render_error] for parse or layout errors.
 			</description>
 		</method>
+		<method name="create_print_layout" qualifiers="const">
+			<return type="HTMLPrintLayout" />
+			<param index="0" name="options" type="Dictionary" default="{}" />
+			<description>
+				Creates a print layout from this resource. The layout uses print media queries, applies CSS [code]@page[/code] size and margins, and exposes page geometry in CSS pixels. The default page is A4 portrait with 10 mm margins. The optional dictionary accepts [code]page_size: Vector2[/code] in CSS pixels, [code]orientation[/code] as [code]portrait[/code] or [code]landscape[/code], [code]margin[/code] as a number, [code]Vector4(left, top, right, bottom)[/code], or a dictionary of side values, and [code]page_name[/code] for named [code]@page[/code] rules. Explicit options override CSS.
+			</description>
+		</method>
 	</methods>
 	<members>
 		<member name="base_dir" type="String" setter="set_base_dir" getter="get_base_dir" default="&quot;res://&quot;">
-			The project directory used for relative image paths. Imported resources use the source file's directory.
+			The base directory in [code]res://[/code] or [code]user://[/code] used for relative asset paths. Imported resources use the source file's directory.
 		</member>
 		<member name="stylesheet" type="String" setter="set_stylesheet" getter="get_stylesheet" default="&quot;&quot;">
-			Additional CSS for this document. Its rules follow the document's stylesheets in the author cascade. See [method HTMLLayout.parse].
+			Additional CSS for this document. The rules share the document stylesheets' author origin and follow them in source order. See [method HTMLLayout.parse].
 		</member>
 		<member name="text" type="String" setter="set_text" getter="get_text" default="&quot;&quot;">
 			The source HTML document or fragment.

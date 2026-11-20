@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLSelection" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		The live node selection of an HTML layout.
+	</brief_description>
+	<description>
+		Get the selection with [method HTMLLayout.get_selection] or [method HTMLLabel.get_selection]. It holds at most one [HTMLRange]. The anchor can follow the focus in document order. In [HTMLLabel], this selection also controls rendered highlighting and copying.
+	</description>
+	<methods>
+		<method name="is_valid" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns whether the selection still belongs to a live layout.
+			</description>
+		</method>
+		<method name="is_collapsed" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns whether the selection is empty or its anchor and focus are the same.
+			</description>
+		</method>
+		<method name="get_range_count" qualifiers="const">
+			<return type="int" />
+			<description>
+				Returns zero for an empty selection or one when a live range is attached.
+			</description>
+		</method>
+		<method name="get_range_at" qualifiers="const">
+			<return type="HTMLRange" />
+			<param index="0" name="index" type="int" />
+			<description>
+				Returns the attached range for index zero, or [code]null[/code] when there is no such range.
+			</description>
+		</method>
+		<method name="get_anchor_node" qualifiers="const">
+			<return type="HTMLNode" />
+			<description>
+				Returns the selection's anchor node.
+			</description>
+		</method>
+		<method name="get_anchor_offset" qualifiers="const">
+			<return type="int" />
+			<description>
+				Returns the offset of the selection's anchor.
+			</description>
+		</method>
+		<method name="get_focus_node" qualifiers="const">
+			<return type="HTMLNode" />
+			<description>
+				Returns the selection's focus node.
+			</description>
+		</method>
+		<method name="get_focus_offset" qualifiers="const">
+			<return type="int" />
+			<description>
+				Returns the offset of the selection's focus.
+			</description>
+		</method>
+		<method name="add_range">
+			<return type="int" enum="Error" />
+			<param index="0" name="range" type="HTMLRange" />
+			<description>
+				Attaches a live range from the same document when the selection is empty.
+			</description>
+		</method>
+		<method name="remove_all_ranges">
+			<return type="void" />
+			<description>
+				Clears the selection.
+			</description>
+		</method>
+		<method name="collapse">
+			<return type="int" enum="Error" />
+			<param index="0" name="node" type="HTMLNode" />
+			<param index="1" name="offset" type="int" default="0" />
+			<description>
+				Moves the anchor and focus to the same boundary. Passing [code]null[/code] clears the selection.
+			</description>
+		</method>
+		<method name="extend">
+			<return type="int" enum="Error" />
+			<param index="0" name="node" type="HTMLNode" />
+			<param index="1" name="offset" type="int" default="0" />
+			<description>
+				Moves the focus while keeping the anchor fixed.
+			</description>
+		</method>
+		<method name="set_base_and_extent">
+			<return type="int" enum="Error" />
+			<param index="0" name="anchor" type="HTMLNode" />
+			<param index="1" name="anchor_offset" type="int" />
+			<param index="2" name="focus" type="HTMLNode" />
+			<param index="3" name="focus_offset" type="int" />
+			<description>
+				Sets both ends of the selection and preserves their direction.
+			</description>
+		</method>
+		<method name="select_all_children">
+			<return type="int" enum="Error" />
+			<param index="0" name="node" type="HTMLNode" />
+			<description>
+				Selects the contents of the given node.
+			</description>
+		</method>
+		<method name="get_text" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns the source text in the selection's live range.
+			</description>
+		</method>
+	</methods>
+</class>

@@ -1,0 +1,56 @@
+# Godot Dockit Simplified Chinese translations.
+# Distributed under the project license.
+msgid ""
+msgstr ""
+"Project-Id-Version: Godot Dockit VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-11-12 14:31+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_Hans\n"
+"Language-Team: zh_Hans <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#. src/editor/importers/latex_document_importer.cpp:12
+msgctxt "Godot Dockit"
+msgid "LaTeX Document"
+msgstr "LaTeX 文档"
+
+#. src/editor/importers/mermaid_document_importer.cpp:12
+msgctxt "Godot Dockit"
+msgid "Mermaid Document"
+msgstr "Mermaid 文档"
+
+#. src/editor/script_editor_preview_plugin.cpp:124
+msgctxt "Godot Dockit"
+msgid "Open Preview to the Right"
+msgstr "右侧打开预览"
+
+#. src/editor/importers/pdf_texture_importer.cpp:20
+msgctxt "Godot Dockit"
+msgid "PDF Texture"
+msgstr "PDF 纹理"
+
+#. src/editor/script_editor_preview_plugin.cpp:118
+msgctxt "Godot Dockit"
+msgid "Preview"
+msgstr "预览"
+
+#. src/editor/script_editor_preview_plugin.cpp:125
+msgctxt "Godot Dockit"
+msgid "Preview Only"
+msgstr "仅预览"
+
+#. src/editor/script_editor_preview_plugin.cpp:123
+msgctxt "Godot Dockit"
+msgid "View Source"
+msgstr "查看源文件"
+
+#. src/editor/importers/html_document_importer.cpp:13
+msgctxt "Godot Dockit"
+msgid "HTML Document"
+msgstr "HTML 文档"

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLDialogCloseRequest" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A synchronous request to close an HTML dialog.
+	</brief_description>
+	<description>
+		Emitted by [signal HTMLDialogElement.close_requested]. Connect directly to the signal and call [method prevent_default] during the callback to keep the dialog open.
+	</description>
+	<methods>
+		<method name="is_default_prevented" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns whether a listener canceled this request.
+			</description>
+		</method>
+		<method name="prevent_default">
+			<return type="void" />
+			<description>
+				Cancels the default close action during synchronous signal delivery. Deferred calls have no effect.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="reason" type="int" enum="HTMLDialogCloseRequest.Reason" getter="get_reason">
+			The source of this close request.
+		</member>
+		<member name="return_value" type="Variant" getter="get_return_value">
+			The proposed result. A [code]null[/code] value preserves [member HTMLDialogElement.return_value].
+		</member>
+	</members>
+	<constants>
+		<constant name="SCRIPT" value="0" enum="Reason">
+			A GDScript call to [method HTMLDialogElement.request_close].
+		</constant>
+		<constant name="ESCAPE" value="1" enum="Reason">
+			A press of the Escape key.
+		</constant>
+		<constant name="BACKDROP" value="2" enum="Reason">
+			A primary pointer click outside the active dialog.
+		</constant>
+	</constants>
+</class>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLLegendElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		The caption of an HTML fieldset.
+	</brief_description>
+	<description>
+		The first direct legend in a fieldset defines the disabled-control exception.
+	</description>
+	<methods>
+		<method name="get_form" qualifiers="const">
+			<return type="HTMLFormElement" />
+			<description>
+				Returns the enclosing fieldset's form or [code]null[/code].
+			</description>
+		</method>
+	</methods>
+</class>

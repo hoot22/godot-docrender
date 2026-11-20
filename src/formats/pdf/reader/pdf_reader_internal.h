@@ -11,7 +11,7 @@ namespace godot {
 		Error fail(Error p_error, const String& p_message);							// 记录并返回错误码，同时保存诊断信息
 		void clear_error();															// 清除上一次操作的错误状态
 
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 		std::shared_ptr<pdfium::Api> api;
 		PackedByteArray bytes;
 		FPDF_DOCUMENT document = nullptr;
@@ -36,7 +36,7 @@ namespace godot {
 	};
 } // namespace godot
 
-#ifdef DOCRENDER_PDFIUM_ENABLED
+#ifdef DOCKIT_PDFIUM_ENABLED
 #define PDF_QUERY_OR_RETURN(group, result) \
 	std::lock_guard guard(pdfium::mutex()); \
 	if (!state->require(Group::group)) { return result; } \

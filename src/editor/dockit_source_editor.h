@@ -1,0 +1,67 @@
+#pragma once
+
+#include "dockit_editor_translations.h"
+#include "html_video_export_plugin.h"
+#include "editor/importers/html_document_importer.h"
+#include "editor/importers/latex_document_importer.h"
+#include "editor/importers/mermaid_document_importer.h"
+#include "editor/importers/pdf_texture_importer.h"
+
+#include <godot_cpp/classes/config_file.hpp>
+#include <godot_cpp/classes/editor_plugin.hpp>
+#include <godot_cpp/templates/hash_map.hpp>
+#include <godot_cpp/variant/signal.hpp>
+
+namespace godot {
+	class ScriptEditorBase;
+
+	class DockitSourceEditorPlugin : public EditorPlugin {
+		GDCLASS(DockitSourceEditorPlugin, EditorPlugin)
+
+	public:
+		static void prepare_registration();
+		static void observe_source_document(const Ref<Resource>& p_document);
+		static String get_source_path(uint64_t p_tab_id);
+		void _enter_tree() override;
+		void _exit_tree() override;
+		void _set_window_layout(const Ref<ConfigFile>& p_configuration) override;
+
+	protected:
+		static void _bind_methods() {}
+
+	private:
+		struct NativeConnection {
+			Signal signal;
+			Callable callback;
+		};
+
+		DockitEditorTranslations editor_translations;
+		Ref<HTMLDocumentImporter> html_importer;
+		Ref<HTMLVideoExportPlugin> video_exporter;
+		Ref<LatexDocumentImporter> latex_importer;
+		Ref<MermaidDocumentImporter> mermaid_importer;
+		Ref<PDFTextureImporter> pdf_importer;
+		NativeConnection tree_activation;
+		NativeConnection list_activation;
+		NativeConnection file_selection;
+		Callable open_text_result;
+		uint64_t script_list_id = 0;
+		uint64_t script_tabs_id = 0;
+		static HashMap<uint64_t, String> source_tabs;
+
+		void install_importers();
+		void import_existing_sources();
+		void observe_restored_scene_sources(Node* p_scene);
+		void attach_source_editor();
+		void detach_source_editor();
+		void activate_tree_item();
+		void activate_list_item(int32_t p_index);
+		bool open_imported_source(const Variant& p_metadata);
+		void open_source_text(const String& p_path);
+		void sync_open_sources();
+		void restore_open_source_paths(const Array& p_paths);
+		void remember_source(ScriptEditorBase* p_tab, const String& p_path);
+		void forget_source(uint64_t p_tab_id);
+		void select_file(const String& p_path);
+	};
+} // namespace godot

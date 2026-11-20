@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLSlotElement" inherits="HTMLElement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <brief_description>A placeholder for a shadow host's content.</brief_description>
+  <description>Named assignment matches the host's direct children to the first slot with the same name. Unassigned slots render their fallback children. The slotchange DOM event reports changes in assignment.</description>
+  <methods>
+    <method name="assigned_nodes" qualifiers="const"><return type="HTMLNode[]"/><param index="0" name="flatten" type="bool" default="false"/><description>Returns assigned nodes, optionally flattening nested slots and fallback content.</description></method>
+    <method name="assigned_elements" qualifiers="const"><return type="HTMLElement[]"/><param index="0" name="flatten" type="bool" default="false"/><description>Returns the element subset of assigned_nodes.</description></method>
+    <method name="assign"><return type="int" enum="Error"/><param index="0" name="nodes" type="Array"/><description>Sets manual assignments in a shadow root configured for manual assignment. Does not move the nodes.</description></method>
+  </methods>
+  <members><member name="name" type="String" setter="set_name" getter="get_name">The slot name. An empty name denotes the default slot.</member></members>
+</class>

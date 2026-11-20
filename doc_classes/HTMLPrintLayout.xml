@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="HTMLPrintLayout" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<brief_description>
+		A paginated print layout created from an [HTMLDocument].
+	</brief_description>
+	<description>
+		The print layout waits for remote stylesheets and images before emitting [signal ready]. Page sizes and content rectangles are expressed in CSS pixels. Pagination honors [code]break-before[/code], [code]break-after[/code], and legacy [code]page-break-before[/code] and [code]page-break-after[/code] values that force a page break. It currently does not apply [code]break-inside[/code], column break values, [code]orphans[/code], or [code]widows[/code]. Page-specific content widths share one text reflow width. PDF export writes basic text, rectangular fills, circles, and images as PDF objects. Text is written with PDF standard Helvetica; glyphs it cannot encode, including CJK glyphs, are omitted. Some CSS transforms, overflow clips, and compositing effects are reported in [method get_diagnostics] and are not preserved.
+	</description>
+	<signals>
+		<signal name="ready">
+			<description>Emitted after layout and remote resource requests have finished. Check [method get_error] and [method get_diagnostics] before exporting.</description>
+		</signal>
+	</signals>
+	<methods>
+		<method name="get_diagnostics">
+			<return type="PackedStringArray" />
+			<description>Returns print layout, resource, and PDF export limitations collected so far.</description>
+		</method>
+		<method name="get_error">
+			<return type="int" />
+			<description>Returns the most recent Godot error code, or [constant OK] when the layout and last export succeeded.</description>
+		</method>
+		<method name="get_error_message">
+			<return type="String" />
+			<description>Returns a message for the most recent layout or export error.</description>
+		</method>
+		<method name="get_page_content_rect">
+			<return type="Rect2" />
+			<param index="0" name="page_index" type="int" />
+			<description>Returns the printable content rectangle within a page in CSS pixels.</description>
+		</method>
+		<method name="get_page_count">
+			<return type="int" />
+			<description>Returns the number of pages in this layout.</description>
+		</method>
+		<method name="get_page_size">
+			<return type="Vector2" />
+			<param index="0" name="page_index" type="int" />
+			<description>Returns the physical page size in CSS pixels.</description>
+		</method>
+		<method name="is_ready">
+			<return type="bool" />
+			<description>Returns [code]true[/code] after the initial layout and all remote resources have settled.</description>
+		</method>
+		<method name="save_pdf">
+			<return type="int" />
+			<param index="0" name="path" type="String" />
+			<description>Exports the paginated layout to a PDF file. Returns [constant OK] on success. PDF export requires a build with the PDFium writer backend.</description>
+		</method>
+		<method name="to_pdf">
+			<return type="PackedByteArray" />
+			<description>Exports the paginated layout to PDF bytes. Returns an empty array when the layout is not ready or PDFium is unavailable.</description>
+		</method>
+	</methods>
+</class>
